@@ -35,6 +35,7 @@ public class Editeur extends JComponent {
 		coordonnees = new LinkedList<Point>();
 
 		poser_sommet = new JButton("o");
+
 		poser_sommet.setBounds(900,50,50,50);
 		add(poser_sommet);
 
@@ -60,11 +61,16 @@ public class Editeur extends JComponent {
 
 
 	public void paintComponent(Graphics g) {
+		validate();
+		System.out.println(getHeight()+" : "+getWidth());
 		g.setColor(c);
 		if(a_lier != -1){
 			g.fillOval((int) (coordonnees.get(a_lier).getX()),(int) (coordonnees.get(a_lier).getY()), d, d);
 
 		}
+
+		lier.setBounds(getWidth() - 100,110,50,50);
+		poser_sommet.setBounds(getWidth() - 100,50,50,50);
 
 		for (int i = 0; i < sommets.size(); ++i) {
 			((Graphics2D) g).draw(new Ellipse2D.Double(coordonnees.get(i).getX(), coordonnees.get(i).getY(), d, d));
