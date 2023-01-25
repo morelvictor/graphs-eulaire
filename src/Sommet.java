@@ -1,21 +1,19 @@
-import java.util.Random;
+import java.util.LinkedList;
 
 public class Sommet{
 
-	private static int nb_graphes;
-	private int id;
+	public LinkedList<Sommet> voisins;
 
 	public Sommet(){
-		id = nb_graphes;
-		++nb_graphes;
+		voisins = new LinkedList<Sommet>();
 	}
 
-	public void ajoute_arete(Sommet s1, Sommet s2){
-		return;
+	public void ajoute_arete(Sommet s2){
+		voisins.add(s2);
+		s2.voisins.add(this);
 	}
 
 	public boolean estRelie(Sommet s){
-		Random r = new Random();
-		return r.nextInt(5)==1;
+		return voisins.contains(s);
 	}
 }

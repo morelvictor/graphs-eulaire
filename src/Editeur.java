@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class Editeur extends JComponent {
+	//diametre d'un sommet dans la vue
+	private static int d = 10;
 
 	private LinkedList<Sommet> sommets;
 	private LinkedList<Point> coordonnees;
@@ -16,6 +18,10 @@ public class Editeur extends JComponent {
 
 	private JButton poser_sommet;
 	private boolean peut_poser_sommet = false;
+
+	private JButton lier;
+	private boolean peut_lier = false;
+	private int a_lier = -1;
 
 
 	public Editeur() {
@@ -32,21 +38,41 @@ public class Editeur extends JComponent {
 		poser_sommet.addActionListener(
 			(ActionEvent e) -> {
 				peut_poser_sommet = !peut_poser_sommet;
+				lier.setEnabled(!peut_poser_sommet);
 			});
 
-			repaint();
+		lier = new JButton("x");
+		lier.setBounds(900,110,50,50);
+		add(lier);
+
+		lier.addActionListener(
+			(ActionEvent e) -> {
+				peut_lier = !peut_lier;
+				poser_sommet.setEnabled(!peut_lier);
+			});
+	
+		repaint();
 	}
 
 
 	public void paintComponent(Graphics g) {
 		for (int i = 0; i < sommets.size(); ++i) {
-			((Graphics2D) g).draw(new Ellipse2D.Double(coordonnees.get(i).getX(), coordonnees.get(i).getY(), 10, 10));
+			((Graphics2D) g).draw(new Ellipse2D.Double(coordonnees.get(i).getX(), coordonnees.get(i).getY(), d, d));
 			for(int j = i; j < sommets.size(); ++j){
 				if(sommets.get(i).estRelie(sommets.get(j))){
-					g.drawLine((int) coordonnees.get(i).getX() + 5, (int) coordonnees.get(i).getY() + 5, (int) coordonnees.get(j).getX() + 5, (int) coordonnees.get(j).getY() + 5);	
+					g.drawLine((int) (coordonnees.get(i).getX() + d/2), (int) (coordonnees.get(i).getY() + d/2), (int) (coordonnees.get(j).getX() + d/2), (int) (coordonnees.get(j).getY() + d/2));	
 				}
 			}
 		}
+	}
+
+	public int getId(int x, int y){
+		for(int i = 0;i<sommets.size();i++){
+			if( (x <= coordonnees.get(i).getX() + 3*d/2) && (x >= coordonnees.get(i).getX() - d/2) && (y <= coordonnees.get(i).getY() + 3*d/2) && (y >= coordonnees.get(i).getY() - d/2) ){
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public class ControleurSouris implements MouseListener{
@@ -60,6 +86,17 @@ public class Editeur extends JComponent {
 				sommets.add(new Sommet());
 				coordonnees.add(new Point(e.getX(),e.getY()));
 				repaint();
+			}
+			if(peut_lier && getId(e.getX(),e.getY()) >= 0){
+				if(a_lier == -1){
+					a_lier = getId(e.getX(),e.getY());
+				}
+				else{
+					sommets.get(a_lier).ajoute_arete(sommets.get(getId(e.getX(),e.getY())));
+					a_lier = -1;
+				}
+				repaint();
+				
 			}
 		}
 
