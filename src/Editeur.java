@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class Editeur extends JComponent {
-	private static int DIAMETRE = 10;
+	private static int DIAMETRE = 15;
 	private static Color COULEUR = new Color(39, 78, 140);
 
 	private LinkedList<Sommet> sommets;
@@ -59,8 +59,6 @@ public class Editeur extends JComponent {
 
 
 	public void paintComponent(Graphics g) {
-		validate();
-		System.out.println(getHeight()+" : "+getWidth());
 		g.setColor(COULEUR);
 		if(a_lier != -1){
 			g.fillOval((int) (coordonnees.get(a_lier).getX()),(int) (coordonnees.get(a_lier).getY()), DIAMETRE, DIAMETRE);
