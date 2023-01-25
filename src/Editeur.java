@@ -49,6 +49,7 @@ public class Editeur extends JComponent {
 			(ActionEvent e) -> {
 				peut_lier = !peut_lier;
 				poser_sommet.setEnabled(!peut_lier);
+				a_lier = -1;
 			});
 	
 		repaint();
