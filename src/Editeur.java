@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 
 import javax.swing.*;
@@ -11,19 +12,16 @@ public class Editeur extends JComponent {
 	private LinkedList<Sommet> sommets;
 	private LinkedList<Point> coordonnees;
 
+	public ControleurSouris controleurSouris;
+
 	public Editeur() {
+
+		addMouseListener(new ControleurSouris());
 
 		sommets = new LinkedList<Sommet>();
 		coordonnees = new LinkedList<Point>();
 
-		Random r = new Random();
-
-		for(int i = 0;i < 10;++i){
-			sommets.add(new Sommet());
-			coordonnees.add(new Point(r.nextInt(1000),r.nextInt(1000)));
-		}
-
-		repaint();
+			repaint();
 	}
 
 
@@ -36,5 +34,36 @@ public class Editeur extends JComponent {
 				}
 			}
 		}
+	}
+
+	public class ControleurSouris implements MouseListener{
+
+		public ControleurSouris(){
+
+		}
+
+		public void mouseClicked(MouseEvent e){
+			System.out.println(e.getX()+" : "+e.getY());
+			sommets.add(new Sommet());
+			coordonnees.add(new Point(e.getX(),e.getY()));
+			repaint();
+		}
+
+		public void mouseEntered(MouseEvent e){
+
+		}
+
+		public void mouseExited(MouseEvent e){
+
+		}
+
+		public void mousePressed(MouseEvent e){
+
+		}
+
+		public void mouseReleased(MouseEvent e){
+
+		}
+
 	}
 }
