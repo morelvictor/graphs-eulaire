@@ -19,7 +19,6 @@ class Frame extends JFrame {
 	private JPanel container;
 
 	public Frame() {
-        
 		container = new JPanel(new GridBagLayout());
 		JPanel menu = new JPanel();
 		menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
@@ -39,8 +38,8 @@ class Frame extends JFrame {
 
 	public void lanceEditeur() {
 		container.removeAll();
-		add(new Editeur());
-		validate();
-		repaint();
+		container.validate();
+		container.repaint();
+		container.add(new Editeur());
 	}
 }

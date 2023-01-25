@@ -13,6 +13,7 @@ public class VueGraphe extends JPanel{
 	private static Color color = Color.BLUE;
 
 	public VueGraphe(LinkedList<Sommet> s, LinkedList<Point> c){
+		setLayout(null);
 		sommets = s;
 		coordonnees = c;
 	}
@@ -22,7 +23,7 @@ public class VueGraphe extends JPanel{
 		super.paintComponent(g);
 		g.setColor(color);
 		for(int i = 0;i<sommets.size();i++){
-			g.fillOval((int) coordonnees.get(i).getX(),(int) coordonnees.get(i).getY(),20,20);
+			((Graphics2D) g).draw(new Ellipse2D.Double(coordonnees.get(i).getX(), coordonnees.get(i).getY(), 10, 10));
 		}
 
 	}
