@@ -14,12 +14,25 @@ public class Editeur extends JComponent {
 
 	public ControleurSouris controleurSouris;
 
+	private JButton poser_sommet;
+	private boolean peut_poser_sommet = false;
+
+
 	public Editeur() {
 
 		addMouseListener(new ControleurSouris());
 
 		sommets = new LinkedList<Sommet>();
 		coordonnees = new LinkedList<Point>();
+
+		poser_sommet = new JButton("o");
+		poser_sommet.setBounds(900,50,50,50);
+		add(poser_sommet);
+
+		poser_sommet.addActionListener(
+			(ActionEvent e) -> {
+				peut_poser_sommet = !peut_poser_sommet;
+			});
 
 			repaint();
 	}
@@ -43,10 +56,11 @@ public class Editeur extends JComponent {
 		}
 
 		public void mouseClicked(MouseEvent e){
-			System.out.println(e.getX()+" : "+e.getY());
-			sommets.add(new Sommet());
-			coordonnees.add(new Point(e.getX(),e.getY()));
-			repaint();
+			if(peut_poser_sommet){
+				sommets.add(new Sommet());
+				coordonnees.add(new Point(e.getX(),e.getY()));
+				repaint();
+			}
 		}
 
 		public void mouseEntered(MouseEvent e){
