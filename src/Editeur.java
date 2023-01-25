@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class Editeur extends JComponent {
-	//diametre d'un sommet dans la vue
-	private static int d = 10;
+	private static int DIAMETRE = 10;
+	private static Color COULEUR = new Color(39, 78, 140);
 
 	private LinkedList<Sommet> sommets;
 	private LinkedList<Point> coordonnees;
@@ -23,8 +23,6 @@ public class Editeur extends JComponent {
 	private boolean peut_lier = false;
 	//indice dans la liste sommets du sommet à lier
 	private int a_lier = -1;
-	//couleur surbrillance
-	private Color c = Color.BLUE;
 
 
 	public Editeur() {
@@ -63,9 +61,9 @@ public class Editeur extends JComponent {
 	public void paintComponent(Graphics g) {
 		validate();
 		System.out.println(getHeight()+" : "+getWidth());
-		g.setColor(c);
+		g.setColor(COULEUR);
 		if(a_lier != -1){
-			g.fillOval((int) (coordonnees.get(a_lier).getX()),(int) (coordonnees.get(a_lier).getY()), d, d);
+			g.fillOval((int) (coordonnees.get(a_lier).getX()),(int) (coordonnees.get(a_lier).getY()), DIAMETRE, DIAMETRE);
 
 		}
 
@@ -73,10 +71,10 @@ public class Editeur extends JComponent {
 		poser_sommet.setBounds(getWidth() - 100,50,50,50);
 
 		for (int i = 0; i < sommets.size(); ++i) {
-			((Graphics2D) g).draw(new Ellipse2D.Double(coordonnees.get(i).getX(), coordonnees.get(i).getY(), d, d));
+			((Graphics2D) g).draw(new Ellipse2D.Double(coordonnees.get(i).getX(), coordonnees.get(i).getY(), DIAMETRE, DIAMETRE));
 			for(int j = i; j < sommets.size(); ++j){
 				if(sommets.get(i).estRelie(sommets.get(j))){
-					g.drawLine((int) (coordonnees.get(i).getX() + d/2), (int) (coordonnees.get(i).getY() + d/2), (int) (coordonnees.get(j).getX() + d/2), (int) (coordonnees.get(j).getY() + d/2));	
+					g.drawLine((int) (coordonnees.get(i).getX() + DIAMETRE/2), (int) (coordonnees.get(i).getY() + DIAMETRE/2), (int) (coordonnees.get(j).getX() + DIAMETRE/2), (int) (coordonnees.get(j).getY() + DIAMETRE/2));
 				}
 			}
 		}
@@ -84,7 +82,7 @@ public class Editeur extends JComponent {
 
 	public int getId(int x, int y){
 		for(int i = 0;i<sommets.size();i++){
-			if( (x <= coordonnees.get(i).getX() + 3*d/2) && (x >= coordonnees.get(i).getX() - d/2) && (y <= coordonnees.get(i).getY() + 3*d/2) && (y >= coordonnees.get(i).getY() - d/2) ){
+			if( (x <= coordonnees.get(i).getX() + 3*DIAMETRE/2) && (x >= coordonnees.get(i).getX() - DIAMETRE/2) && (y <= coordonnees.get(i).getY() + 3*DIAMETRE/2) && (y >= coordonnees.get(i).getY() - DIAMETRE/2) ){
 				return i;
 			}
 		}
