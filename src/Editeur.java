@@ -21,7 +21,10 @@ public class Editeur extends JComponent {
 
 	private JButton lier;
 	private boolean peut_lier = false;
+	//indice dans la liste sommets du sommet à lier
 	private int a_lier = -1;
+	//couleur surbrillance
+	private Color c = Color.BLUE;
 
 
 	public Editeur() {
@@ -57,6 +60,12 @@ public class Editeur extends JComponent {
 
 
 	public void paintComponent(Graphics g) {
+		g.setColor(c);
+		if(a_lier != -1){
+			g.fillOval((int) (coordonnees.get(a_lier).getX()),(int) (coordonnees.get(a_lier).getY()), d, d);
+
+		}
+
 		for (int i = 0; i < sommets.size(); ++i) {
 			((Graphics2D) g).draw(new Ellipse2D.Double(coordonnees.get(i).getX(), coordonnees.get(i).getY(), d, d));
 			for(int j = i; j < sommets.size(); ++j){
