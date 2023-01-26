@@ -21,6 +21,7 @@ public class VueGrapheEditeur extends VueGraphe{
 	public VueGrapheEditeur(Color c, int d, Editeur e){
 		super(c, d);
 		controleurSouris = new ControleurSourisEditeur();
+		addMouseListener(controleurSouris);
 		editeur = e;
 	}
 
