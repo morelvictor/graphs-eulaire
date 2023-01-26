@@ -16,7 +16,7 @@ public abstract class VueGraphe extends JComponent{
 	public int DIAMETRE = 15;
 
 	public VueGraphe(Color c, int d, MouseListener controleur){
-		setPreferredSize(new Dimension(800,800));
+		setPreferredSize(new Dimension(850,850));
 		COULEUR = c;
 		DIAMETRE = d;
 		sommets = new LinkedList<Sommet>();

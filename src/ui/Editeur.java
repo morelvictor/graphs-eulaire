@@ -73,6 +73,7 @@ public class Editeur extends JPanel {
 	public void paintComponent(Graphics g) {
 		lier.setBounds(getWidth() - 100,110,50,50);
 		poser_sommet.setBounds(getWidth() - 100,50,50,50);
+		g.drawRect(20,20,850,850);
 	}
 
 
