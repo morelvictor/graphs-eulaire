@@ -57,6 +57,26 @@ public abstract class VueGraphe extends JComponent{
 		return -1;
 	}
 
+	public void paintComponent(Graphics g){
+		g.setColor(getCouleur());
+
+		LinkedList<Point> coord = getCoordonnees();
+		LinkedList<Sommet> som = getSommets();
+		int diam = getDiametre();
+
+		for (int i = 0; i < som.size(); ++i) {
+			((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(), diam, diam));
+			for(int j = i; j < som.size(); ++j){
+				if(som.get(i).estRelie(som.get(j))){
+					g.drawLine((int) (coord.get(i).getX() + diam/2), (int) (coord.get(i).getY() + diam/2), (int) (coord.get(j).getX() + diam/2), (int) (coord.get(j).getY() + diam/2));
+				}
+			}
+		}
+	}
+
+
+	
+
 	
 
 

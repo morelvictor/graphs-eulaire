@@ -21,6 +21,7 @@ public class VueGrapheEditeur extends VueGraphe{
 	}
 
 
+	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(super.getCouleur());
 
