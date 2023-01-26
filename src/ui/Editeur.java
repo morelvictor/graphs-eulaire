@@ -25,6 +25,7 @@ public class Editeur extends JPanel {
 	private JButton generer_random;
 	private Random r = new Random();
 
+	private JButton suppr_all;
 
 	public Editeur() {
 
@@ -67,6 +68,19 @@ public class Editeur extends JPanel {
 				vuegraphe.setCoordonnees(getNRandomCoord(taille));
 				repaint();
 			});
+
+		suppr_all = new JButton("☒");
+		suppr_all.setBounds(900,230,50,50);
+		add(suppr_all);
+
+		suppr_all.addActionListener(
+			(ActionEvent e) -> {
+				vuegraphe.setSommets(new LinkedList<Sommet>());
+				vuegraphe.setCoordonnees(new LinkedList<Point>());
+				repaint();
+			});
+
+		
 
 		repaint();
 	}
@@ -115,6 +129,7 @@ public class Editeur extends JPanel {
 		lier.setBounds(getWidth() - 100,110,50,50);
 		poser_sommet.setBounds(getWidth() - 100,50,50,50);
 		generer_random.setBounds(getWidth() - 100,170,50,50);
+		suppr_all.setBounds(getWidth() - 100,230,50,50);
 		g.drawRect(20,20,850,850);
 	}
 
