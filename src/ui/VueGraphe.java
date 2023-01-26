@@ -46,7 +46,17 @@ public abstract class VueGraphe extends JComponent{
 
 	public int getDiametre(){
 		return DIAMETRE;
-	}	
+	}
+
+	public void setSommets(LinkedList<Sommet> l){
+		sommets.clear();
+		sommets.addAll(l);
+	}
+
+	public void setCoordonnees(LinkedList<Point> l){
+		coordonnees.clear();
+		coordonnees.addAll(l);
+	}
 
 	public int getId(int x, int y){
 		for(int i = 0;i<coordonnees.size();i++){
