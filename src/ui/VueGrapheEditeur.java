@@ -28,10 +28,15 @@ public class VueGrapheEditeur extends VueGraphe{
 		LinkedList<Sommet> som = super.getSommets();
 		int diam = super.getDiametre();
 
-
-
 		for (int i = 0; i < som.size(); ++i) {
-			((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(), diam, diam));
+			if(editeur.getALier() != i){
+				((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(), diam, diam));
+			}
+			else{
+				g.setColor(Color.GREEN);
+				((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(), diam, diam));
+				g.setColor(super.getCouleur());
+			}
 			for(int j = i; j < som.size(); ++j){
 				if(som.get(i).estRelie(som.get(j))){
 					g.drawLine((int) (coord.get(i).getX() + diam/2), (int) (coord.get(i).getY() + diam/2), (int) (coord.get(j).getX() + diam/2), (int) (coord.get(j).getY() + diam/2));
@@ -40,8 +45,6 @@ public class VueGrapheEditeur extends VueGraphe{
 		}
 
 	}
-
-
 
 	public LinkedList<Point> getCoordonnees(){
 		return super.getCoordonnees();

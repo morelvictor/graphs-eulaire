@@ -24,7 +24,6 @@ public abstract class VueGraphe extends JComponent{
 		addMouseListener(controleur);
 	}
 
-
 	public LinkedList<Point> getCoordonnees(){
 		return coordonnees;
 	}
