@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class Editeur extends JComponent {
+public class Editeur extends JPanel {
 	private static int DIAMETRE = 15;
 	private static Color COULEUR = new Color(39, 78, 140);
 
@@ -25,7 +25,7 @@ public class Editeur extends JComponent {
 
 	public Editeur() {
 
-		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this);
+		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
 		vuegraphe.setBounds(20,20,800,800);
 		add(vuegraphe);
 
@@ -70,13 +70,58 @@ public class Editeur extends JComponent {
 		return peut_lier;
 	}
 
-
 	public void paintComponent(Graphics g) {
-
 		lier.setBounds(getWidth() - 100,110,50,50);
 		poser_sommet.setBounds(getWidth() - 100,50,50,50);
+	}
 
-		vuegraphe.repaint();	
+
+public class ControleurSourisEditeur extends ControleurSouris{
+
+	@Override
+
+	public void mouseClicked(MouseEvent e){
+		if(getPeutPoserSommet()){
+			vuegraphe.ajouteSommet(new Sommet());
+			vuegraphe.ajouteCoordonnees(new Point(e.getX(),e.getY()));
+		}
+		int id = vuegraphe.getId(e.getX(), e.getY());
+		if(getPeutLier() && id >= 0){
+			if(getALier() == -1){
+				setALier(id);
+			}
+			else{
+				vuegraphe.getSommets().get(getALier()).ajoute_arete(vuegraphe.getSommets().get(id));
+				setALier(-1);
+			}			
+		}
+		repaint();
+	}
+
+}
+
+public abstract class ControleurSouris implements MouseListener{
+
+
+		public void mouseClicked(MouseEvent e){
+		}
+
+		public void mouseEntered(MouseEvent e){
+
+		}
+
+		public void mouseExited(MouseEvent e){
+
+		}
+
+		public void mousePressed(MouseEvent e){
+
+		}
+
+		public void mouseReleased(MouseEvent e){
+
+		}
+
 	}
 
 

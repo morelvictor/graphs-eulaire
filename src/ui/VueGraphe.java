@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.util.LinkedList;
 import java.util.Random;
 
-public abstract class VueGraphe extends JPanel{
+public abstract class VueGraphe extends JComponent{
 
 	private LinkedList<Sommet> sommets;
 	private LinkedList<Point> coordonnees;
@@ -15,11 +15,13 @@ public abstract class VueGraphe extends JPanel{
 	private Color COULEUR = Color.BLUE;
 	public int DIAMETRE = 15;
 
-	public VueGraphe(Color c, int d){
+	public VueGraphe(Color c, int d, MouseListener controleur){
+		setPreferredSize(new Dimension(800,800));
 		COULEUR = c;
 		DIAMETRE = d;
 		sommets = new LinkedList<Sommet>();
 		coordonnees = new LinkedList<Point>();
+		addMouseListener(controleur);
 	}
 
 
@@ -56,44 +58,7 @@ public abstract class VueGraphe extends JPanel{
 		return -1;
 	}
 
-	public void paintComponent(Graphics g) {
-		g.setColor(COULEUR);
-
-		for (int i = 0; i < sommets.size(); ++i) {
-			((Graphics2D) g).draw(new Ellipse2D.Double(coordonnees.get(i).getX(), coordonnees.get(i).getY(), DIAMETRE, DIAMETRE));
-			for(int j = i; j < sommets.size(); ++j){
-				if(sommets.get(i).estRelie(sommets.get(j))){
-					g.drawLine((int) (coordonnees.get(i).getX() + DIAMETRE/2), (int) (coordonnees.get(i).getY() + DIAMETRE/2), (int) (coordonnees.get(j).getX() + DIAMETRE/2), (int) (coordonnees.get(j).getY() + DIAMETRE/2));
-				}
-			}
-		}
-	}
-
-				
-public abstract class ControleurSouris implements MouseListener{
-
-
-		public void mouseClicked(MouseEvent e){
-			System.out.println("mouseclicked vuegraphe");
-		}
-
-		public void mouseEntered(MouseEvent e){
-
-		}
-
-		public void mouseExited(MouseEvent e){
-
-		}
-
-		public void mousePressed(MouseEvent e){
-
-		}
-
-		public void mouseReleased(MouseEvent e){
-
-		}
-
-	}
+	
 
 
 	

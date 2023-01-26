@@ -12,16 +12,11 @@ public class VueGrapheEditeur extends VueGraphe{
 	boolean peut_poser_sommet = false;
 	boolean peut_lier = false;
 
-	int a_lier = -1;
-
-	ControleurSourisEditeur controleurSouris;
 
 	Editeur editeur;
 
-	public VueGrapheEditeur(Color c, int d, Editeur e){
-		super(c, d);
-		controleurSouris = new ControleurSourisEditeur();
-		addMouseListener(controleurSouris);
+	public VueGrapheEditeur(Color c, int d, Editeur e, MouseListener controleur){
+		super(c, d, controleur);
 		editeur = e;
 	}
 
@@ -29,13 +24,24 @@ public class VueGrapheEditeur extends VueGraphe{
 	public void paintComponent(Graphics g) {
 		g.setColor(super.getCouleur());
 
-		if(editeur.getALier() != -1){
-			g.fillOval((int) (super.getCoordonnees().get(a_lier).getX()),(int) (super.getCoordonnees().get(a_lier).getY()), DIAMETRE, DIAMETRE);
+		LinkedList<Point> coord = super.getCoordonnees();
+		LinkedList<Sommet> som = super.getSommets();
+		int diam = super.getDiametre();
+
+
+
+		for (int i = 0; i < som.size(); ++i) {
+			((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(), diam, diam));
+			for(int j = i; j < som.size(); ++j){
+				if(som.get(i).estRelie(som.get(j))){
+					g.drawLine((int) (coord.get(i).getX() + diam/2), (int) (coord.get(i).getY() + diam/2), (int) (coord.get(j).getX() + diam/2), (int) (coord.get(j).getY() + diam/2));
+				}
+			}
 		}
 
-		super.repaint();
-
 	}
+
+
 
 	public LinkedList<Point> getCoordonnees(){
 		return super.getCoordonnees();
@@ -57,30 +63,7 @@ public class VueGrapheEditeur extends VueGraphe{
 		return super.getId(x, y);
 	}
 
-public class ControleurSourisEditeur extends ControleurSouris{
 
-	@Override
-
-	public void mouseClicked(MouseEvent e){
-		System.out.println("mouseclicked vuegraphe editeur");
-		if(editeur.getPeutPoserSommet()){
-			ajouteSommet(new Sommet());
-			ajouteCoordonnees(new Point(e.getX(),e.getY()));
-			repaint();
-		}
-		if(editeur.getPeutLier() && getId(e.getX(),e.getY()) >= 0){
-			if(editeur.getALier() == -1){
-				editeur.setALier(getId(e.getX(),e.getY()));
-			}
-			else{
-				getSommets().get(editeur.getALier()).ajoute_arete(getSommets().get(getId(e.getX(),e.getY())));
-				editeur.setALier(-1);
-			}
-			repaint();			
-		}
-	}
-
-}
 
 	
 
