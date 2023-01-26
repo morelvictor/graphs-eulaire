@@ -1,7 +1,7 @@
 Pour compiler : 
 
 depuis /build :
-javac ../*/*.java -d .
+javac ../*/*/*.java -d .
 
 Pour lancer :
 
