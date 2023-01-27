@@ -24,8 +24,8 @@ public class VueGrapheEditeur extends VueGraphe{
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(20,20,850,850);
-		
+		g.fillRect(0,0,850,850);
+
 		g.setColor(super.getCouleur());
 
 		LinkedList<Point> coord = super.getCoordonnees();
@@ -47,7 +47,6 @@ public class VueGrapheEditeur extends VueGraphe{
 				}
 			}
 		}
-
 	}
 
 	public LinkedList<Point> getCoordonnees(){
@@ -69,9 +68,4 @@ public class VueGrapheEditeur extends VueGraphe{
 	public int getId(int x, int y){
 		return super.getId(x, y);
 	}
-
-
-
-	
-
 }

@@ -22,6 +22,7 @@ public abstract class VueGraphe extends JComponent{
 		sommets = new LinkedList<Sommet>();
 		coordonnees = new LinkedList<Point>();
 		addMouseListener(controleur);
+		setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 
 	public LinkedList<Point> getCoordonnees(){

@@ -39,35 +39,35 @@ public class Editeur extends JPanel {
 		add(poser_sommet);
 
 		poser_sommet.addActionListener(
-			(ActionEvent e) -> {
-				peut_poser_sommet = !peut_poser_sommet;
-				lier.setEnabled(!peut_poser_sommet);
-			});
+				(ActionEvent e) -> {
+					peut_poser_sommet = !peut_poser_sommet;
+					peut_lier = false;
+				});
 
 		lier = new JButton("x");
 		lier.setBounds(900,110,50,50);
 		add(lier);
 
 		lier.addActionListener(
-			(ActionEvent e) -> {
-				peut_lier = !peut_lier;
-				poser_sommet.setEnabled(!peut_lier);
-				a_lier = -1;
-			});
+				(ActionEvent e) -> {
+					peut_lier = !peut_lier;
+					peut_poser_sommet = false;
+					a_lier = -1;
+				});
 
 		generer_random = new JButton("?");
 		generer_random.setBounds(900,170,50,50);
 		add(generer_random);
-	
+
 
 		generer_random.addActionListener(
-			(ActionEvent e) -> {
-				int taille = r.nextInt(20);
-				int proba = r.nextInt(10);
-				vuegraphe.setSommets(getNRandomSom(taille, proba));
-				vuegraphe.setCoordonnees(getNRandomCoord(taille));
-				repaint();
-			});
+				(ActionEvent e) -> {
+					int taille = r.nextInt(20);
+					int proba = r.nextInt(10);
+					vuegraphe.setSommets(getNRandomSom(taille, proba));
+					vuegraphe.setCoordonnees(getNRandomCoord(taille));
+					repaint();
+				});
 
 		suppr_all = new JButton("☒");
 		suppr_all.setBounds(900,230,50,50);
@@ -79,9 +79,6 @@ public class Editeur extends JPanel {
 				vuegraphe.setCoordonnees(new LinkedList<Point>());
 				repaint();
 			});
-
-		
-
 		repaint();
 	}
 
@@ -98,8 +95,8 @@ public class Editeur extends JPanel {
 		for(int i = 0;i<n;i++){
 			res.add(new Sommet());
 		}
-		for(int id = 0;id<n;id++){
-			for(int j = id+1;j<n;j++){
+		for(int id = 0; id < n; id++) {
+			for(int j = id + 1; j < n; j++) {
 				if(r.nextInt(inverse_proba_arete+1)==1){
 					res.get(id).ajoute_arete(res.get(j));
 				}
@@ -130,35 +127,33 @@ public class Editeur extends JPanel {
 		poser_sommet.setBounds(getWidth() - 100,50,50,50);
 		generer_random.setBounds(getWidth() - 100,170,50,50);
 		suppr_all.setBounds(getWidth() - 100,230,50,50);
-		g.drawRect(20,20,850,850);
 	}
 
 
-public class ControleurSourisEditeur extends ControleurSouris{
+	public class ControleurSourisEditeur extends ControleurSouris{
 
-	@Override
-
-	public void mouseClicked(MouseEvent e){
-		if(getPeutPoserSommet()){
-			vuegraphe.ajouteSommet(new Sommet());
-			vuegraphe.ajouteCoordonnees(new Point(e.getX(),e.getY()));
-		}
-		int id = vuegraphe.getId(e.getX(), e.getY());
-		if(getPeutLier() && id >= 0){
-			if(getALier() == -1){
-				setALier(id);
+		@Override
+		public void mouseClicked(MouseEvent e){
+			if(getPeutPoserSommet()){
+				vuegraphe.ajouteSommet(new Sommet());
+				vuegraphe.ajouteCoordonnees(new Point(e.getX() - 7 , e.getY() - 7));
 			}
-			else{
-				vuegraphe.getSommets().get(getALier()).ajoute_arete(vuegraphe.getSommets().get(id));
-				setALier(-1);
-			}			
+			int id = vuegraphe.getId(e.getX(), e.getY());
+			if(getPeutLier() && id >= 0){
+				if(getALier() == -1){
+					setALier(id);
+				}
+				else{
+					vuegraphe.getSommets().get(getALier()).ajoute_arete(vuegraphe.getSommets().get(id));
+					setALier(-1);
+				}
+			}
+			repaint();
 		}
-		repaint();
+
 	}
 
-}
-
-public abstract class ControleurSouris implements MouseListener{
+	public abstract class ControleurSouris implements MouseListener{
 
 
 		public void mouseClicked(MouseEvent e){
@@ -177,12 +172,6 @@ public abstract class ControleurSouris implements MouseListener{
 		}
 
 		public void mouseReleased(MouseEvent e){
-
 		}
-
 	}
-
-
-
-	
 }
