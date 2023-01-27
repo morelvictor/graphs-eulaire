@@ -88,7 +88,7 @@ public class Editeur extends JPanel {
 	public LinkedList<Point> getNRandomCoord(int n){
 		LinkedList<Point> res = new LinkedList<Point>();
 		for(int i = 0;i<n;i++){
-			res.add(new Point(20+r.nextInt(830),20+r.nextInt(830)));
+			res.add(new Point(30+r.nextInt(800),30+r.nextInt(800)));
 		}
 		return res;
 	}
