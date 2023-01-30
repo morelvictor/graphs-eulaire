@@ -1,9 +1,2 @@
-Pour compiler : 
-
-depuis /build :
-javac ../*/*/*.java -d .
-
-Pour lancer :
-
-depuis /build , après avoir compilé :
-java App
+pour compiler depuis 2022-al1-ga-eulaire/ :
+make run
