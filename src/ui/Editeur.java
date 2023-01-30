@@ -1,11 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
-
-import javax.swing.*;
-
 import java.util.LinkedList;
 import java.util.Random;
+import javax.swing.*;
 
 public class Editeur extends JPanel {
 	private static int DIAMETRE = 15;
@@ -39,21 +37,21 @@ public class Editeur extends JPanel {
 		add(poser_sommet);
 
 		poser_sommet.addActionListener(
-				(ActionEvent e) -> {
-					peut_poser_sommet = !peut_poser_sommet;
-					peut_lier = false;
-				});
+			(ActionEvent e) -> {
+			peut_poser_sommet = !peut_poser_sommet;
+			peut_lier = false;
+		});
 
 		lier = new JButton("x");
 		lier.setBounds(900,110,50,50);
 		add(lier);
 
 		lier.addActionListener(
-				(ActionEvent e) -> {
-					peut_lier = !peut_lier;
-					peut_poser_sommet = false;
-					a_lier = -1;
-				});
+			(ActionEvent e) -> {
+			peut_lier = !peut_lier;
+			peut_poser_sommet = false;
+			a_lier = -1;
+		});
 
 		generer_random = new JButton("?");
 		generer_random.setBounds(900,170,50,50);
@@ -61,13 +59,12 @@ public class Editeur extends JPanel {
 
 
 		generer_random.addActionListener(
-				(ActionEvent e) -> {
-					int taille = r.nextInt(20);
-					int proba = r.nextInt(10);
-					vuegraphe.setSommets(getNRandomSom(taille, proba));
-					vuegraphe.setCoordonnees(getNRandomCoord(taille));
-					repaint();
-				});
+			(ActionEvent e) -> {
+			int taille = r.nextInt(20);
+			int proba = r.nextInt(10);
+			vuegraphe.setGraphe(getNRandomSom(taille, proba), getNRandomCoord(taille));
+			repaint();
+		});
 
 		suppr_all = new JButton("☒");
 		suppr_all.setBounds(900,230,50,50);
@@ -75,50 +72,49 @@ public class Editeur extends JPanel {
 
 		suppr_all.addActionListener(
 			(ActionEvent e) -> {
-				vuegraphe.setSommets(new LinkedList<Sommet>());
-				vuegraphe.setCoordonnees(new LinkedList<Point>());
-				repaint();
-			});
+			vuegraphe.viderGraphe();
+			repaint();
+		});
 		repaint();
 	}
 
-	public static LinkedList<Point> getNRandomCoord(int n){
+	public static LinkedList<Point> getNRandomCoord(int n) {
 		LinkedList<Point> res = new LinkedList<Point>();
-		for(int i = 0;i<n;i++){
-			res.add(new Point(30+r.nextInt(800),30+r.nextInt(800)));
+		for (int i = 0; i < n; i++) {
+			res.add(new Point(30 + r.nextInt(800),30 + r.nextInt(800)));
 		}
 		return res;
 	}
 
-	public static LinkedList<Sommet> getNRandomSom(int n, int inverse_proba_arete){
-		LinkedList<Sommet> res = new LinkedList<Sommet>();
-		for(int i = 0;i<n;i++){
-			res.add(new Sommet());
+	public static Graphe getNRandomSom(int n, int inverse_proba_arete) {
+		Graphe graphe = new Graphe();
+		for (int i = 0; i < n; i++) {
+			graphe.addSommet();
 		}
-		for(int id = 0; id < n; id++) {
-			for(int j = id + 1; j < n; j++) {
-				if(r.nextInt(inverse_proba_arete+1)==1){
-					res.get(id).ajoute_arete(res.get(j));
+		for (int id = 0; id < n; id++) {
+			for (int j = id + 1; j < n; j++) {
+				if (r.nextInt(inverse_proba_arete + 1) == 1) {
+					graphe.setConnexion(id, j, true);
 				}
 			}
 		}
-		return res;
+		return graphe;
 	}
 
 
-	public int getALier(){
+	public int getALier() {
 		return a_lier;
 	}
 
-	public void setALier(int n){
+	public void setALier(int n) {
 		a_lier = n;
 	}
 
-	public boolean getPeutPoserSommet(){
+	public boolean getPeutPoserSommet() {
 		return peut_poser_sommet;
 	}
 
-	public boolean getPeutLier(){
+	public boolean getPeutLier() {
 		return peut_lier;
 	}
 
@@ -130,41 +126,26 @@ public class Editeur extends JPanel {
 	}
 
 
-
-	public class ControleurSourisEditeur implements MouseListener{
-
-
-		public void mouseClicked(MouseEvent e){
-			if(getPeutPoserSommet()){
-				vuegraphe.ajouteSommet(new Sommet());
-				vuegraphe.ajouteCoordonnees(new Point(e.getX() - 7 , e.getY() - 7));
+	public class ControleurSourisEditeur implements MouseListener {
+		public void mouseClicked(MouseEvent e) {
+			if (getPeutPoserSommet()) {
+				vuegraphe.ajouteSommet(new Point(e.getX() - 7, e.getY() - 7));
 			}
 			int id = vuegraphe.getId(e.getX(), e.getY());
-			if(getPeutLier() && id >= 0){
-				if(getALier() == -1){
+			if (getPeutLier() && id >= 0) {
+				if (getALier() == -1) {
 					setALier(id);
-				}
-				else{
-					vuegraphe.getSommets().get(getALier()).ajoute_arete(vuegraphe.getSommets().get(id));
+				} else {
+					vuegraphe.getGraphe().setConnexion(getALier(), id, true);
 					setALier(-1);
 				}
 			}
 			repaint();
 		}
 
-		public void mouseEntered(MouseEvent e){
-
-		}
-
-		public void mouseExited(MouseEvent e){
-
-		}
-
-		public void mousePressed(MouseEvent e){
-
-		}
-
-		public void mouseReleased(MouseEvent e){
-		}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
 	}
 }
