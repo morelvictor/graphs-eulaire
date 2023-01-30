@@ -23,7 +23,7 @@ public class Editeur extends JPanel {
 	private int a_lier = -1;
 
 	private JButton generer_random;
-	private Random r = new Random();
+	private static Random r = new Random();
 
 	private JButton suppr_all;
 
@@ -82,7 +82,7 @@ public class Editeur extends JPanel {
 		repaint();
 	}
 
-	public LinkedList<Point> getNRandomCoord(int n){
+	public static LinkedList<Point> getNRandomCoord(int n){
 		LinkedList<Point> res = new LinkedList<Point>();
 		for(int i = 0;i<n;i++){
 			res.add(new Point(30+r.nextInt(800),30+r.nextInt(800)));
@@ -90,7 +90,7 @@ public class Editeur extends JPanel {
 		return res;
 	}
 
-	public LinkedList<Sommet> getNRandomSom(int n, int inverse_proba_arete){
+	public static LinkedList<Sommet> getNRandomSom(int n, int inverse_proba_arete){
 		LinkedList<Sommet> res = new LinkedList<Sommet>();
 		for(int i = 0;i<n;i++){
 			res.add(new Sommet());
@@ -130,9 +130,10 @@ public class Editeur extends JPanel {
 	}
 
 
-	public class ControleurSourisEditeur extends ControleurSouris{
 
-		@Override
+	public class ControleurSourisEditeur implements MouseListener{
+
+
 		public void mouseClicked(MouseEvent e){
 			if(getPeutPoserSommet()){
 				vuegraphe.ajouteSommet(new Sommet());
@@ -149,14 +150,6 @@ public class Editeur extends JPanel {
 				}
 			}
 			repaint();
-		}
-
-	}
-
-	public abstract class ControleurSouris implements MouseListener{
-
-
-		public void mouseClicked(MouseEvent e){
 		}
 
 		public void mouseEntered(MouseEvent e){
