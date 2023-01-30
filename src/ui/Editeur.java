@@ -28,12 +28,12 @@ public class Editeur extends JPanel {
 	public Editeur() {
 
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
-		vuegraphe.setBounds(20,20,800,800);
+		vuegraphe.setBounds(20, 20, 800, 800);
 		add(vuegraphe);
 
 		poser_sommet = new JButton("o");
 
-		poser_sommet.setBounds(900,50,50,50);
+		poser_sommet.setBounds(900, 50, 50, 50);
 		add(poser_sommet);
 
 		poser_sommet.addActionListener(
@@ -43,7 +43,7 @@ public class Editeur extends JPanel {
 		});
 
 		lier = new JButton("x");
-		lier.setBounds(900,110,50,50);
+		lier.setBounds(900, 110, 50, 50);
 		add(lier);
 
 		lier.addActionListener(
@@ -54,7 +54,7 @@ public class Editeur extends JPanel {
 		});
 
 		generer_random = new JButton("?");
-		generer_random.setBounds(900,170,50,50);
+		generer_random.setBounds(900, 170, 50, 50);
 		add(generer_random);
 
 
@@ -67,7 +67,7 @@ public class Editeur extends JPanel {
 		});
 
 		suppr_all = new JButton("☒");
-		suppr_all.setBounds(900,230,50,50);
+		suppr_all.setBounds(900, 230, 50, 50);
 		add(suppr_all);
 
 		suppr_all.addActionListener(
@@ -81,7 +81,7 @@ public class Editeur extends JPanel {
 	public static LinkedList<Point> getNRandomCoord(int n) {
 		LinkedList<Point> res = new LinkedList<Point>();
 		for (int i = 0; i < n; i++) {
-			res.add(new Point(30 + r.nextInt(800),30 + r.nextInt(800)));
+			res.add(new Point(30 + r.nextInt(800), 30 + r.nextInt(800)));
 		}
 		return res;
 	}
@@ -119,10 +119,10 @@ public class Editeur extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
-		lier.setBounds(getWidth() - 100,110,50,50);
-		poser_sommet.setBounds(getWidth() - 100,50,50,50);
-		generer_random.setBounds(getWidth() - 100,170,50,50);
-		suppr_all.setBounds(getWidth() - 100,230,50,50);
+		lier.setBounds(getWidth() - 100, 110, 50, 50);
+		poser_sommet.setBounds(getWidth() - 100, 50, 50, 50);
+		generer_random.setBounds(getWidth() - 100, 170, 50, 50);
+		suppr_all.setBounds(getWidth() - 100, 230, 50, 50);
 	}
 
 

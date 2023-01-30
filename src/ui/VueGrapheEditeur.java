@@ -22,7 +22,7 @@ public class VueGrapheEditeur extends VueGraphe {
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(0,0,850,850);
+		g.fillRect(0, 0, 850, 850);
 
 		g.setColor(super.getCouleur());
 
@@ -41,9 +41,9 @@ public class VueGrapheEditeur extends VueGraphe {
 			}
 			for (int j = i; j < getGraphe().taille(); ++j) {
 				if (getGraphe().getConnexion(i, j)) {
-					g.drawLine((int) (coord.get(i).getX() + diam / 2),
-					           (int) (coord.get(i).getY() + diam / 2),
-					           (int) (coord.get(j).getX() + diam / 2),
+					g.drawLine((int) (coord.get(i).getX() + diam / 2), // Make formatter happy
+					           (int) (coord.get(i).getY() + diam / 2), // until I figure out
+					           (int) (coord.get(j).getX() + diam / 2), // the setting I need.
 					           (int) (coord.get(j).getY() + diam / 2));
 				}
 			}

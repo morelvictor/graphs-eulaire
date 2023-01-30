@@ -15,7 +15,7 @@ public abstract class VueGraphe extends JComponent {
 	public int DIAMETRE = 15;
 
 	public VueGraphe(Color c, int d, MouseListener controleur) {
-		setPreferredSize(new Dimension(850,850));
+		setPreferredSize(new Dimension(850, 850));
 		COULEUR = c;
 		DIAMETRE = d;
 		graphe = new Graphe();
@@ -77,9 +77,9 @@ public abstract class VueGraphe extends JComponent {
 			                                           diam));
 			for (int j = i; j < graphe.taille(); ++j) {
 				if (graphe.getConnexion(i, j)) {
-					g.drawLine((int) (coord.get(i).getX() + diam / 2),
-					           (int) (coord.get(i).getY() + diam / 2),
-					           (int) (coord.get(j).getX() + diam / 2),
+					g.drawLine((int) (coord.get(i).getX() + diam / 2), // Make formatter happy
+					           (int) (coord.get(i).getY() + diam / 2), // until I figure out
+					           (int) (coord.get(j).getX() + diam / 2), // the setting I need.
 					           (int) (coord.get(j).getY() + diam / 2));
 				}
 			}
