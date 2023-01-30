@@ -1,10 +1,9 @@
 import java.awt.*;
-import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.*;
 
 public class App {
-
-	public static void main(String[]args) {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			var frame = new Frame();
 			frame.setTitle("EULAIRE");
