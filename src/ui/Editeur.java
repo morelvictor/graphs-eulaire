@@ -170,7 +170,7 @@ public class Editeur extends JPanel {
 	public class ControleurSourisEditeur implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			if (getPeutPoserSommet()) {
-				vuegraphe.ajouteSommet(new Point(e.getX() - 7, e.getY() - 7));
+				vuegraphe.ajouteSommet(new Point(e.getX() - DIAMETRE/2, e.getY() - DIAMETRE/2));
 			}
 			int id = vuegraphe.getId(e.getX(), e.getY());
 			if (getPeutLier() && id >= 0) {
