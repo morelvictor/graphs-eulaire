@@ -181,6 +181,9 @@ public class Editeur extends JPanel {
 					setALier(-1);
 				}
 			}
+			if(peut_suppr && id >= 0) {
+				//suppression sommet
+			}
 			repaint();
 		}
 
