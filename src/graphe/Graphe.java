@@ -15,6 +15,10 @@ public class Graphe {
 		matrice.setConnexion(i, j, val);
 		listes.setConnexion(i, j, val);
 	}
+	public void supprSommet(int i) {
+		matrice.supprSommet(i);
+		listes.supprSommet(i);
+	}
 	public ArrayList<Integer> getConnexions(int i) {
 		return listes.getConnexions(i);
 	}
@@ -25,6 +29,7 @@ public class Graphe {
 	public int taille() {
 		return matrice.taille();
 	}
+
 
 	private GrapheMatrice matrice;
 	private GrapheListes listes;
@@ -57,9 +62,15 @@ class GrapheMatrice {
 		} else {
 			contenu[i][j] -= contenu[i][j] == 0x00 ? 0 : 1;
 			if (i != j) {
-				contenu[j][i] -= contenu[i][j] == 0x00 ? 0 : 1;
+				contenu[j][i] -= contenu[j][i] == 0x00 ? 0 : 1;
 			}
 		}
+	}
+	public void supprSommet(int i){
+		for(int j = 0; j < contenu[i].length; j++) {
+			setConnexion(i, j, false);
+		}
+		//supprimer sommet i
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		var r = new ArrayList<Integer>();
@@ -113,6 +124,12 @@ class GrapheListes {
 				contenu[j].remove(Integer.valueOf(i));
 			}
 		}
+	}
+	public void supprSommet(int i){
+		for(int j = 0; j < contenu[i].size(); j++) {
+			setConnexion(i, j, false);
+		}
+		//supprimer sommet i
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		return contenu[i];

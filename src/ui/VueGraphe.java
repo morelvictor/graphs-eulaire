@@ -28,6 +28,11 @@ public abstract class VueGraphe extends JComponent {
 		return coordonnees;
 	}
 
+	public void supprCoordonnee(int i) {
+		coordonnees.remove(i);
+
+	}
+
 	public Graphe getGraphe() {
 		return graphe;
 	}

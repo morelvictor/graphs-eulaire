@@ -182,7 +182,7 @@ public class Editeur extends JPanel {
 				}
 			}
 			if(peut_suppr && id >= 0) {
-				//suppression sommet
+				vuegraphe.getGraphe().supprSommet(id);
 			}
 			repaint();
 		}
