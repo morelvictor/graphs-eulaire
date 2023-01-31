@@ -57,7 +57,7 @@ class GrapheMatrice {
 		} else {
 			contenu[i][j] -= contenu[i][j] == 0x00 ? 0 : 1;
 			if (i != j) {
-				contenu[j][i] -= contenu[i][j] == 0x00 ? 0 : 1;
+				contenu[j][i] -= contenu[j][i] == 0x00 ? 0 : 1;
 			}
 		}
 	}
