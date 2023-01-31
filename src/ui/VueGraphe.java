@@ -76,7 +76,7 @@ public abstract class VueGraphe extends JComponent {
 			((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(), diam,
 			                                           diam));
 			for (int j = i; j < graphe.taille(); ++j) {
-				if (graphe.getConnexion(i, j)) {
+				if (graphe.getConnexion(i, j) != 0) {
 					g.drawLine((int) (coord.get(i).getX() + diam / 2), // Make formatter happy
 					           (int) (coord.get(i).getY() + diam / 2), // until I figure out
 					           (int) (coord.get(j).getX() + diam / 2), // the setting I need.
