@@ -40,7 +40,7 @@ public class VueGrapheEditeur extends VueGraphe {
 				g.setColor(super.getCouleur());
 			}
 			for (int j = i; j < getGraphe().taille(); ++j) {
-				if (getGraphe().getConnexion(i, j)) {
+				if (getGraphe().getConnexion(i, j) != 0) {
 					g.drawLine((int) (coord.get(i).getX() + diam / 2), // Make formatter happy
 					           (int) (coord.get(i).getY() + diam / 2), // until I figure out
 					           (int) (coord.get(j).getX() + diam / 2), // the setting I need.

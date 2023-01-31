@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Graphe {
 	public Graphe() {
@@ -17,7 +18,7 @@ public class Graphe {
 	public ArrayList<Integer> getConnexions(int i) {
 		return listes.getConnexions(i);
 	}
-	public boolean getConnexion(int i, int j) {
+	public int getConnexion(int i, int j) {
 		return matrice.getConnexion(i, j);
 	}
 
@@ -31,7 +32,7 @@ public class Graphe {
 
 class GrapheMatrice {
 	public GrapheMatrice() {
-		contenu = new byte[1][8];
+		contenu = new byte[1][1];
 		taille_ = 0;
 	}
 
@@ -49,24 +50,28 @@ class GrapheMatrice {
 	}
 	public void setConnexion(int i, int j, boolean val) {
 		if (val) {
-			contenu[i / 8][j] |= (1 << (i % 8));
-			contenu[j / 8][i] |= (1 << (j % 8));
+			contenu[i][j] += contenu[i][j] == 0xFF ? 0 : 1;
+			if (i != j) {
+				contenu[j][i] += contenu[i][j] == 0xFF ? 0 : 1;
+			}
 		} else {
-			contenu[i / 8][j] &= ~(1 << (i % 8));
-			contenu[j / 8][i] &= ~(1 << (j % 8));
+			contenu[i][j] -= contenu[i][j] == 0x00 ? 0 : 1;
+			if (i != j) {
+				contenu[j][i] -= contenu[i][j] == 0x00 ? 0 : 1;
+			}
 		}
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		var r = new ArrayList<Integer>();
 		for (int j = 0; j < contenu[0].length; j++) {
-			if (getConnexion(i, j)) {
+			for (int n = 0; n < getConnexion(i, j); n++) {
 				r.add(j);
 			}
 		}
 		return r;
 	}
-	public boolean getConnexion(int i, int j) {
-		return (contenu[i / 8][j] & (1 << (i % 8))) != 0;
+	public int getConnexion(int i, int j) {
+		return contenu[i][j];
 	}
 
 	public int taille() {
@@ -97,27 +102,23 @@ class GrapheListes {
 		contenu[taille_ - 1] = new ArrayList<Integer>();
 	}
 	public void setConnexion(int i, int j, boolean val) {
-		if (getConnexion(i, j) == val) {
-			return;
-		}
-		if (val == false) {
-			contenu[i].remove(Integer.valueOf(j));
-			if (i != j) {
-				contenu[j].remove(Integer.valueOf(i));
-			}
-		}
-		if (val == true) {
+		if (val) {
 			contenu[i].add(Integer.valueOf(j));
 			if (i != j) {
 				contenu[j].add(Integer.valueOf(i));
+			}
+		} else {
+			contenu[i].remove(Integer.valueOf(j));
+			if (i != j) {
+				contenu[j].remove(Integer.valueOf(i));
 			}
 		}
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		return contenu[i];
 	}
-	public boolean getConnexion(int i, int j) {
-		return contenu[i].contains(Integer.valueOf(j));
+	public int getConnexion(int i, int j) {
+		return Collections.frequency(contenu[i], Integer.valueOf(j));
 	}
 
 	public int taille() {
