@@ -51,8 +51,8 @@ class GrapheMatrice {
 		taille_++;
 		if (taille_ > contenu[0].length) {
 			var nouveau_contenu = new byte[contenu.length * 2][contenu[0].length * 2];
-			for (int i = 0; i < contenu.length; i++) {
-				for (int j = 0; j < contenu[i].length; j++) {
+			for (int i = 0; i < taille_-1; i++) {
+				for (int j = 0; j < taille_-1; j++) {
 					nouveau_contenu[i][j] = contenu[i][j];
 				}
 			}
@@ -73,10 +73,11 @@ class GrapheMatrice {
 		}
 	}
 	public void supprSommet(int i){
-		for(int j = 0; j < contenu[i].length; j++) {
-			setConnexion(i, j, false);
+		for(int j = 0; j < taille_; j++) {
+			contenu[i][j] = contenu[taille_-1][j];
+			contenu[j][i] = contenu[j][taille_-1];
 		}
-		//supprimer sommet i
+		taille_--;
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		var r = new ArrayList<Integer>();
@@ -111,7 +112,7 @@ class GrapheListes {
 		taille_++;
 		if (taille_ > contenu.length) {
 			var nouveau_contenu = new ArrayList[contenu.length * 2];
-			for (int i = 0; i < contenu.length; i++) {
+			for (int i = 0; i < taille_-1; i++) {
 				nouveau_contenu[i] = contenu[i];
 			}
 			contenu = nouveau_contenu;
@@ -135,7 +136,9 @@ class GrapheListes {
 		for(int j = 0; j < contenu[i].size(); j++) {
 			setConnexion(i, j, false);
 		}
-		//supprimer sommet i
+		contenu[i].clear();
+		contenu[i].addAll(contenu[taille_-1]);
+		taille_--;
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		return contenu[i];

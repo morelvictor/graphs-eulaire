@@ -57,4 +57,8 @@ public class VueGrapheEditeur extends VueGraphe {
 	public int getId(int x, int y) {
 		return super.getId(x, y);
 	}
+
+	public void supprSommet(int id){
+		super.supprSommet(id);	
+	}
 }

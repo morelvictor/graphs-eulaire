@@ -59,6 +59,11 @@ public abstract class VueGraphe extends JComponent {
 		return DIAMETRE;
 	}
 
+	public void supprSommet(int id){
+		coordonnees.remove(id);
+		graphe.supprSommet(id);
+	}
+
 	public int getId(int x, int y) {
 		for (int i = 0; i < coordonnees.size(); i++) {
 			if ((x <= coordonnees.get(i).getX() + DIAMETRE) &&
