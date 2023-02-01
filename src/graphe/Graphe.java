@@ -16,8 +16,11 @@ public class Graphe {
 		listes.setConnexion(i, j, val);
 	}
 	public int supprSommet(int i) {
-		matrice.supprSommet(i);
-		return listes.supprSommet(i);
+		if(taille() > 0){
+			matrice.supprSommet(i);
+			return listes.supprSommet(i);
+		}
+		return 0;
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		return listes.getConnexions(i);
