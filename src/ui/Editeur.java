@@ -162,7 +162,6 @@ public class Editeur extends JPanel {
 
 	public void setConnexionRandom(boolean b){
 		if(!b && vuegraphe.getGraphe().nbConnexions() < 1){
-			System.out.println("0");
 			return;
 		}
 		int id1 = r.nextInt(vuegraphe.getGraphe().taille());
