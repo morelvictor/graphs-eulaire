@@ -30,6 +30,9 @@ public class Editeur extends JPanel {
 	private static Random r = new Random();
 	private boolean en_generation = false;
 
+	private int nb_sommets = 5 + r.nextInt(20);
+	private int nb_aretes = r.nextInt(nb_sommets);
+
 	private JButton ajoute_sommet;
 	private JButton ajoute_arete;
 	private JButton enleve_sommet;
@@ -107,8 +110,6 @@ public class Editeur extends JPanel {
 			peut_lier = false;
 			peut_poser_sommet = false;
 			if(en_generation){
-				int nb_sommets = 5 + r.nextInt(20);
-				int nb_aretes = r.nextInt(nb_sommets);
 				vuegraphe.setGraphe(getNRandomSom(nb_sommets, nb_aretes), getNRandomCoord(nb_sommets));
 			}
 			repaint();
@@ -120,6 +121,7 @@ public class Editeur extends JPanel {
 
 		ajoute_sommet.addActionListener(
 			(ActionEvent e) -> {
+			nb_sommets++;
 			vuegraphe.ajouteSommet(getRandomCoord());
 			repaint();
 		});
@@ -130,6 +132,7 @@ public class Editeur extends JPanel {
 
 		enleve_sommet.addActionListener(
 			(ActionEvent e) -> {
+			nb_sommets--;
 			vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille()));
 			repaint();
 		});
@@ -140,6 +143,7 @@ public class Editeur extends JPanel {
 
 		ajoute_arete.addActionListener(
 			(ActionEvent e) -> {
+			nb_aretes++;
 			setConnexionRandom(true);
 			repaint();
 		});
@@ -150,6 +154,7 @@ public class Editeur extends JPanel {
 
 		enleve_arete.addActionListener(
 			(ActionEvent e) -> {
+			nb_aretes--;
 			setConnexionRandom(false);
 			repaint();
 		});

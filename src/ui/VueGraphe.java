@@ -60,7 +60,8 @@ public abstract class VueGraphe extends JComponent {
 	}
 
 	public void supprSommet(int id){
-		coordonnees.remove(id);
+		coordonnees.set(id, coordonnees.get(coordonnees.size()-1));
+		coordonnees.remove(coordonnees.size()-1);
 		graphe.supprSommet(id);
 	}
 
