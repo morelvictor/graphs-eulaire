@@ -90,6 +90,8 @@ public class Editeur extends JPanel {
 
 		suppr_all.addActionListener(
 			(ActionEvent e) -> {
+			nb_sommets = 0;
+			nb_aretes = 0;
 			vuegraphe.viderGraphe();
 			repaint();
 		});

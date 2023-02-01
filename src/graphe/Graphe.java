@@ -51,12 +51,16 @@ class GrapheMatrice {
 		taille_++;
 		if (taille_ > contenu[0].length) {
 			var nouveau_contenu = new byte[contenu.length * 2][contenu[0].length * 2];
-			for (int i = 0; i < taille_-1; i++) {
-				for (int j = 0; j < taille_-1; j++) {
+			for (int i = 0; i < contenu.length; i++) {
+				for (int j = 0; j < contenu[0].length; j++) {
 					nouveau_contenu[i][j] = contenu[i][j];
 				}
 			}
 			contenu = nouveau_contenu;
+		}
+		for(int n = 0; n < taille_; n++) {
+			contenu[taille_-1][n] = 0;
+			contenu[n][taille_-1] = 0;
 		}
 	}
 	public void setConnexion(int i, int j, boolean val) {
@@ -133,12 +137,11 @@ class GrapheListes {
 		}
 	}
 	public int supprSommet(int i){
-		for(int j = 0; j < contenu[i].size(); j++) {
-			setConnexion(i, j, false);
-		}
 		int res = contenu[i].size();
-		contenu[i].clear();
-		contenu[i].addAll(contenu[taille_-1]);
+		while (contenu[i].size() > 0) {
+			setConnexion(i, contenu[i].get(0), false);
+		}
+		contenu[i] = contenu[taille_-1];
 		taille_--;
 		return res;
 	}
