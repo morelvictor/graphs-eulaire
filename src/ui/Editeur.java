@@ -133,7 +133,7 @@ public class Editeur extends JPanel {
 		enleve_sommet.addActionListener(
 			(ActionEvent e) -> {
 			nb_sommets--;
-			vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille()));
+			nb_aretes -= vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille()));
 			repaint();
 		});
 
@@ -278,7 +278,8 @@ public class Editeur extends JPanel {
 				}
 			}
 			if(peut_suppr && id >= 0) {
-				vuegraphe.supprSommet(id);
+				nb_sommets--;
+				nb_aretes -= vuegraphe.supprSommet(id);
 			}
 			repaint();
 		}
