@@ -29,7 +29,13 @@ public class Graphe {
 	public int taille() {
 		return matrice.taille();
 	}
-
+	public int nbConnexions() {
+		int res = 0;
+		for(int i = 0; i < taille(); i++) {
+			res+=getConnexions(i).size();
+		}
+		return res;
+	}
 
 	private GrapheMatrice matrice;
 	private GrapheListes listes;

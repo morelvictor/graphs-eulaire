@@ -4,6 +4,7 @@ import java.awt.geom.Ellipse2D;
 import java.util.LinkedList;
 import java.util.Random;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Editeur extends JPanel {
 	private static int DIAMETRE = 15;
@@ -27,16 +28,21 @@ public class Editeur extends JPanel {
 
 	private JButton generer_random;
 	private static Random r = new Random();
+	private boolean en_generation = false;
 
+	private JButton ajoute_sommet;
+	private JButton ajoute_arete;
+	private JButton enleve_sommet;
+	private JButton enleve_arete;
+	private JLabel sommet = new JLabel("Sommet");
+	private JLabel arete = new JLabel("Arête");
 
 	public Editeur() {
 
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
-		vuegraphe.setBounds(20, 20, 800, 800);
 		add(vuegraphe);
 
 		poser_sommet = new JButton("o");
-		poser_sommet.setBounds(900, 50, 50, 50);
 		add(poser_sommet);
 
 		poser_sommet.addActionListener(
@@ -44,12 +50,12 @@ public class Editeur extends JPanel {
 			peut_poser_sommet = !peut_poser_sommet;
 			peut_lier = false;
 			peut_suppr = false;
+			en_generation = false;
 			repaint();
 		});
 
 
 		lier = new JButton("x");
-		lier.setBounds(900, 110, 50, 50);
 		add(lier);
 
 		lier.addActionListener(
@@ -57,13 +63,13 @@ public class Editeur extends JPanel {
 			peut_lier = !peut_lier;
 			peut_poser_sommet = false;
 			peut_suppr = false;
+			en_generation = false;
 			a_lier = -1;
 			repaint();
 		});
 
 
 		suppr_som = new JButton("☒");
-		suppr_som.setBounds(900, 170, 50, 50);
 		add(suppr_som);
 
 		suppr_som.addActionListener(
@@ -71,12 +77,12 @@ public class Editeur extends JPanel {
 			peut_suppr = !peut_suppr;
 			peut_poser_sommet = false;
 			peut_lier = false;
+			en_generation = false;
 			repaint();
 			});
 
 
 		suppr_all = new JButton("⟲");
-		suppr_all.setBounds(900, 230, 50, 50);
 		add(suppr_all);
 
 		suppr_all.addActionListener(
@@ -84,43 +90,123 @@ public class Editeur extends JPanel {
 			vuegraphe.viderGraphe();
 			repaint();
 		});
-		repaint();
 
 
 		generer_random = new JButton("?");
-		generer_random.setBounds(900, 290, 50, 50);
 		add(generer_random);
 
 
 		generer_random.addActionListener(
 			(ActionEvent e) -> {
-			int taille = r.nextInt(20);
-			int proba = r.nextInt(10);
-			vuegraphe.setGraphe(getNRandomSom(taille, proba), getNRandomCoord(taille));
+			en_generation = !en_generation;
+			ajoute_sommet.setEnabled(en_generation);
+			ajoute_arete.setEnabled(en_generation);
+			enleve_sommet.setEnabled(en_generation);
+			enleve_arete.setEnabled(en_generation);
+			peut_suppr = false;
+			peut_lier = false;
+			peut_poser_sommet = false;
+			if(en_generation){
+				int nb_sommets = 5 + r.nextInt(20);
+				int nb_aretes = r.nextInt(nb_sommets);
+				vuegraphe.setGraphe(getNRandomSom(nb_sommets, nb_aretes), getNRandomCoord(nb_sommets));
+			}
 			repaint();
 		});
 
+		ajoute_sommet = new JButton("+");
+		ajoute_sommet.setEnabled(false);
+		add(ajoute_sommet);
+
+		ajoute_sommet.addActionListener(
+			(ActionEvent e) -> {
+			vuegraphe.ajouteSommet(getRandomCoord());
+			repaint();
+		});
+
+		enleve_sommet = new JButton("-");
+		enleve_sommet.setEnabled(false);
+		add(enleve_sommet);
+
+		enleve_sommet.addActionListener(
+			(ActionEvent e) -> {
+			vuegraphe.getGraphe().supprSommet(r.nextInt(vuegraphe.getGraphe().taille()));
+			repaint();
+		});
+
+		ajoute_arete = new JButton("+");
+		ajoute_arete.setEnabled(false);
+		add(ajoute_arete);
+
+		ajoute_arete.addActionListener(
+			(ActionEvent e) -> {
+			setConnexionRandom(true);
+			repaint();
+		});
+
+		enleve_arete = new JButton("-");
+		enleve_arete.setEnabled(false);
+		add(enleve_arete);
+
+		enleve_arete.addActionListener(
+			(ActionEvent e) -> {
+			setConnexionRandom(false);
+			repaint();
+		});
+
+		add(sommet);
+		add(arete);
+
+
+	}
+
+	public void setConnexionRandom(boolean b){
+		if(!b && vuegraphe.getGraphe().nbConnexions() < 1){
+			System.out.println("0");
+			return;
+		}
+		int id1 = r.nextInt(vuegraphe.getGraphe().taille());
+		while(!b && vuegraphe.getGraphe().getConnexions(id1).size()<1){
+			id1 = r.nextInt(vuegraphe.getGraphe().taille());
+		}
+		int id2;
+		if(!b){
+			ArrayList<Integer> l = vuegraphe.getGraphe().getConnexions(id1);
+			id2 = l.get(r.nextInt(l.size()));
+		}
+		else{
+			id2 = r.nextInt(vuegraphe.getGraphe().taille());
+			while(id1 == id2){
+				id2 = r.nextInt(vuegraphe.getGraphe().taille());
+			}
+		}
+		vuegraphe.getGraphe().setConnexion(id1, id2, b);
+	}
+
+	public static Point getRandomCoord(){
+		return new Point(30 + r.nextInt(800), 30 + r.nextInt(800));
 	}
 
 	public static LinkedList<Point> getNRandomCoord(int n) {
 		LinkedList<Point> res = new LinkedList<Point>();
 		for (int i = 0; i < n; i++) {
-			res.add(new Point(30 + r.nextInt(800), 30 + r.nextInt(800)));
+			res.add(getRandomCoord());
 		}
 		return res;
 	}
 
-	public static Graphe getNRandomSom(int n, int inverse_proba_arete) {
+	public static Graphe getNRandomSom(int nb_sommets, int nb_aretes) {
 		Graphe graphe = new Graphe();
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < nb_sommets; i++) {
 			graphe.addSommet();
 		}
-		for (int id = 0; id < n; id++) {
-			for (int j = id + 1; j < n; j++) {
-				if (r.nextInt(inverse_proba_arete + 1) == 1) {
-					graphe.setConnexion(id, j, true);
-				}
+		for (int j = 0; j < nb_aretes; j++) {
+			int id1 = r.nextInt(nb_sommets);
+			int id2 = r.nextInt(nb_sommets);
+			while(id2 == id1){
+				id2 = r.nextInt(nb_sommets);
 			}
+			graphe.setConnexion(id1, id2, true);
 		}
 		return graphe;
 	}
@@ -164,6 +250,12 @@ public class Editeur extends JPanel {
 		suppr_som.setBounds(getWidth() - 100, 170, 50, 50);
 		suppr_all.setBounds(getWidth() - 100, 230, 50, 50);
 		generer_random.setBounds(getWidth() - 100, 290, 50, 50);
+		ajoute_sommet.setBounds(getWidth() - 100, 350, 50, 24);
+		sommet.setBounds(getWidth() - 105, 375, 75, 24);
+		enleve_sommet.setBounds(getWidth() - 100, 400, 50, 24);
+		ajoute_arete.setBounds(getWidth() - 100, 450, 50, 24);
+		arete.setBounds(getWidth() - 95, 475, 75, 24);
+		enleve_arete.setBounds(getWidth() - 100, 500, 50, 24);
 	}
 
 
