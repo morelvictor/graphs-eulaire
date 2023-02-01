@@ -130,7 +130,7 @@ public class Editeur extends JPanel {
 
 		enleve_sommet.addActionListener(
 			(ActionEvent e) -> {
-			vuegraphe.getGraphe().supprSommet(r.nextInt(vuegraphe.getGraphe().taille()));
+			vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille()));
 			repaint();
 		});
 
