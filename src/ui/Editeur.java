@@ -172,8 +172,10 @@ public class Editeur extends JPanel {
 	}
 
 	public void ajouteNAretes(int n) {
-		nb_aretes += n;
-		n_aretes.setText("" + nb_aretes);
+		if (nb_aretes + n >= 0) {
+			nb_aretes += n;
+			n_aretes.setText("" + nb_aretes);
+		}
 	}
 
 	public void setConnexionRandom(boolean b) {
@@ -289,6 +291,7 @@ public class Editeur extends JPanel {
 				if (getALier() == -1) {
 					setALier(id);
 				} else {
+					ajouteNAretes(1);
 					vuegraphe.getGraphe().setConnexion(getALier(), id, true);
 					setALier(-1);
 				}
