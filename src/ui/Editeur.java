@@ -28,15 +28,17 @@ public class Editeur extends JPanel {
 	private static Random r = new Random();
 	private boolean en_generation = false;
 
-	private int nb_sommets = 5 + r.nextInt(20);
-	private int nb_aretes = r.nextInt(nb_sommets);
+	private int nb_sommets = 0;
+	private int nb_aretes = 0;
 
 	private JButton ajoute_sommet;
 	private JButton ajoute_arete;
 	private JButton enleve_sommet;
 	private JButton enleve_arete;
-	private JLabel sommet = new JLabel("Sommet");
-	private JLabel arete = new JLabel("Arête");
+	private JLabel sommet = new JLabel("Sommet : ");
+	private JLabel arete = new JLabel("Arête : ");
+	private JLabel n_sommets = new JLabel("0");
+	private JLabel n_aretes = new JLabel("0");
 
 	public Editeur() {
 
@@ -86,6 +88,8 @@ public class Editeur extends JPanel {
 		suppr_all.addActionListener((ActionEvent e) -> {
 			nb_sommets = 0;
 			nb_aretes = 0;
+			n_sommets.setText("0");
+			n_aretes.setText("0");
 			vuegraphe.viderGraphe();
 			repaint();
 		});
@@ -105,6 +109,10 @@ public class Editeur extends JPanel {
 			peut_lier = false;
 			peut_poser_sommet = false;
 			if (en_generation) {
+				nb_sommets = 5 + r.nextInt(20);
+				nb_aretes = r.nextInt(nb_sommets);
+				n_sommets.setText("" + nb_sommets);
+				n_aretes.setText("" + nb_aretes);
 				vuegraphe.setGraphe(getNRandomSom(nb_sommets, nb_aretes), getNRandomCoord(nb_sommets));
 			}
 			repaint();
@@ -115,7 +123,7 @@ public class Editeur extends JPanel {
 		add(ajoute_sommet);
 
 		ajoute_sommet.addActionListener((ActionEvent e) -> {
-			nb_sommets++;
+			ajouteNSommets(1);
 			vuegraphe.ajouteSommet(getRandomCoord());
 			repaint();
 		});
@@ -126,8 +134,8 @@ public class Editeur extends JPanel {
 
 		enleve_sommet.addActionListener((ActionEvent e) -> {
 			if (nb_sommets > 0) {
-				nb_sommets--;
-				nb_aretes -= vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille()));
+				ajouteNSommets(-1);
+				ajouteNAretes(-1 * vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille())));
 			}
 			repaint();
 		});
@@ -137,7 +145,7 @@ public class Editeur extends JPanel {
 		add(ajoute_arete);
 
 		ajoute_arete.addActionListener((ActionEvent e) -> {
-			nb_aretes++;
+			ajouteNAretes(1);
 			setConnexionRandom(true);
 			repaint();
 		});
@@ -147,15 +155,25 @@ public class Editeur extends JPanel {
 		add(enleve_arete);
 
 		enleve_arete.addActionListener((ActionEvent e) -> {
-			nb_aretes--;
+			ajouteNAretes(-1);
 			setConnexionRandom(false);
 			repaint();
 		});
 
 		add(sommet);
 		add(arete);
+		add(n_sommets);
+		add(n_aretes);
+	}
 
+	public void ajouteNSommets(int n) {
+		nb_sommets += n;
+		n_sommets.setText("" + nb_sommets);
+	}
 
+	public void ajouteNAretes(int n) {
+		nb_aretes += n;
+		n_aretes.setText("" + nb_aretes);
 	}
 
 	public void setConnexionRandom(boolean b) {
@@ -212,6 +230,10 @@ public class Editeur extends JPanel {
 		return a_lier;
 	}
 
+	public boolean getPeutLier() {
+		return peut_lier;
+	}
+
 	public void setALier(int n) {
 		a_lier = n;
 	}
@@ -220,11 +242,10 @@ public class Editeur extends JPanel {
 		return peut_poser_sommet;
 	}
 
-	public boolean getPeutLier() {
-		return peut_lier;
-	}
-
 	public void paintComponent(Graphics g) {
+		g.setColor(Color.WHITE);
+		g.fillRect(getWidth() - 45, 375, 20, 24);
+		g.fillRect(getWidth() - 55, 475, 20, 24);
 		g.setColor(COULEUR);
 		if (peut_poser_sommet) {
 			g.setColor(Color.green);
@@ -247,10 +268,12 @@ public class Editeur extends JPanel {
 		suppr_all.setBounds(getWidth() - 100, 230, 50, 50);
 		generer_random.setBounds(getWidth() - 100, 290, 50, 50);
 		ajoute_sommet.setBounds(getWidth() - 100, 350, 50, 24);
-		sommet.setBounds(getWidth() - 105, 375, 75, 24);
+		sommet.setBounds(getWidth() - 115, 375, 75, 24);
+		n_sommets.setBounds(getWidth() - 45, 375, 24, 24);
 		enleve_sommet.setBounds(getWidth() - 100, 400, 50, 24);
 		ajoute_arete.setBounds(getWidth() - 100, 450, 50, 24);
-		arete.setBounds(getWidth() - 95, 475, 75, 24);
+		arete.setBounds(getWidth() - 105, 475, 75, 24);
+		n_aretes.setBounds(getWidth() - 55, 475, 24, 24);
 		enleve_arete.setBounds(getWidth() - 100, 500, 50, 24);
 	}
 
@@ -258,6 +281,7 @@ public class Editeur extends JPanel {
 	public class ControleurSourisEditeur implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			if (getPeutPoserSommet()) {
+				ajouteNSommets(1);
 				vuegraphe.ajouteSommet(new Point(e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2));
 			}
 			int id = vuegraphe.getId(e.getX(), e.getY());
@@ -270,8 +294,8 @@ public class Editeur extends JPanel {
 				}
 			}
 			if (peut_suppr && id >= 0) {
-				nb_sommets--;
-				nb_aretes -= vuegraphe.supprSommet(id);
+				ajouteNSommets(-1);
+				ajouteNAretes(-1 * vuegraphe.supprSommet(id));
 			}
 			repaint();
 		}
