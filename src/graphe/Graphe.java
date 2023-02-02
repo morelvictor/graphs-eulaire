@@ -16,7 +16,7 @@ public class Graphe {
 		listes.setConnexion(i, j, val);
 	}
 	public int supprSommet(int i) {
-		if(taille() > 0){
+		if (taille() > 0) {
 			matrice.supprSommet(i);
 			return listes.supprSommet(i);
 		}
@@ -34,8 +34,8 @@ public class Graphe {
 	}
 	public int nbConnexions() {
 		int res = 0;
-		for(int i = 0; i < taille(); i++) {
-			res+=getConnexions(i).size();
+		for (int i = 0; i < taille(); i++) {
+			res += getConnexions(i).size();
 		}
 		return res;
 	}
@@ -61,9 +61,9 @@ class GrapheMatrice {
 			}
 			contenu = nouveau_contenu;
 		}
-		for(int n = 0; n < taille_; n++) {
-			contenu[taille_-1][n] = 0;
-			contenu[n][taille_-1] = 0;
+		for (int n = 0; n < taille_; n++) {
+			contenu[taille_ - 1][n] = 0;
+			contenu[n][taille_ - 1] = 0;
 		}
 	}
 	public void setConnexion(int i, int j, boolean val) {
@@ -79,10 +79,10 @@ class GrapheMatrice {
 			}
 		}
 	}
-	public void supprSommet(int i){
-		for(int j = 0; j < taille_; j++) {
-			contenu[i][j] = contenu[taille_-1][j];
-			contenu[j][i] = contenu[j][taille_-1];
+	public void supprSommet(int i) {
+		for (int j = 0; j < taille_; j++) {
+			contenu[i][j] = contenu[taille_ - 1][j];
+			contenu[j][i] = contenu[j][taille_ - 1];
 		}
 		taille_--;
 	}
@@ -119,7 +119,7 @@ class GrapheListes {
 		taille_++;
 		if (taille_ > contenu.length) {
 			var nouveau_contenu = new ArrayList[contenu.length * 2];
-			for (int i = 0; i < taille_-1; i++) {
+			for (int i = 0; i < taille_ - 1; i++) {
 				nouveau_contenu[i] = contenu[i];
 			}
 			contenu = nouveau_contenu;
@@ -139,12 +139,12 @@ class GrapheListes {
 			}
 		}
 	}
-	public int supprSommet(int i){
+	public int supprSommet(int i) {
 		int res = contenu[i].size();
 		while (contenu[i].size() > 0) {
 			setConnexion(i, contenu[i].get(0), false);
 		}
-		contenu[i] = contenu[taille_-1];
+		contenu[i] = contenu[taille_ - 1];
 		taille_--;
 		return res;
 	}
