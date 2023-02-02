@@ -145,9 +145,11 @@ public class Editeur extends JPanel {
 		add(ajoute_arete);
 
 		ajoute_arete.addActionListener((ActionEvent e) -> {
-			ajouteNAretes(1);
-			setConnexionRandom(true);
-			repaint();
+			if (nb_sommets > 1) {
+				ajouteNAretes(1);
+				setConnexionRandom(true);
+				repaint();
+			}
 		});
 
 		enleve_arete = new JButton("-");
