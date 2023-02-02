@@ -55,7 +55,7 @@ class GrapheMatrice {
 		if (taille_ > contenu[0].length) {
 			var nouveau_contenu = new byte[contenu.length * 2][contenu[0].length * 2];
 			for (int i = 0; i < contenu.length; i++) {
-				for (int j = 0; j < contenu[0].length; j++) {
+				for (int j = 0; j < contenu[i].length; j++) {
 					nouveau_contenu[i][j] = contenu[i][j];
 				}
 			}
@@ -119,7 +119,7 @@ class GrapheListes {
 		taille_++;
 		if (taille_ > contenu.length) {
 			var nouveau_contenu = new ArrayList[contenu.length * 2];
-			for (int i = 0; i < taille_ - 1; i++) {
+			for (int i = 0; i < contenu.length; i++) {
 				nouveau_contenu[i] = contenu[i];
 			}
 			contenu = nouveau_contenu;
