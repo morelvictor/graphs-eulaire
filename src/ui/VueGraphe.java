@@ -3,7 +3,9 @@ import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 
 import javax.swing.*;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -49,7 +51,6 @@ public abstract class VueGraphe extends JComponent {
 	public void ajouteSommet(Point p) {
 		graphe.addSommet();
 		coordonnees.add(p);
-		System.out.println(this);
 	}
 
 	public Color getCouleur() {
@@ -110,4 +111,15 @@ public abstract class VueGraphe extends JComponent {
 
 		return res + graphe.toString();
 	}
+
+	public void exporter() {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("graph.txt"));
+			writer.write(this.toString());
+			writer.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

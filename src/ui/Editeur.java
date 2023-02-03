@@ -25,6 +25,8 @@ public class Editeur extends JPanel {
 
 	private JButton suppr_all;
 
+	private JButton exporter;
+
 	public Editeur() {
 
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
@@ -57,7 +59,6 @@ public class Editeur extends JPanel {
 		generer_random.setBounds(900, 170, 50, 50);
 		add(generer_random);
 
-
 		generer_random.addActionListener(
 			(ActionEvent e) -> {
 			int taille = r.nextInt(20);
@@ -75,7 +76,15 @@ public class Editeur extends JPanel {
 			vuegraphe.viderGraphe();
 			repaint();
 		});
-		repaint();
+
+		exporter = new JButton("→");
+		exporter.setBounds(900, 290, 50, 50);
+		add(exporter);
+
+		exporter.addActionListener(
+				(ActionEvent e) -> {
+				vuegraphe.exporter();
+		});
 	}
 
 	public static LinkedList<Point> getNRandomCoord(int n) {
@@ -123,6 +132,7 @@ public class Editeur extends JPanel {
 		poser_sommet.setBounds(getWidth() - 100, 50, 50, 50);
 		generer_random.setBounds(getWidth() - 100, 170, 50, 50);
 		suppr_all.setBounds(getWidth() - 100, 230, 50, 50);
+		exporter.setBounds(getWidth() - 100, 290, 50, 50);
 	}
 
 
