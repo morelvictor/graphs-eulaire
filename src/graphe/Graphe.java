@@ -15,6 +15,10 @@ public class Graphe {
 		matrice.setConnexion(i, j, val);
 		listes.setConnexion(i, j, val);
 	}
+	public int supprSommet(int i) {
+		matrice.supprSommet(i);
+		return listes.supprSommet(i);
+	}
 	public ArrayList<Integer> getConnexions(int i) {
 		return listes.getConnexions(i);
 	}
@@ -24,6 +28,17 @@ public class Graphe {
 
 	public int taille() {
 		return matrice.taille();
+	}
+	public int nbConnexions() {
+		int res = 0;
+		for (int i = 0; i < taille(); i++) {
+			res += getConnexions(i).size();
+		}
+		return res;
+	}
+
+	public String toString() {
+		return matrice.toString();
 	}
 
 	private GrapheMatrice matrice;
@@ -47,6 +62,10 @@ class GrapheMatrice {
 			}
 			contenu = nouveau_contenu;
 		}
+		for (int n = 0; n < taille_; n++) {
+			contenu[taille_ - 1][n] = 0;
+			contenu[n][taille_ - 1] = 0;
+		}
 	}
 	public void setConnexion(int i, int j, boolean val) {
 		if (val) {
@@ -60,6 +79,13 @@ class GrapheMatrice {
 				contenu[j][i] -= contenu[j][i] == 0x00 ? 0 : 1;
 			}
 		}
+	}
+	public void supprSommet(int i) {
+		for (int j = 0; j < taille_; j++) {
+			contenu[i][j] = contenu[taille_ - 1][j];
+			contenu[j][i] = contenu[j][taille_ - 1];
+		}
+		taille_--;
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		var r = new ArrayList<Integer>();
@@ -76,6 +102,21 @@ class GrapheMatrice {
 
 	public int taille() {
 		return taille_;
+	}
+
+	public String toString() {
+		String res = "";
+
+		if (taille_ == 0) return res;
+
+		for (int i = 0; i < taille_; i++) {
+			res += contenu[i][0] + "";
+			for (int j = 1; j < taille_; j++) {
+				res += " " + contenu[i][j];
+			}
+			res += "\n";
+		}
+		return res;
 	}
 
 	private byte contenu[][];
@@ -113,6 +154,15 @@ class GrapheListes {
 				contenu[j].remove(Integer.valueOf(i));
 			}
 		}
+	}
+	public int supprSommet(int i) {
+		int res = contenu[i].size();
+		while (contenu[i].size() > 0) {
+			setConnexion(i, contenu[i].get(0), false);
+		}
+		contenu[i] = contenu[taille_ - 1];
+		taille_--;
+		return res;
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		return contenu[i];

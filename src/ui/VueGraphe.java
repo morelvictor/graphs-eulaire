@@ -28,6 +28,11 @@ public abstract class VueGraphe extends JComponent {
 		return coordonnees;
 	}
 
+	public void supprCoordonnee(int i) {
+		coordonnees.remove(i);
+
+	}
+
 	public Graphe getGraphe() {
 		return graphe;
 	}
@@ -44,6 +49,7 @@ public abstract class VueGraphe extends JComponent {
 	public void ajouteSommet(Point p) {
 		graphe.addSommet();
 		coordonnees.add(p);
+		System.out.println(this);
 	}
 
 	public Color getCouleur() {
@@ -54,12 +60,18 @@ public abstract class VueGraphe extends JComponent {
 		return DIAMETRE;
 	}
 
+	public int supprSommet(int id) {
+		coordonnees.set(id, coordonnees.get(coordonnees.size() - 1));
+		coordonnees.remove(coordonnees.size() - 1);
+		return graphe.supprSommet(id);
+	}
+
 	public int getId(int x, int y) {
 		for (int i = 0; i < coordonnees.size(); i++) {
-			if ((x <= coordonnees.get(i).getX() + 3 * DIAMETRE / 2) &&
-			    (x >= coordonnees.get(i).getX() - DIAMETRE / 2) &&
-			    (y <= coordonnees.get(i).getY() + 3 * DIAMETRE / 2) &&
-			    (y >= coordonnees.get(i).getY() - DIAMETRE / 2)) {
+			if ((x <= coordonnees.get(i).getX() + DIAMETRE) &&
+			    (x >= coordonnees.get(i).getX()) &&
+			    (y <= coordonnees.get(i).getY() + DIAMETRE) &&
+			    (y >= coordonnees.get(i).getY())) {
 				return i;
 			}
 		}
@@ -84,5 +96,18 @@ public abstract class VueGraphe extends JComponent {
 				}
 			}
 		}
+	}
+
+	public String toString() {
+		String res = "";
+
+		if (coordonnees.size() == 0) return res;
+
+		for (Point pos : coordonnees)
+			res += " " + pos.getX() + ";" + pos.getY();
+		
+		res = res.substring(1, res.length()) + "\n"; // retrait du premier espace
+
+		return res + graphe.toString();
 	}
 }
