@@ -17,6 +17,7 @@ public class VueGraphePartie extends VueGraphe {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseClicked(MouseEvent e) {
+				
 				if(oujesuis < 0) {
 					if(getId(e.getX(), e.getY()) != -1) {
 						oujesuis = getId(e.getX(), e.getY());
@@ -58,6 +59,11 @@ public class VueGraphePartie extends VueGraphe {
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(getCouleur());
+		
+		if(getGraphe().nbConnexions() == 0) {
+			g.drawString("Bravo c'est gagné", 100 , 100);
+			return;
+		}
 
 		LinkedList<Point> coord = getCoordonnees();
 		int diam = getDiametre();
