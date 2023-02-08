@@ -49,7 +49,7 @@ public class VueGraphePartie extends VueGraphe {
 		getGraphe().setConnexion(2, 4, true);
 
 		try {	
-			origin = getGraphe()/*.clone()*/;
+			origin = getGraphe().clone();
 		} catch (Exception e) {
 			//TODO: handle exception
 		}
@@ -90,6 +90,7 @@ public class VueGraphePartie extends VueGraphe {
 	public void regen() {
 		try {
 			setGraphe(origin.clone());
+			oujesuis = -1;
 			repaint();
 		} catch (Exception e) {
 			//TODO: handle exception
