@@ -1,10 +1,19 @@
+import java.lang.Cloneable;
+import java.lang.CloneNotSupportedException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Graphe {
+public class Graphe implements Cloneable {
 	public Graphe() {
 		matrice = new GrapheMatrice();
 		listes = new GrapheListes();
+	}
+
+	public Graphe clone() throws CloneNotSupportedException {
+		var g = new Graphe();
+		g.matrice = matrice.clone();
+		g.listes = listes.clone();
+		return g;
 	}
 
 	public void addSommet() {
@@ -37,14 +46,90 @@ public class Graphe {
 		return res;
 	}
 
+
+	public ArrayList<Integer> breadthFirst(int start) {
+		var result = new ArrayList<Integer>();
+		result.add(Integer.valueOf(start));
+		for (int i = 0; i < result.size(); i++) {
+			for (Integer v : getConnexions(result.get(i))) {
+				if (!result.contains(v)) {
+					result.add(v);
+				}
+			}
+		}
+		return result;
+	}
+
+	public ArrayList<Integer> hierholzer() {
+		if (breadthFirst(0).size() != taille()) {
+			System.err.println("Graph must be connected for hierholzer to work.");
+			return null;
+		}
+		int odd_vertices = 0;
+		for (int i = 0; i < taille(); i++) {
+			if (getConnexions(i).size() % 2 == 1) {
+				odd_vertices++;
+			}
+		}
+		if (odd_vertices == 1 || odd_vertices == 2) {
+			System.err.println("Hierholzer implementation doesn't support Euler trails for now.");
+			return null;
+		} else if (odd_vertices != 0) {
+			System.err.println("Graph contains no Euler cycle or trail.");
+			return null;
+		}
+
+		Graphe g;
+		var result = new ArrayList<Integer>();
+		result.add(Integer.valueOf(0));
+		try {
+			g = clone();
+		} catch (CloneNotSupportedException err) {
+			System.out.println("This shouldn't happen.");
+			g = null;
+			// This won't happen, java's just being a dick.
+		}
+
+		while (g.getConnexions(result.get(result.size() - 1)).size() != 0) {
+			int next_vertex = g.getConnexions(result.get(result.size() - 1)).get(0);
+			g.setConnexion(result.get(result.size() - 1), next_vertex, false);
+			result.add(Integer.valueOf(next_vertex));
+		}
+		while (g.nbConnexions() != 0) {
+			// Go to last still-connected vertex you find. Has to exist.
+			result.remove(result.size() - 1);
+			while (g.getConnexions(result.get(result.size() - 1)).size() == 0) {
+				var v = result.get(result.size() - 1);
+				result.remove(result.size() - 1);
+				result.add(0, v);
+			}
+			result.add(0, result.get(result.size() - 1));
+			// While there is a connexion, take it.
+			while (g.getConnexions(result.get(result.size() - 1)).size() != 0) {
+				int next_vertex = g.getConnexions(result.get(result.size() - 1)).get(0);
+				g.setConnexion(result.get(result.size() - 1), next_vertex, false);
+				result.add(Integer.valueOf(next_vertex));
+			}
+		}
+		return result;
+	}
+
+
 	private GrapheMatrice matrice;
 	private GrapheListes listes;
 }
 
-class GrapheMatrice {
+class GrapheMatrice implements Cloneable {
 	public GrapheMatrice() {
 		contenu = new byte[1][1];
 		taille_ = 0;
+	}
+
+	public GrapheMatrice clone() throws CloneNotSupportedException {
+		var g = new GrapheMatrice();
+		g.contenu = new byte[contenu.length][contenu[0].length];
+		g.taille_ = taille_;
+		return g;
 	}
 
 	public void addSommet() {
@@ -104,11 +189,26 @@ class GrapheMatrice {
 	private int taille_;
 }
 
-class GrapheListes {
+class GrapheListes implements Cloneable {
 	@SuppressWarnings("unchecked")
 	public GrapheListes() {
 		contenu = new ArrayList[1];
 		taille_ = 0;
+	}
+
+	@SuppressWarnings("unchecked")
+	public GrapheListes clone() throws CloneNotSupportedException {
+		var g = new GrapheListes();
+		g.contenu = new ArrayList[contenu.length];
+		for (int i = 0; i < g.contenu.length; i++) {
+			if (contenu[i] == null) {
+				g.contenu[i] = null;
+			} else {
+				g.contenu[i] = (ArrayList<Integer>)contenu[i].clone();
+			}
+		}
+		g.taille_ = taille_;
+		return g;
 	}
 
 	@SuppressWarnings("unchecked")
