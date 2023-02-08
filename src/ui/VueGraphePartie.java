@@ -7,6 +7,7 @@ import javax.swing.*;
 
 public class VueGraphePartie extends VueGraphe {
 	int oujesuis = -1;
+	Graphe origin;
 
 	public VueGraphePartie() {
 		super(Color.black, 30, null);
@@ -46,6 +47,12 @@ public class VueGraphePartie extends VueGraphe {
 		getGraphe().setConnexion(0, 3, true);
 		getGraphe().setConnexion(4, 1, true);
 		getGraphe().setConnexion(2, 4, true);
+
+		try {	
+			origin = getGraphe()/*.clone()*/;
+		} catch (Exception e) {
+			//TODO: handle exception
+		}
 	}
 
 	@Override
@@ -77,6 +84,15 @@ public class VueGraphePartie extends VueGraphe {
 					}
 				}
 			}
+		}
+	}
+
+	public void regen() {
+		try {
+			setGraphe(origin.clone());
+			repaint();
+		} catch (Exception e) {
+			//TODO: handle exception
 		}
 	}
 }

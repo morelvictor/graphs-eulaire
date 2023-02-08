@@ -37,6 +37,10 @@ public abstract class VueGraphe extends JComponent {
 		return graphe;
 	}
 
+	public void setGraphe(Graphe g) {
+		graphe = g;
+	}
+
 	public void viderGraphe() {
 		graphe = new Graphe();
 		coordonnees = new LinkedList<Point>();
