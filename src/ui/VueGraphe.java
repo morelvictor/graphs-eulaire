@@ -86,12 +86,20 @@ public abstract class VueGraphe extends JComponent {
 		for (int i = 0; i < graphe.taille(); ++i) {
 			((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(), diam,
 			                                           diam));
-			for (int j = i; j < graphe.taille(); ++j) {
-				if (graphe.getConnexion(i, j) != 0) {
-					g.drawLine((int) (coord.get(i).getX() + diam / 2), // Make formatter happy
-					           (int) (coord.get(i).getY() + diam / 2), // until I figure out
-					           (int) (coord.get(j).getX() + diam / 2), // the setting I need.
-					           (int) (coord.get(j).getY() + diam / 2));
+			
+			for (int j = i; j < getGraphe().taille(); ++j) {
+				if (getGraphe().getConnexion(i, j) != 0) {
+					int coord_i_x = (int) (coord.get(i).getX() + diam / 2);
+					int coord_i_y = (int) (coord.get(i).getY() + diam / 2);
+					int coord_j_x = (int) (coord.get(j).getX() + diam / 2);
+					int coord_j_y = (int) (coord.get(j).getY() + diam / 2);
+					g.drawLine(coord_i_x, // Make formatter happy
+					           coord_i_y, // until I figure out
+					           coord_j_x, // the setting I need.
+					           coord_j_y);
+					if (getGraphe().getConnexion(i, j) > 1) {
+						g.drawString(getGraphe().getConnexion(i, j)+"", (coord_i_x + coord_j_x) / 2, (coord_i_y + coord_j_y) / 2);
+					}
 				}
 			}
 		}
