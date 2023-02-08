@@ -128,6 +128,11 @@ class GrapheMatrice implements Cloneable {
 	public GrapheMatrice clone() throws CloneNotSupportedException {
 		var g = new GrapheMatrice();
 		g.contenu = new byte[contenu.length][contenu[0].length];
+		for (int i = 0; i < taille(); i++) {
+			for (int j = 0; j < taille(); j++) {
+				g.contenu[i][j] = contenu[i][j];
+			}
+		}
 		g.taille_ = taille_;
 		return g;
 	}
