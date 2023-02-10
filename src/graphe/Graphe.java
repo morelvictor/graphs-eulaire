@@ -118,7 +118,6 @@ public class Graphe implements Cloneable {
 	}
 
 
->>>>>>> src/graphe/Graphe.java
 	private GrapheMatrice matrice;
 	private GrapheListes listes;
 }
@@ -197,7 +196,9 @@ class GrapheMatrice implements Cloneable {
 	public String toString() {
 		String res = "";
 
-		if (taille_ == 0) return res;
+		if (taille_ == 0) {
+			return res;
+		}
 
 		for (int i = 0; i < taille_; i++) {
 			res += contenu[i][0] + "";
