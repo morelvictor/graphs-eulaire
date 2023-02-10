@@ -4,8 +4,6 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.*;
 
-import jdk.internal.org.jline.reader.Buffer;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -123,8 +121,8 @@ public abstract class VueGraphe extends JComponent {
 		String[] tab = inp.split(" ");
 		for (String coord : tab) {
 			String[] point = coord.split(";");
-			double x = Double.parseDouble(point[0]);
-			double y = Double.parseDouble(point[1]);
+			int x = (int) Double.parseDouble(point[0]);
+			int y = (int) Double.parseDouble(point[1]);
 			resultat.add(new Point(x, y));
 		}
 
@@ -134,15 +132,24 @@ public abstract class VueGraphe extends JComponent {
 	public Graphe parseGraphe(BufferedReader reader) {
 		Graphe g = new Graphe();
 		try {
+			reader.mark(0);
 			String[] ligne = (reader.readLine()).split(" ");
+			reader.reset();
 			int taille = ligne.length;
 
 			for (int i = 0; i < taille; i++) {
-				g.ajouteSommet();
+				g.addSommet();
 			}
+
 			for (int i = 0; i < taille; i++) {
-				for (int j = 0; j < i; j++) {
-					g.setConnexion(i, j, ligne[j]);
+				String stream = reader.readLine();
+				if (stream == null) break;
+				ligne = stream.split(" ");
+				for (int j = 0; j <= i; j++) {
+					for (int k = 0; k < Integer.parseInt(ligne[j]); k++) {
+						g.setConnexion(j, i, true);
+						// System.out.println("jajoute");
+					}
 				}
 			}
 		} catch (IOException e) {
@@ -167,6 +174,7 @@ public abstract class VueGraphe extends JComponent {
 			coordonnees = parseCoordonnees(reader.readLine());
 			graphe = parseGraphe(reader);
 			reader.close();
+			repaint();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

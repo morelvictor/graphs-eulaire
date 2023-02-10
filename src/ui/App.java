@@ -5,7 +5,7 @@ import javax.swing.*;
 public class App {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
-			var frame = new Frame();
+			var frame = new ContentFrame();
 			frame.setTitle("EULAIRE");
 			frame.setSize(1000, 1000);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -14,11 +14,3 @@ public class App {
 	}
 }
 
-class Frame extends JFrame {
-	private JPanel container;
-
-	public Frame() {
-		add(new Editeur());
-		pack();
-	}
-}
