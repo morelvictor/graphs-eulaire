@@ -142,13 +142,10 @@ public abstract class VueGraphe extends JComponent {
 			}
 
 			for (int i = 0; i < taille; i++) {
-				String stream = reader.readLine();
-				if (stream == null) break;
-				ligne = stream.split(" ");
+				ligne = (reader.readLine()).split(" ");
 				for (int j = 0; j <= i; j++) {
 					for (int k = 0; k < Integer.parseInt(ligne[j]); k++) {
 						g.setConnexion(j, i, true);
-						// System.out.println("jajoute");
 					}
 				}
 			}

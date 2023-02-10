@@ -128,7 +128,7 @@ public class Editeur extends JPanel {
 				vuegraphe.exporter();
 		});
 
-		importer = new JButton("<-");
+		importer = new JButton("←");
 		importer.setBounds(900, 620, 50, 50);
 		add(importer);
 
