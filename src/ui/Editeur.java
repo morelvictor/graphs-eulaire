@@ -26,6 +26,7 @@ public class Editeur extends JPanel {
 	private JButton suppr_all;
 
 	private JButton exporter;
+	private JButton importer;
 
 	public Editeur() {
 
@@ -85,6 +86,15 @@ public class Editeur extends JPanel {
 				(ActionEvent e) -> {
 				vuegraphe.exporter();
 		});
+
+		importer = new JButton("<-");
+		importer.setBounds(900, 350, 50, 50);
+		add(importer);
+
+		importer.addActionListener(
+				(ActionEvent e) -> {
+				vuegraphe.importer();
+		});
 	}
 
 	public static LinkedList<Point> getNRandomCoord(int n) {
@@ -133,6 +143,7 @@ public class Editeur extends JPanel {
 		generer_random.setBounds(getWidth() - 100, 170, 50, 50);
 		suppr_all.setBounds(getWidth() - 100, 230, 50, 50);
 		exporter.setBounds(getWidth() - 100, 290, 50, 50);
+		importer.setBounds(getWidth() - 100, 350, 50, 50);
 	}
 
 

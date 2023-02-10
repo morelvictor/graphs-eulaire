@@ -3,7 +3,12 @@ import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 
 import javax.swing.*;
+
+import jdk.internal.org.jline.reader.Buffer;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -112,11 +117,56 @@ public abstract class VueGraphe extends JComponent {
 		return res + graphe.toString();
 	}
 
+	public LinkedList<Point> parseCoordonnees(String inp) {
+		LinkedList<Point> resultat = new LinkedList<>();
+
+		String[] tab = inp.split(" ");
+		for (String coord : tab) {
+			String[] point = coord.split(";");
+			double x = Double.parseDouble(point[0]);
+			double y = Double.parseDouble(point[1]);
+			resultat.add(new Point(x, y));
+		}
+
+		return resultat;
+	}
+
+	public Graphe parseGraphe(BufferedReader reader) {
+		Graphe g = new Graphe();
+		try {
+			String[] ligne = (reader.readLine()).split(" ");
+			int taille = ligne.length;
+
+			for (int i = 0; i < taille; i++) {
+				g.ajouteSommet();
+			}
+			for (int i = 0; i < taille; i++) {
+				for (int j = 0; j < i; j++) {
+					g.setConnexion(i, j, ligne[j]);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return g;
+	}
+
 	public void exporter() {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter("graph.txt"));
 			writer.write(this.toString());
 			writer.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void importer() {
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("graph.txt"));
+			coordonnees = parseCoordonnees(reader.readLine());
+			graphe = parseGraphe(reader);
+			reader.close();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
