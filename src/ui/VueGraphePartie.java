@@ -100,7 +100,7 @@ public class VueGraphePartie extends VueGraphe {
 	}
 
 	public void setOrigin() {
-		try {	
+		try {
 			origin = getGraphe().clone();
 		} catch (Exception e) {
 			//TODO: handle exception
