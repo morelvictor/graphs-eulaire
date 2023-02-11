@@ -169,12 +169,15 @@ public class Editeur extends JPanel {
 
 		jouer.addActionListener((ActionEvent e)->{
 			frame.setContentPane(new Partie(vuegraphe));
+			frame.revalidate();
+			frame.repaint();
 		});
 
 		add(sommet);
 		add(arete);
 		add(n_sommets);
 		add(n_aretes);
+		add(jouer);
 	}
 
 	public void ajouteNSommets(int n) {
