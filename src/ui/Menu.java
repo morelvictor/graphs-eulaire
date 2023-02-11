@@ -21,7 +21,7 @@ public class Menu extends JPanel {
 
 		gameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//frame.setContentPane(new Game());
+				frame.setContentPane(new Partie());
 				frame.revalidate();
 				frame.repaint();
 			}
