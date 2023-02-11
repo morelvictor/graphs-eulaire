@@ -26,7 +26,7 @@ public class Partie extends JPanel {
 		g = new VueGraphePartie();
 		g.setGraphe(vg.getGraphe());
 		g.setCoordonnes(vg.getCoordonnees());
-
+		g.setOrigin();
 		add(g);
 		add(regenerer);
 		regenerer.addActionListener(new ActionListener(){
@@ -35,6 +35,6 @@ public class Partie extends JPanel {
 				g.regen();
 			}
 		});
-
+		
 	}
 }
