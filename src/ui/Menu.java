@@ -13,7 +13,7 @@ public class Menu extends JPanel {
 
 		editorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new Editeur());
+				frame.setContentPane(new Editeur(frame));
 				frame.revalidate();
 				frame.repaint();
 			}
