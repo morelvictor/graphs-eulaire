@@ -26,12 +26,11 @@ public class Partie extends JPanel {
 		g.setOrigin();
 		add(g);
 		add(regenerer);
-		regenerer.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+		regenerer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				System.out.println("Je regenère la team");
 				g.regen();
 			}
 		});
-		
 	}
 }

@@ -46,7 +46,7 @@ public class Editeur extends JPanel {
 
 	public Editeur(JFrame f) {
 		frame = f;
-		
+
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
 		add(vuegraphe);
 
@@ -167,7 +167,7 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
-		jouer.addActionListener((ActionEvent e)->{
+		jouer.addActionListener((ActionEvent e) -> {
 			frame.setContentPane(new Partie(vuegraphe));
 			frame.revalidate();
 			frame.repaint();
@@ -319,13 +319,9 @@ public class Editeur extends JPanel {
 			repaint();
 		}
 
-		public void mouseEntered(MouseEvent e) {
-		}
-		public void mouseExited(MouseEvent e) {
-		}
-		public void mousePressed(MouseEvent e) {
-		}
-		public void mouseReleased(MouseEvent e) {
-		}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
 	}
 }
