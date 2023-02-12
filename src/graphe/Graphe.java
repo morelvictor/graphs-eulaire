@@ -65,52 +65,44 @@ public class Graphe implements Cloneable {
 			System.err.println("Graph must be connected for hierholzer to work.");
 			return null;
 		}
-		int odd_vertices = 0;
+		var odd_vertices = new ArrayList<Integer>();
 		for (int i = 0; i < taille(); i++) {
-			if (getConnexions(i).size() % 2 == 1) {
-				odd_vertices++;
+			if ((getConnexions(i).size() - getConnexion(i, i)) % 2 == 1) {
+				odd_vertices.add(Integer.valueOf(i));
 			}
 		}
-		if (odd_vertices == 1 || odd_vertices == 2) {
-			System.err.println("Hierholzer implementation doesn't support Euler trails for now.");
-			return null;
-		} else if (odd_vertices != 0) {
+		if (odd_vertices.size() > 2) {
 			System.err.println("Graph contains no Euler cycle or trail.");
 			return null;
 		}
 
 		Graphe g;
-		var result = new ArrayList<Integer>();
-		result.add(Integer.valueOf(0));
 		try {
 			g = clone();
-		} catch (CloneNotSupportedException err) {
-			System.out.println("This shouldn't happen.");
+		} catch (CloneNotSupportedException err) { // This won't happen, java's just being a dick.
+			System.err.println("This shouldn't happen.");
 			g = null;
-			// This won't happen, java's just being a dick.
 		}
 
-		while (g.getConnexions(result.get(result.size() - 1)).size() != 0) {
-			int next_vertex = g.getConnexions(result.get(result.size() - 1)).get(0);
-			g.setConnexion(result.get(result.size() - 1), next_vertex, false);
-			result.add(Integer.valueOf(next_vertex));
+		var result = new ArrayList<Integer>();
+		if (odd_vertices.size() == 0) {
+			result.add(Integer.valueOf(0));
+		} else {
+			result.add(odd_vertices.get(0));
 		}
-		while (g.nbConnexions() != 0) {
-			// Go to last still-connected vertex you find. Has to exist.
-			result.remove(result.size() - 1);
-			while (g.getConnexions(result.get(result.size() - 1)).size() == 0) {
-				var v = result.get(result.size() - 1);
-				result.remove(result.size() - 1);
-				result.add(0, v);
-			}
-			result.add(0, result.get(result.size() - 1));
-			// While there is a connexion, take it.
-			while (g.getConnexions(result.get(result.size() - 1)).size() != 0) {
-				int next_vertex = g.getConnexions(result.get(result.size() - 1)).get(0);
-				g.setConnexion(result.get(result.size() - 1), next_vertex, false);
-				result.add(Integer.valueOf(next_vertex));
+		int insertion_point = 0;
+		while (insertion_point >= 0) {
+			var nexts = g.getConnexions(result.get(insertion_point));
+			if (nexts.size() == 0) {
+				insertion_point--;
+			} else {
+				insertion_point++;
+				result.add(insertion_point, nexts.get(0));
+				g.setConnexion(result.get(insertion_point - 1), result.get(insertion_point), false);
 			}
 		}
+
+
 		return result;
 	}
 
