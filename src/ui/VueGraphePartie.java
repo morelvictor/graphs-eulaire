@@ -93,8 +93,9 @@ public class VueGraphePartie extends VueGraphe {
 			setGraphe(origin.clone());
 			oujesuis = -1;
 			repaint();
-		} catch (Exception e) {
-			//TODO: handle exception
+		} catch (CloneNotSupportedException e) {
+			System.out.println("This shouldn't happen.");
+			// This won't happen, java's just being a dick.
 		}
 	}
 
