@@ -27,7 +27,6 @@ public class Menu extends JPanel {
 			}
 		});
 
-
 		add(editorButton);
 		add(gameButton);
 	}
