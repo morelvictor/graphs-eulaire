@@ -62,32 +62,6 @@ public class Editeur extends JPanel {
 		});
 
 		lier = new JButton("x");
-		lier.setBounds(900, 110, 50, 50);
-		add(lier);
-
-		lier.addActionListener(
-			(ActionEvent e) -> {
-			peut_lier = !peut_lier;
-			peut_poser_sommet = false;
-			a_lier = -1;
-		});
-
-		generer_random = new JButton("?");
-		generer_random.setBounds(900, 170, 50, 50);
-		add(generer_random);
-
-		generer_random.addActionListener(
-			(ActionEvent e) -> {
-			int taille = r.nextInt(20);
-			int proba = r.nextInt(10);
-			vuegraphe.setGraphe(getNRandomSom(taille, proba), getNRandomCoord(taille));
-			peut_suppr = false;
-			en_generation = false;
-			repaint();
-		});
-
-
-		lier = new JButton("x");
 		add(lier);
 
 		lier.addActionListener((ActionEvent e) -> {
@@ -337,6 +311,7 @@ public class Editeur extends JPanel {
 
 		exporter.setBounds(getWidth() - 100, 560, 50, 50);
 		importer.setBounds(getWidth() - 100, 620, 50, 50);
+		jouer.setBounds(getWidth() - 120, 800, 100, 50);
 	}
 
 
