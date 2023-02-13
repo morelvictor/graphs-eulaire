@@ -63,7 +63,31 @@ public class Graphe implements Cloneable {
 		return result;
 	}
 
+	public boolean estEulerien() {
+		if (taille() == 0) {
+			return false;
+		}
+		if (breadthFirst(0).size() != taille()) {
+			return false;
+		}
+		var odd_vertices = 0;
+		for (int i = 0; i < taille(); i++) {
+			if ((getConnexions(i).size() - getConnexion(i, i)) % 2 == 1) {
+				odd_vertices++;
+			}
+		}
+		if (odd_vertices > 2) {
+			return false;
+		}
+		return true;
+	}
+
 	public ArrayList<Integer> hierholzer() {
+		if (taille() == 0) {
+			System.err.println("Graph must not be empty for hierholzer to work.");
+			return null;
+		}
+
 		if (breadthFirst(0).size() != taille()) {
 			System.err.println("Graph must be connected for hierholzer to work.");
 			return null;

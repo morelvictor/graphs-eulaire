@@ -24,7 +24,7 @@ public class VueGrapheEditeur extends VueGraphe {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 850, 850);
 
-		g.setColor(super.getCouleur());
+		g.setColor(getGraphe().estEulerien() ? super.getCouleur() : Color.RED);
 
 		LinkedList<Point> coord = super.getCoordonnees();
 		int diam = super.getDiametre();
@@ -37,7 +37,7 @@ public class VueGrapheEditeur extends VueGraphe {
 				g.setColor(Color.GREEN);
 				((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(),
 				                                           diam, diam));
-				g.setColor(super.getCouleur());
+				g.setColor(getGraphe().estEulerien() ? super.getCouleur() : Color.RED);
 			}
 			for (int j = i; j < getGraphe().taille(); ++j) {
 				if (getGraphe().getConnexion(i, j) != 0) {
@@ -50,7 +50,9 @@ public class VueGrapheEditeur extends VueGraphe {
 					           coord_j_x, // the setting I need.
 					           coord_j_y);
 					if (getGraphe().getConnexion(i, j) > 1) {
-						g.drawString(getGraphe().getConnexion(i, j)+"", (coord_i_x + coord_j_x) / 2, (coord_i_y + coord_j_y) / 2);
+						g.drawString(getGraphe().getConnexion(i, j) + "", // uncrustify,
+						             (coord_i_x + coord_j_x) / 2, // what are you doing
+						             (coord_i_y + coord_j_y) / 2);
 					}
 				}
 			}
