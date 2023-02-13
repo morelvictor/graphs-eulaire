@@ -8,7 +8,7 @@ public class Partie extends JPanel {
 	JButton regenerer = new JButton("Regen");
 
 	public Partie() {
-		g = new VueGraphePartie();
+		g = new VueGraphePartie(this);
 		add(g);
 		add(regenerer);
 		regenerer.addActionListener(new ActionListener() {
@@ -20,7 +20,7 @@ public class Partie extends JPanel {
 	}
 
 	public Partie(VueGraphe vg) {
-		g = new VueGraphePartie();
+		g = new VueGraphePartie(this);
 		g.setGraphe(vg.getGraphe());
 		g.setCoordonnes(vg.getCoordonnees());
 		g.setOrigin();
