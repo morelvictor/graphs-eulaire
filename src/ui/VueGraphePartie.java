@@ -47,12 +47,7 @@ public class VueGraphePartie extends VueGraphe {
 		getGraphe().setConnexion(0, 3, true);
 		getGraphe().setConnexion(4, 1, true);
 		getGraphe().setConnexion(2, 4, true);
-
-		try {
-			origin = getGraphe().clone();
-		} catch (Exception e) {
-			//TODO: handle exception
-		}
+		setOrigin();
 	}
 
 	@Override
@@ -98,6 +93,15 @@ public class VueGraphePartie extends VueGraphe {
 			setGraphe(origin.clone());
 			oujesuis = -1;
 			repaint();
+		} catch (CloneNotSupportedException e) {
+			System.out.println("This shouldn't happen.");
+			// This won't happen, java's just being a dick.
+		}
+	}
+
+	public void setOrigin() {
+		try {
+			origin = getGraphe().clone();
 		} catch (CloneNotSupportedException e) {
 			System.out.println("This shouldn't happen.");
 			// This won't happen, java's just being a dick.

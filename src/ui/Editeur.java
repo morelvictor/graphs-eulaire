@@ -43,7 +43,12 @@ public class Editeur extends JPanel {
 	private JLabel n_sommets = new JLabel("0");
 	private JLabel n_aretes = new JLabel("0");
 
-	public Editeur() {
+	private JButton jouer = new JButton("Jouer");
+
+	private JFrame frame;
+
+	public Editeur(JFrame f) {
+		frame = f;
 
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
 		add(vuegraphe);
@@ -204,10 +209,17 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
+		jouer.addActionListener((ActionEvent e) -> {
+			frame.setContentPane(new Partie(vuegraphe));
+			frame.revalidate();
+			frame.repaint();
+		});
+
 		add(sommet);
 		add(arete);
 		add(n_sommets);
 		add(n_aretes);
+		add(jouer);
 	}
 
 	public void ajouteNSommets(int n) {
@@ -353,13 +365,9 @@ public class Editeur extends JPanel {
 			repaint();
 		}
 
-		public void mouseEntered(MouseEvent e) {
-		}
-		public void mouseExited(MouseEvent e) {
-		}
-		public void mousePressed(MouseEvent e) {
-		}
-		public void mouseReleased(MouseEvent e) {
-		}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
 	}
 }

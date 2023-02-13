@@ -33,6 +33,10 @@ public abstract class VueGraphe extends JComponent {
 		return coordonnees;
 	}
 
+	public void setCoordonnes(LinkedList<Point> c) {
+		coordonnees = c;
+	}
+
 	public void supprCoordonnee(int i) {
 		coordonnees.remove(i);
 
