@@ -4,6 +4,11 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.*;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -107,4 +112,80 @@ public abstract class VueGraphe extends JComponent {
 			}
 		}
 	}
+
+	public String toString() {
+		String res = "";
+
+		if (coordonnees.size() == 0) return res;
+
+		for (Point pos : coordonnees)
+			res += " " + pos.getX() + ";" + pos.getY();
+		
+		res = res.substring(1, res.length()) + "\n"; // retrait du premier espace
+
+		return res + graphe.toString();
+	}
+
+	public LinkedList<Point> parseCoordonnees(String inp) {
+		LinkedList<Point> resultat = new LinkedList<>();
+
+		String[] tab = inp.split(" ");
+		for (String coord : tab) {
+			String[] point = coord.split(";");
+			int x = (int) Double.parseDouble(point[0]);
+			int y = (int) Double.parseDouble(point[1]);
+			resultat.add(new Point(x, y));
+		}
+
+		return resultat;
+	}
+
+	public Graphe parseGraphe(BufferedReader reader) {
+		Graphe g = new Graphe();
+		try {
+			reader.mark(0);
+			String[] ligne = (reader.readLine()).split(" ");
+			reader.reset();
+			int taille = ligne.length;
+
+			for (int i = 0; i < taille; i++) {
+				g.addSommet();
+			}
+
+			for (int i = 0; i < taille; i++) {
+				ligne = (reader.readLine()).split(" ");
+				for (int j = 0; j <= i; j++) {
+					for (int k = 0; k < Integer.parseInt(ligne[j]); k++) {
+						g.setConnexion(j, i, true);
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return g;
+	}
+
+	public void exporter() {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("graph.txt"));
+			writer.write(this.toString());
+			writer.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void importer() {
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("graph.txt"));
+			coordonnees = parseCoordonnees(reader.readLine());
+			graphe = parseGraphe(reader);
+			reader.close();
+			repaint();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

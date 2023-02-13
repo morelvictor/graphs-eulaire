@@ -24,6 +24,9 @@ public class Editeur extends JPanel {
 
 	private JButton suppr_all;
 
+	private JButton exporter;
+	private JButton importer;
+
 	private JButton generer_random;
 	private static Random r = new Random();
 	private boolean en_generation = false;
@@ -51,6 +54,28 @@ public class Editeur extends JPanel {
 		poser_sommet.addActionListener((ActionEvent e) -> {
 			peut_poser_sommet = !peut_poser_sommet;
 			peut_lier = false;
+		});
+
+		lier = new JButton("x");
+		lier.setBounds(900, 110, 50, 50);
+		add(lier);
+
+		lier.addActionListener(
+			(ActionEvent e) -> {
+			peut_lier = !peut_lier;
+			peut_poser_sommet = false;
+			a_lier = -1;
+		});
+
+		generer_random = new JButton("?");
+		generer_random.setBounds(900, 170, 50, 50);
+		add(generer_random);
+
+		generer_random.addActionListener(
+			(ActionEvent e) -> {
+			int taille = r.nextInt(20);
+			int proba = r.nextInt(10);
+			vuegraphe.setGraphe(getNRandomSom(taille, proba), getNRandomCoord(taille));
 			peut_suppr = false;
 			en_generation = false;
 			repaint();
@@ -94,6 +119,23 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
+		exporter = new JButton("→");
+		exporter.setBounds(900, 560, 50, 50);
+		add(exporter);
+
+		exporter.addActionListener(
+				(ActionEvent e) -> {
+				vuegraphe.exporter();
+		});
+
+		importer = new JButton("←");
+		importer.setBounds(900, 620, 50, 50);
+		add(importer);
+
+		importer.addActionListener(
+				(ActionEvent e) -> {
+				vuegraphe.importer();
+		});
 
 		generer_random = new JButton("?");
 		add(generer_random);
@@ -270,6 +312,7 @@ public class Editeur extends JPanel {
 		lier.setBounds(getWidth() - 100, 110, 50, 50);
 		suppr_som.setBounds(getWidth() - 100, 170, 50, 50);
 		suppr_all.setBounds(getWidth() - 100, 230, 50, 50);
+
 		generer_random.setBounds(getWidth() - 100, 290, 50, 50);
 		ajoute_sommet.setBounds(getWidth() - 100, 350, 50, 24);
 		sommet.setBounds(getWidth() - 115, 375, 75, 24);
@@ -279,6 +322,9 @@ public class Editeur extends JPanel {
 		arete.setBounds(getWidth() - 105, 475, 75, 24);
 		n_aretes.setBounds(getWidth() - 55, 475, 24, 24);
 		enleve_arete.setBounds(getWidth() - 100, 500, 50, 24);
+
+		exporter.setBounds(getWidth() - 100, 560, 50, 50);
+		importer.setBounds(getWidth() - 100, 620, 50, 50);
 	}
 
 

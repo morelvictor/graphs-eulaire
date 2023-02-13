@@ -46,6 +46,9 @@ public class Graphe implements Cloneable {
 		return res;
 	}
 
+	public String toString() {
+		return matrice.toString();
+	}
 
 	public ArrayList<Integer> breadthFirst(int start) {
 		var result = new ArrayList<Integer>();
@@ -180,6 +183,23 @@ class GrapheMatrice implements Cloneable {
 
 	public int taille() {
 		return taille_;
+	}
+
+	public String toString() {
+		String res = "";
+
+		if (taille_ == 0) {
+			return res;
+		}
+
+		for (int i = 0; i < taille_; i++) {
+			res += contenu[i][0] + "";
+			for (int j = 1; j < taille_; j++) {
+				res += " " + contenu[i][j];
+			}
+			res += "\n";
+		}
+		return res;
 	}
 
 	private byte contenu[][];
