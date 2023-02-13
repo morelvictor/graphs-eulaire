@@ -23,8 +23,8 @@ public class Editeur extends JPanel {
 	private boolean peut_suppr = false;
 
 	private JButton suppr_all;
-	
-	private int graphe_actuel = 0;
+
+	private int graphe_actuel = vuegraphe.get_n_graphe();
 	private JButton exporter;
 	private JButton importer;
 
@@ -103,24 +103,21 @@ public class Editeur extends JPanel {
 		exporter.setBounds(900, 560, 50, 50);
 		add(exporter);
 
-		exporter.addActionListener(
-				(ActionEvent e) -> {
-				vuegraphe.exporter(graphe_actuel);
+		exporter.addActionListener((ActionEvent e) -> {
+			vuegraphe.exporter(graphe_actuel);
 		});
 
 		importer = new JButton("←");
 		importer.setBounds(900, 620, 50, 50);
 		add(importer);
 
-		importer.addActionListener(
-				(ActionEvent e) -> {
-				if (graphe_actuel < vuegraphe.get_n_graphe()) {
-					graphe_actuel++;
-				}
-				else {
-					graphe_actuel = 1;
-				}
-				vuegraphe.importer(graphe_actuel);
+		importer.addActionListener((ActionEvent e) -> {
+			if (graphe_actuel < vuegraphe.get_n_graphe()) {
+				graphe_actuel++;
+			} else {
+				graphe_actuel = 1;
+			}
+			vuegraphe.importer(graphe_actuel);
 		});
 
 		generer_random = new JButton("?");
@@ -347,9 +344,13 @@ public class Editeur extends JPanel {
 			repaint();
 		}
 
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
-		public void mousePressed(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {
+		}
+		public void mouseExited(MouseEvent e) {
+		}
+		public void mousePressed(MouseEvent e) {
+		}
+		public void mouseReleased(MouseEvent e) {
+		}
 	}
 }
