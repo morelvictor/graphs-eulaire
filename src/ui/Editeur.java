@@ -23,7 +23,8 @@ public class Editeur extends JPanel {
 	private boolean peut_suppr = false;
 
 	private JButton suppr_all;
-
+	
+	private int graphe_actuel = 0;
 	private JButton exporter;
 	private JButton importer;
 
@@ -104,7 +105,7 @@ public class Editeur extends JPanel {
 
 		exporter.addActionListener(
 				(ActionEvent e) -> {
-				vuegraphe.exporter();
+				vuegraphe.exporter(graphe_actuel);
 		});
 
 		importer = new JButton("←");
@@ -113,7 +114,13 @@ public class Editeur extends JPanel {
 
 		importer.addActionListener(
 				(ActionEvent e) -> {
-				vuegraphe.importer();
+				if (graphe_actuel < vuegraphe.get_n_graphe()) {
+					graphe_actuel++;
+				}
+				else {
+					graphe_actuel = 1;
+				}
+				vuegraphe.importer(graphe_actuel);
 		});
 
 		generer_random = new JButton("?");

@@ -34,7 +34,7 @@ public class VueGraphePartie extends VueGraphe {
 				}
 			}
 		});
-		super.importer();
+		super.importer(id_graphe);
 		setOrigin();
 		regen();
 	}
@@ -50,7 +50,7 @@ public class VueGraphePartie extends VueGraphe {
 			else {
 				id_graphe = 1;
 			}
-			super.importer();
+			super.importer(id_graphe);
 			setOrigin();
 			regen();
 			System.out.println(super.id_graphe);
