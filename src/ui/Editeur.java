@@ -59,6 +59,7 @@ public class Editeur extends JPanel {
 		poser_sommet.addActionListener((ActionEvent e) -> {
 			peut_poser_sommet = !peut_poser_sommet;
 			peut_lier = false;
+			peut_suppr = false;
 		});
 
 		lier = new JButton("x");
