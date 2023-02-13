@@ -19,6 +19,9 @@ public abstract class VueGraphe extends JComponent {
 	private Color COULEUR = Color.BLUE;
 	public int DIAMETRE = 15;
 
+	int id_graphe = 1;
+	static int n_graphes = get_n_graphe();
+
 	public VueGraphe(Color c, int d, MouseListener controleur) {
 		setPreferredSize(new Dimension(850, 850));
 		COULEUR = c;
@@ -49,6 +52,7 @@ public abstract class VueGraphe extends JComponent {
 	public void setGraphe(Graphe g) {
 		graphe = g;
 	}
+
 
 	public void viderGraphe() {
 		graphe = new Graphe();
@@ -172,7 +176,8 @@ public abstract class VueGraphe extends JComponent {
 
 	public void exporter() {
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter("graph.txt"));
+			n_graphes++;
+			BufferedWriter writer = new BufferedWriter(new FileWriter(n_graphes+".txt"));
 			writer.write(this.toString());
 			writer.close();
 		} catch(IOException e) {
@@ -182,7 +187,7 @@ public abstract class VueGraphe extends JComponent {
 
 	public void importer() {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("graph.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader(id_graphe+".txt"));
 			coordonnees = parseCoordonnees(reader.readLine());
 			graphe = parseGraphe(reader);
 			reader.close();
@@ -190,6 +195,17 @@ public abstract class VueGraphe extends JComponent {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static int get_n_graphe() {
+		for(int res = 1; res < 100; res++){
+			try {
+				BufferedReader reader = new BufferedReader(new FileReader(res+".txt"));
+			} catch(IOException e) {
+				return res - 1;
+			}
+		}
+		return -1;
 	}
 
 }
