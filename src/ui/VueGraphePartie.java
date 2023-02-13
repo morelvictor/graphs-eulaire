@@ -7,9 +7,11 @@ import javax.swing.*;
 public class VueGraphePartie extends VueGraphe {
 	int oujesuis = -1;
 	Graphe origin;
+	Partie partie;
 
-	public VueGraphePartie() {
+	public VueGraphePartie(Partie p) {
 		super(Color.black, 30, null);
+		partie = p;
 		addMouseListener(new MouseListener() {
 			public void mouseExited(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
@@ -32,22 +34,9 @@ public class VueGraphePartie extends VueGraphe {
 				}
 			}
 		});
-		ajouteSommet(new Point(100, 100));
-		ajouteSommet(new Point(200, 200));
-		ajouteSommet(new Point(200, 100));
-		ajouteSommet(new Point(100, 200));
-		ajouteSommet(new Point(250, 150));
-		getGraphe().setConnexion(3, 2, true);
-		getGraphe().setConnexion(3, 2, true);
-		getGraphe().setConnexion(3, 2, true);
-		getGraphe().setConnexion(0, 1, true);
-		getGraphe().setConnexion(0, 2, true);
-		getGraphe().setConnexion(2, 1, true);
-		getGraphe().setConnexion(1, 3, true);
-		getGraphe().setConnexion(0, 3, true);
-		getGraphe().setConnexion(4, 1, true);
-		getGraphe().setConnexion(2, 4, true);
+		super.importer();
 		setOrigin();
+		regen();
 	}
 
 	@Override
@@ -55,7 +44,16 @@ public class VueGraphePartie extends VueGraphe {
 		g.setColor(getCouleur());
 
 		if (getGraphe().nbConnexions() == 0) {
-			g.drawString("Bravo c'est gagné", 100, 100);
+			if (id_graphe < n_graphes) {
+				id_graphe++;
+			}
+			else {
+				id_graphe = 1;
+			}
+			super.importer();
+			setOrigin();
+			regen();
+			System.out.println(super.id_graphe);
 			return;
 		}
 
