@@ -40,6 +40,10 @@ public abstract class VueGraphe extends JComponent {
 		coordonnees = c;
 	}
 
+	public void setCoordonnees(int i, int x, int y) {
+		coordonnees.set(i, new Point(x, y));
+	}
+
 	public void supprCoordonnee(int i) {
 		coordonnees.remove(i);
 

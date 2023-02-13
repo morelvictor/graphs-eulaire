@@ -30,7 +30,7 @@ public class VueGrapheEditeur extends VueGraphe {
 		int diam = super.getDiametre();
 
 		for (int i = 0; i < getGraphe().taille(); ++i) {
-			if (editeur.getALier() != i || !getPeutLier()) {
+			if ((editeur.getADeplacer() != i || !editeur.getEnDeplacement()) && (editeur.getALier() != i || !editeur.getPeutLier())) {
 				((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(),
 				                                           diam, diam));
 			} else {
@@ -59,10 +59,6 @@ public class VueGrapheEditeur extends VueGraphe {
 		}
 	}
 
-	public boolean getPeutLier() {
-		return editeur.getPeutLier();
-	}
-
 	public void ajouteSommet(Point p) {
 		super.ajouteSommet(p);
 	}
@@ -73,5 +69,9 @@ public class VueGrapheEditeur extends VueGraphe {
 
 	public int supprSommet(int id) {
 		return super.supprSommet(id);
+	}
+
+	public void setCoordonnees(int id, int x, int y) {
+		super.setCoordonnees(id, x, y);
 	}
 }
