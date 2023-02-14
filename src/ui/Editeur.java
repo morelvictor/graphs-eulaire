@@ -170,10 +170,6 @@ public class Editeur extends JPanel {
 
 		generer_random.addActionListener((ActionEvent e) -> {
 			en_generation = !en_generation;
-			ajoute_sommet.setEnabled(en_generation);
-			ajoute_arete.setEnabled(en_generation);
-			enleve_sommet.setEnabled(en_generation);
-			enleve_arete.setEnabled(en_generation);
 			peut_suppr = false;
 			peut_lier = false;
 			peut_poser_sommet = false;
@@ -191,7 +187,6 @@ public class Editeur extends JPanel {
 		ajoute_sommet.setBorderPainted(false);
 		ajoute_sommet.setContentAreaFilled(false);
 		ajoute_sommet.setFocusPainted(false);
-		ajoute_sommet.setEnabled(false);
 		add(ajoute_sommet);
 
 		ajoute_sommet.addActionListener((ActionEvent e) -> {
@@ -204,7 +199,6 @@ public class Editeur extends JPanel {
 		enleve_sommet.setBorderPainted(false);
 		enleve_sommet.setContentAreaFilled(false);
 		enleve_sommet.setFocusPainted(false);
-		enleve_sommet.setEnabled(false);
 		add(enleve_sommet);
 
 		enleve_sommet.addActionListener((ActionEvent e) -> {
@@ -219,7 +213,6 @@ public class Editeur extends JPanel {
 		ajoute_arete.setBorderPainted(false);
 		ajoute_arete.setContentAreaFilled(false);
 		ajoute_arete.setFocusPainted(false);
-		ajoute_arete.setEnabled(false);
 		add(ajoute_arete);
 
 		ajoute_arete.addActionListener((ActionEvent e) -> {
@@ -234,7 +227,6 @@ public class Editeur extends JPanel {
 		enleve_arete.setBorderPainted(false);
 		enleve_arete.setContentAreaFilled(false);
 		enleve_arete.setFocusPainted(false);
-		enleve_arete.setEnabled(false);
 		add(enleve_arete);
 
 		enleve_arete.addActionListener((ActionEvent e) -> {
