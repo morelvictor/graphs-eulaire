@@ -11,6 +11,9 @@ public class Partie extends JPanel {
 		background = bg;
 		g = new VueGraphePartie(this);
 		add(g);
+		regenerer.setBorderPainted(false);
+		regenerer.setContentAreaFilled(false);
+		regenerer.setFocusPainted(false);
 		add(regenerer);
 		regenerer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -28,6 +31,9 @@ public class Partie extends JPanel {
 		g.setCoordonnes(vg.getCoordonnees());
 		g.setOrigin();
 		add(g);
+		regenerer.setBorderPainted(false);
+		regenerer.setContentAreaFilled(false);
+		regenerer.setFocusPainted(false);
 		add(regenerer);
 		regenerer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

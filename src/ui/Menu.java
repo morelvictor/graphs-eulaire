@@ -30,8 +30,12 @@ public class Menu extends JPanel {
 				frame.repaint();
 			}
 		});
-
-		gameButton.setBounds(100, 200, 100, 50);
+		editorButton.setBorderPainted(false);
+		editorButton.setContentAreaFilled(false);
+		editorButton.setFocusPainted(false);
+		gameButton.setBorderPainted(false);
+		gameButton.setContentAreaFilled(false);
+		gameButton.setFocusPainted(false);
 
 		add(editorButton);
 		add(gameButton);
