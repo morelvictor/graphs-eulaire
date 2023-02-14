@@ -7,6 +7,7 @@ import javax.swing.*;
 public class Editeur extends JPanel {
 	private static int DIAMETRE = 15;
 	private static Color COULEUR = new Color(39, 78, 140);
+	private static Image background;
 
 	private VueGrapheEditeur vuegraphe;
 
@@ -52,7 +53,8 @@ public class Editeur extends JPanel {
 
 	private JFrame frame;
 
-	public Editeur(JFrame f) {
+	public Editeur(JFrame f, Image bg) {
+		background = bg;
 		frame = f;
 
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
@@ -206,7 +208,7 @@ public class Editeur extends JPanel {
 		});
 
 		jouer.addActionListener((ActionEvent e) -> {
-			frame.setContentPane(new Partie(vuegraphe));
+			frame.setContentPane(new Partie(vuegraphe, background));
 			frame.revalidate();
 			frame.repaint();
 		});
@@ -309,6 +311,7 @@ public class Editeur extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
+		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		g.setColor(Color.WHITE);
 		g.fillRect(getWidth() - 45, 435, 20, 24);
 		g.fillRect(getWidth() - 55, 535, 20, 24);

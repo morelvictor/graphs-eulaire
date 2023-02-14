@@ -3,7 +3,11 @@ import javax.swing.*;
 
 class ContentFrame extends JFrame {
 	public ContentFrame() {
-		setContentPane(new Menu(this));
+		try {
+			setContentPane(new Menu(this));
+		} catch (Exception e) {
+			System.out.println("goulougoulou");
+		}
 		pack();
 	}
 }

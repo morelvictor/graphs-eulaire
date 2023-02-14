@@ -4,10 +4,11 @@ import javax.swing.*;
 
 public class Partie extends JPanel {
 	VueGraphePartie g;
-
+	Image background;
 	JButton regenerer = new JButton("Regen");
 
-	public Partie() {
+	public Partie(Image bg) {
+		background = bg;
 		g = new VueGraphePartie(this);
 		add(g);
 		add(regenerer);
@@ -17,9 +18,11 @@ public class Partie extends JPanel {
 				g.regen();
 			}
 		});
+		repaint();
 	}
 
-	public Partie(VueGraphe vg) {
+	public Partie(VueGraphe vg, Image bg) {
+		background = bg;
 		g = new VueGraphePartie(this);
 		g.setGraphe(vg.getGraphe());
 		g.setCoordonnes(vg.getCoordonnees());
@@ -32,5 +35,9 @@ public class Partie extends JPanel {
 				g.regen();
 			}
 		});
+	}
+
+	public void paintComponent(Graphics g) {
+		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 }
