@@ -123,7 +123,6 @@ public class Editeur extends JPanel {
 		add(exporter);
 
 		exporter.addActionListener((ActionEvent e) -> {
-			graphe_actuel++;
 			vuegraphe.exporter(graphe_actuel);
 		});
 
