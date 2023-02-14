@@ -41,6 +41,8 @@ public class VueGraphePartie extends VueGraphe {
 
 	@Override
 	public void paintComponent(Graphics g) {
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, 850, 850);
 		g.setColor(getCouleur());
 
 		if (getGraphe().nbConnexions() == 0) {
