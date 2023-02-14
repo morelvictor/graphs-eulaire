@@ -128,11 +128,13 @@ public abstract class VueGraphe extends JComponent {
 	public String toString() {
 		String res = "";
 
-		if (coordonnees.size() == 0) return res;
+		if (coordonnees.size() == 0) {
+			return res;
+		}
 
-		for (Point pos : coordonnees)
+		for (Point pos : coordonnees) {
 			res += " " + pos.getX() + ";" + pos.getY();
-		
+		}
 		res = res.substring(1, res.length()) + "\n"; // retrait du premier espace
 
 		return res + graphe.toString();
@@ -181,31 +183,31 @@ public abstract class VueGraphe extends JComponent {
 	public void exporter(int n) {
 		try {
 			n_graphes++;
-			BufferedWriter writer = new BufferedWriter(new FileWriter("../files/"+n+".mzr"));
+			BufferedWriter writer = new BufferedWriter(new FileWriter("../files/" + n + ".mzr"));
 			writer.write(this.toString());
 			writer.close();
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void importer(int n) {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("../files/"+n+".mzr"));
+			BufferedReader reader = new BufferedReader(new FileReader("../files/" + n + ".mzr"));
 			coordonnees = parseCoordonnees(reader.readLine());
 			graphe = parseGraphe(reader);
 			reader.close();
 			repaint();
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static int get_n_graphe() {
-		for(int res = 1; res < 100; res++){
+		for (int res = 1; res < 100; res++) {
 			try {
-				BufferedReader reader = new BufferedReader(new FileReader("../files/"+res+".mzr"));
-			} catch(IOException e) {
+				BufferedReader reader = new BufferedReader(new FileReader("../files/" + res + ".mzr"));
+			} catch (IOException e) {
 				return res - 1;
 			}
 		}

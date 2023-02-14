@@ -30,7 +30,8 @@ public class VueGrapheEditeur extends VueGraphe {
 		int diam = super.getDiametre();
 
 		for (int i = 0; i < getGraphe().taille(); ++i) {
-			if ((editeur.getADeplacer() != i || !editeur.getEnDeplacement()) && (editeur.getALier() != i || !editeur.getPeutLier())) {
+			if ((editeur.getADeplacer() != i || !editeur.getEnDeplacement()) &&
+			    (editeur.getALier() != i || !editeur.getPeutLier())) {
 				((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(),
 				                                           diam, diam));
 			} else {

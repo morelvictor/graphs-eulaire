@@ -107,8 +107,6 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
-
-
 		suppr_all = new JButton("⟲");
 		add(suppr_all);
 
@@ -387,7 +385,8 @@ public class Editeur extends JPanel {
 				if (getADeplacer() == -1) {
 					setADeplacer(id);
 				} else {
-					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2);
+					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
+					                         e.getY() - DIAMETRE / 2);
 					setADeplacer(-1);
 				}
 			}

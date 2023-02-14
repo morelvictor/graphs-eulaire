@@ -46,8 +46,7 @@ public class VueGraphePartie extends VueGraphe {
 		if (getGraphe().nbConnexions() == 0) {
 			if (id_graphe < n_graphes) {
 				id_graphe++;
-			}
-			else {
+			} else {
 				id_graphe = 1;
 			}
 			super.importer(id_graphe);
