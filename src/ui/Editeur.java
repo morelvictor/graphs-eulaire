@@ -19,11 +19,16 @@ public class Editeur extends JPanel {
 	//indice dans la liste sommets du sommet à lier
 	private int a_lier = -1;
 
+	private JButton deplacer_som;
+	private boolean en_deplacement = false;
+	private int a_deplacer = -1;
+
 	private JButton suppr_som;
 	private boolean peut_suppr = false;
 
 	private JButton suppr_all;
 
+	private int graphe_actuel = vuegraphe.get_n_graphe();
 	private JButton exporter;
 	private JButton importer;
 
@@ -60,6 +65,8 @@ public class Editeur extends JPanel {
 			peut_poser_sommet = !peut_poser_sommet;
 			peut_lier = false;
 			peut_suppr = false;
+			en_deplacement = false;
+			repaint();
 		});
 
 		lier = new JButton("x");
@@ -70,6 +77,7 @@ public class Editeur extends JPanel {
 			peut_poser_sommet = false;
 			peut_suppr = false;
 			en_generation = false;
+			en_deplacement = false;
 			a_lier = -1;
 			repaint();
 		});
@@ -83,9 +91,21 @@ public class Editeur extends JPanel {
 			peut_poser_sommet = false;
 			peut_lier = false;
 			en_generation = false;
+			en_deplacement = false;
 			repaint();
 		});
 
+		deplacer_som = new JButton("✥");
+		add(deplacer_som);
+
+		deplacer_som.addActionListener((ActionEvent e) -> {
+			en_deplacement = !en_deplacement;
+			peut_poser_sommet = false;
+			peut_lier = false;
+			peut_suppr = false;
+			a_deplacer = -1;
+			repaint();
+		});
 
 		suppr_all = new JButton("⟲");
 		add(suppr_all);
@@ -100,21 +120,23 @@ public class Editeur extends JPanel {
 		});
 
 		exporter = new JButton("→");
-		exporter.setBounds(900, 560, 50, 50);
 		add(exporter);
 
-		exporter.addActionListener(
-				(ActionEvent e) -> {
-				vuegraphe.exporter();
+		exporter.addActionListener((ActionEvent e) -> {
+			graphe_actuel++;
+			vuegraphe.exporter(graphe_actuel);
 		});
 
 		importer = new JButton("←");
-		importer.setBounds(900, 620, 50, 50);
 		add(importer);
 
-		importer.addActionListener(
-				(ActionEvent e) -> {
-				vuegraphe.importer();
+		importer.addActionListener((ActionEvent e) -> {
+			if (graphe_actuel < vuegraphe.get_n_graphe()) {
+				graphe_actuel++;
+			} else {
+				graphe_actuel = 1;
+			}
+			vuegraphe.importer(graphe_actuel);
 		});
 
 		generer_random = new JButton("?");
@@ -271,14 +293,26 @@ public class Editeur extends JPanel {
 		a_lier = n;
 	}
 
+	public int getADeplacer() {
+		return a_deplacer;
+	}
+
+	public boolean getEnDeplacement() {
+		return en_deplacement;
+	}
+
+	public void setADeplacer(int n) {
+		a_deplacer = n;
+	}
+
 	public boolean getPeutPoserSommet() {
 		return peut_poser_sommet;
 	}
 
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(getWidth() - 45, 375, 20, 24);
-		g.fillRect(getWidth() - 55, 475, 20, 24);
+		g.fillRect(getWidth() - 45, 435, 20, 24);
+		g.fillRect(getWidth() - 55, 535, 20, 24);
 		g.setColor(COULEUR);
 		if (peut_poser_sommet) {
 			g.setColor(Color.green);
@@ -295,23 +329,31 @@ public class Editeur extends JPanel {
 		}
 		((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 169, 51, 51));
 		g.setColor(COULEUR);
+		if (en_deplacement) {
+			g.setColor(Color.green);
+		}
+		((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 229, 51, 51));
+		g.setColor(COULEUR);
+
 		poser_sommet.setBounds(getWidth() - 100, 50, 50, 50);
 		lier.setBounds(getWidth() - 100, 110, 50, 50);
 		suppr_som.setBounds(getWidth() - 100, 170, 50, 50);
-		suppr_all.setBounds(getWidth() - 100, 230, 50, 50);
+		deplacer_som.setBounds(getWidth() - 100, 230, 50, 50);
 
-		generer_random.setBounds(getWidth() - 100, 290, 50, 50);
-		ajoute_sommet.setBounds(getWidth() - 100, 350, 50, 24);
-		sommet.setBounds(getWidth() - 115, 375, 75, 24);
-		n_sommets.setBounds(getWidth() - 45, 375, 24, 24);
-		enleve_sommet.setBounds(getWidth() - 100, 400, 50, 24);
-		ajoute_arete.setBounds(getWidth() - 100, 450, 50, 24);
-		arete.setBounds(getWidth() - 105, 475, 75, 24);
-		n_aretes.setBounds(getWidth() - 55, 475, 24, 24);
-		enleve_arete.setBounds(getWidth() - 100, 500, 50, 24);
+		suppr_all.setBounds(getWidth() - 100, 290, 50, 50);
 
-		exporter.setBounds(getWidth() - 100, 560, 50, 50);
-		importer.setBounds(getWidth() - 100, 620, 50, 50);
+		generer_random.setBounds(getWidth() - 100, 350, 50, 50);
+		ajoute_sommet.setBounds(getWidth() - 100, 410, 50, 24);
+		sommet.setBounds(getWidth() - 115, 435, 75, 24);
+		n_sommets.setBounds(getWidth() - 45, 435, 24, 24);
+		enleve_sommet.setBounds(getWidth() - 100, 460, 50, 24);
+		ajoute_arete.setBounds(getWidth() - 100, 510, 50, 24);
+		arete.setBounds(getWidth() - 105, 535, 75, 24);
+		n_aretes.setBounds(getWidth() - 55, 535, 24, 24);
+		enleve_arete.setBounds(getWidth() - 100, 560, 50, 24);
+
+		exporter.setBounds(getWidth() - 100, 600, 50, 50);
+		importer.setBounds(getWidth() - 100, 660, 50, 50);
 		jouer.setBounds(getWidth() - 120, 800, 100, 50);
 	}
 
@@ -338,12 +380,26 @@ public class Editeur extends JPanel {
 				ajouteNSommets(-1);
 				ajouteNAretes(-1 * vuegraphe.supprSommet(id));
 			}
+
+			if (getEnDeplacement()) {
+				if (getADeplacer() == -1) {
+					setADeplacer(id);
+				} else {
+					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
+					                         e.getY() - DIAMETRE / 2);
+					setADeplacer(-1);
+				}
+			}
 			repaint();
 		}
 
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
-		public void mousePressed(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {
+		}
+		public void mouseExited(MouseEvent e) {
+		}
+		public void mousePressed(MouseEvent e) {
+		}
+		public void mouseReleased(MouseEvent e) {
+		}
 	}
 }
