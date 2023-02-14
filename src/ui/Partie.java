@@ -5,7 +5,7 @@ import javax.swing.*;
 public class Partie extends JPanel {
 	VueGraphePartie g;
 	Image background;
-	JButton regenerer = new JButton("Regen");
+	JButton regenerer = new JButton(new ImageIcon("../files/textures/retry.png"));
 
 	public Partie(Image bg) {
 		background = bg;
@@ -39,5 +39,6 @@ public class Partie extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+		regenerer.setBounds(getWidth() - 90, getHeight() / 2, 80, 50);
 	}
 }
