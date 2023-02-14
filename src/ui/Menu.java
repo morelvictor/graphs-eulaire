@@ -8,8 +8,8 @@ public class Menu extends JPanel {
 	public Menu(ContentFrame frame) {
 		contentFrame = frame;
 
-		JButton editorButton = new JButton("Editeur");
-		JButton gameButton = new JButton("Jeu");
+		JButton editorButton = new JButton(new ImageIcon("../files/textures/editeur_bouton.png"));
+		JButton gameButton = new JButton(new ImageIcon("../files/textures/jeu_bouton.png"));
 
 		editorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -26,6 +26,8 @@ public class Menu extends JPanel {
 				frame.repaint();
 			}
 		});
+
+		gameButton.setBounds(100, 200, 100, 50);
 
 		add(editorButton);
 		add(gameButton);

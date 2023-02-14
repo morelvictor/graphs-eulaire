@@ -48,7 +48,7 @@ public class Editeur extends JPanel {
 	private JLabel n_sommets = new JLabel("0");
 	private JLabel n_aretes = new JLabel("0");
 
-	private JButton jouer = new JButton("Jouer");
+	private JButton jouer = new JButton(new ImageIcon("../files/textures/jouer_editeur.png"));
 
 	private JFrame frame;
 
@@ -58,7 +58,7 @@ public class Editeur extends JPanel {
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
 		add(vuegraphe);
 
-		poser_sommet = new JButton("o");
+		poser_sommet = new JButton(new ImageIcon("../files/textures/poser_sommet.png"));
 		add(poser_sommet);
 
 		poser_sommet.addActionListener((ActionEvent e) -> {
@@ -69,7 +69,7 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
-		lier = new JButton("x");
+		lier = new JButton(new ImageIcon("../files/textures/lier_sommet.png"));
 		add(lier);
 
 		lier.addActionListener((ActionEvent e) -> {
@@ -83,7 +83,7 @@ public class Editeur extends JPanel {
 		});
 
 
-		suppr_som = new JButton("☒");
+		suppr_som = new JButton(new ImageIcon("../files/textures/suppr_sommet.png"));
 		add(suppr_som);
 
 		suppr_som.addActionListener((ActionEvent e) -> {
@@ -95,7 +95,7 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
-		deplacer_som = new JButton("✥");
+		deplacer_som = new JButton(new ImageIcon("../files/textures/deplacer_sommet.png"));
 		add(deplacer_som);
 
 		deplacer_som.addActionListener((ActionEvent e) -> {
@@ -107,7 +107,7 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
-		suppr_all = new JButton("⟲");
+		suppr_all = new JButton(new ImageIcon("../files/textures/suppr_tout.png"));
 		add(suppr_all);
 
 		suppr_all.addActionListener((ActionEvent e) -> {
@@ -119,14 +119,14 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
-		exporter = new JButton("→");
+		exporter = new JButton(new ImageIcon("../files/textures/exporter.png"));
 		add(exporter);
 
 		exporter.addActionListener((ActionEvent e) -> {
 			vuegraphe.exporter(graphe_actuel);
 		});
 
-		importer = new JButton("←");
+		importer = new JButton(new ImageIcon("../files/textures/importer.png"));
 		add(importer);
 
 		importer.addActionListener((ActionEvent e) -> {
@@ -138,7 +138,7 @@ public class Editeur extends JPanel {
 			vuegraphe.importer(graphe_actuel);
 		});
 
-		generer_random = new JButton("?");
+		generer_random = new JButton(new ImageIcon("../files/textures/random.png"));
 		add(generer_random);
 
 
@@ -161,7 +161,7 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
-		ajoute_sommet = new JButton("+");
+		ajoute_sommet = new JButton(new ImageIcon("../files/textures/ajoute.png"));
 		ajoute_sommet.setEnabled(false);
 		add(ajoute_sommet);
 
@@ -171,7 +171,7 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
-		enleve_sommet = new JButton("-");
+		enleve_sommet = new JButton(new ImageIcon("../files/textures/enleve.png"));
 		enleve_sommet.setEnabled(false);
 		add(enleve_sommet);
 
@@ -183,7 +183,7 @@ public class Editeur extends JPanel {
 			repaint();
 		});
 
-		ajoute_arete = new JButton("+");
+		ajoute_arete = new JButton(new ImageIcon("../files/textures/ajoute.png"));
 		ajoute_arete.setEnabled(false);
 		add(ajoute_arete);
 
@@ -195,7 +195,7 @@ public class Editeur extends JPanel {
 			}
 		});
 
-		enleve_arete = new JButton("-");
+		enleve_arete = new JButton(new ImageIcon("../files/textures/enleve.png"));
 		enleve_arete.setEnabled(false);
 		add(enleve_arete);
 
