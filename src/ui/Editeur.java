@@ -318,23 +318,23 @@ public class Editeur extends JPanel {
 		g.setColor(COULEUR);
 		if (peut_poser_sommet) {
 			g.setColor(Color.green);
+			((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 49, 51, 51));
 		}
-		((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 49, 51, 51));
 		g.setColor(COULEUR);
 		if (peut_lier) {
 			g.setColor(Color.green);
+			((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 109, 51, 51));
 		}
-		((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 109, 51, 51));
 		g.setColor(COULEUR);
 		if (peut_suppr) {
 			g.setColor(Color.green);
+			((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 169, 51, 51));
 		}
-		((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 169, 51, 51));
 		g.setColor(COULEUR);
 		if (en_deplacement) {
 			g.setColor(Color.green);
+			((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 229, 51, 51));
 		}
-		((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 229, 51, 51));
 		g.setColor(COULEUR);
 
 		poser_sommet.setBounds(getWidth() - 100, 50, 50, 50);
