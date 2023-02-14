@@ -352,7 +352,7 @@ public class Editeur extends JPanel {
 		ajoute_arete.setBounds(getWidth() - 100, 510, 50, 24);
 		arete.setBounds(getWidth() - 105, 535, 75, 24);
 		n_aretes.setBounds(getWidth() - 55, 535, 24, 24);
-		enleve_arete.setBounds(getWidth() - 100, 590, 50, 24);
+		enleve_arete.setBounds(getWidth() - 100, 560, 50, 24);
 
 		exporter.setBounds(getWidth() - 100, 600, 50, 50);
 		importer.setBounds(getWidth() - 100, 660, 50, 50);
