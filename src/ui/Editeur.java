@@ -24,6 +24,7 @@ public class Editeur extends JPanel {
 	private JButton deplacer_som;
 	private boolean en_deplacement = false;
 	private int a_deplacer = -1;
+	private Point pre_deplacement;
 
 	private JButton suppr_som;
 	private boolean peut_suppr = false;
@@ -68,6 +69,7 @@ public class Editeur extends JPanel {
 		add(poser_sommet);
 
 		poser_sommet.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			peut_poser_sommet = !peut_poser_sommet;
 			peut_lier = false;
 			peut_suppr = false;
@@ -82,6 +84,7 @@ public class Editeur extends JPanel {
 		add(lier);
 
 		lier.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			peut_lier = !peut_lier;
 			peut_poser_sommet = false;
 			peut_suppr = false;
@@ -99,6 +102,7 @@ public class Editeur extends JPanel {
 		add(suppr_som);
 
 		suppr_som.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			peut_suppr = !peut_suppr;
 			peut_poser_sommet = false;
 			peut_lier = false;
@@ -114,6 +118,7 @@ public class Editeur extends JPanel {
 		add(deplacer_som);
 
 		deplacer_som.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			en_deplacement = !en_deplacement;
 			peut_poser_sommet = false;
 			peut_lier = false;
@@ -129,6 +134,7 @@ public class Editeur extends JPanel {
 		add(suppr_all);
 
 		suppr_all.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			nb_sommets = 0;
 			nb_aretes = 0;
 			n_sommets.setText("0");
@@ -144,6 +150,7 @@ public class Editeur extends JPanel {
 		add(exporter);
 
 		exporter.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			vuegraphe.exporter(graphe_actuel);
 		});
 
@@ -154,6 +161,7 @@ public class Editeur extends JPanel {
 		add(importer);
 
 		importer.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			if (graphe_actuel < vuegraphe.get_n_graphe()) {
 				graphe_actuel++;
 			} else {
@@ -170,6 +178,7 @@ public class Editeur extends JPanel {
 
 
 		generer_random.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			en_generation = !en_generation;
 			peut_suppr = false;
 			peut_lier = false;
@@ -191,6 +200,7 @@ public class Editeur extends JPanel {
 		add(ajoute_sommet);
 
 		ajoute_sommet.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			ajouteNSommets(1);
 			vuegraphe.ajouteSommet(getRandomCoord());
 			repaint();
@@ -203,6 +213,7 @@ public class Editeur extends JPanel {
 		add(enleve_sommet);
 
 		enleve_sommet.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			if (nb_sommets > 0) {
 				ajouteNSommets(-1);
 				ajouteNAretes(-1 * vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille())));
@@ -217,6 +228,7 @@ public class Editeur extends JPanel {
 		add(ajoute_arete);
 
 		ajoute_arete.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			if (nb_sommets > 1) {
 				ajouteNAretes(1);
 				setConnexionRandom(true);
@@ -231,12 +243,14 @@ public class Editeur extends JPanel {
 		add(enleve_arete);
 
 		enleve_arete.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			ajouteNAretes(-1);
 			setConnexionRandom(false);
 			repaint();
 		});
 
 		jouer.addActionListener((ActionEvent e) -> {
+			post_deplacement();
 			frame.setContentPane(new Partie(vuegraphe, background));
 			frame.revalidate();
 			frame.repaint();
@@ -250,6 +264,15 @@ public class Editeur extends JPanel {
 		add(n_sommets);
 		add(n_aretes);
 		add(jouer);
+	}
+
+	public void post_deplacement() {
+		if (a_deplacer != -1) {
+ 			vuegraphe.setCoordonnees(a_deplacer, (int) (pre_deplacement.getX()) - DIAMETRE / 2,
+ 			                         (int) (pre_deplacement.getY()) - DIAMETRE / 2);
+			setADeplacer(-1);
+			repaint();
+		}
 	}
 
 	public void ajouteNSommets(int n) {
@@ -416,10 +439,13 @@ public class Editeur extends JPanel {
 			}
 
 			if (getEnDeplacement()) {
-				if (getADeplacer() == -1) {
+				if (getADeplacer() == -1 && id >= 0) {
 					setADeplacer(id);
-				} else {
-					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
+					pre_deplacement = vuegraphe.getCoordonnees().get(id);
+					return;
+				} 
+				if (getADeplacer() != -1) {
+ 					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
 					                         e.getY() - DIAMETRE / 2);
 					setADeplacer(-1);
 				}
@@ -427,6 +453,7 @@ public class Editeur extends JPanel {
 			repaint();
 		}
 
+		
 		public void mouseEntered(MouseEvent e) {
 		}
 		public void mouseExited(MouseEvent e) {
