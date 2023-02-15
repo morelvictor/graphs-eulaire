@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 public class Editeur extends JPanel {
 	private static int DIAMETRE = 15;
@@ -391,7 +392,7 @@ public class Editeur extends JPanel {
 	}
 
 
-	public class ControleurSourisEditeur implements MouseListener {
+	public class ControleurSourisEditeur implements MouseInputListener {
 		public void mouseClicked(MouseEvent e) {
 			if (getPeutPoserSommet()) {
 				ajouteNSommets(1);
@@ -433,6 +434,15 @@ public class Editeur extends JPanel {
 		public void mousePressed(MouseEvent e) {
 		}
 		public void mouseReleased(MouseEvent e) {
+		}
+		public void mouseDragged(MouseEvent e) {
+		}
+		public void mouseMoved(MouseEvent e) {
+			if (getADeplacer() != -1) {
+				vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2);
+				repaint();
+
+			}
 		}
 	}
 }

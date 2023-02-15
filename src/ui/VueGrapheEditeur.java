@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 
 import javax.swing.*;
+import javax.swing.event.*;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -13,8 +14,9 @@ public class VueGrapheEditeur extends VueGraphe {
 
 	Editeur editeur;
 
-	public VueGrapheEditeur(Color c, int d, Editeur e, MouseListener controleur) {
+	public VueGrapheEditeur(Color c, int d, Editeur e, MouseInputListener controleur) {
 		super(c, d, controleur);
+		addMouseMotionListener(controleur);
 		editeur = e;
 	}
 
