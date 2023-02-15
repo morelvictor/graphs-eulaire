@@ -268,8 +268,8 @@ public class Editeur extends JPanel {
 
 	public void post_deplacement() {
 		if (a_deplacer != -1) {
- 			vuegraphe.setCoordonnees(a_deplacer, (int) (pre_deplacement.getX()) - DIAMETRE / 2,
- 			                         (int) (pre_deplacement.getY()) - DIAMETRE / 2);
+			vuegraphe.setCoordonnees(a_deplacer, (int) (pre_deplacement.getX()) - DIAMETRE / 2,
+			                         (int) (pre_deplacement.getY()) - DIAMETRE / 2);
 			setADeplacer(-1);
 			repaint();
 		}
@@ -443,9 +443,9 @@ public class Editeur extends JPanel {
 					setADeplacer(id);
 					pre_deplacement = vuegraphe.getCoordonnees().get(id);
 					return;
-				} 
+				}
 				if (getADeplacer() != -1) {
- 					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
+					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
 					                         e.getY() - DIAMETRE / 2);
 					setADeplacer(-1);
 				}
@@ -453,11 +453,16 @@ public class Editeur extends JPanel {
 			repaint();
 		}
 
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
-		public void mousePressed(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
-		public void mouseDragged(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {
+		}
+		public void mouseExited(MouseEvent e) {
+		}
+		public void mousePressed(MouseEvent e) {
+		}
+		public void mouseReleased(MouseEvent e) {
+		}
+		public void mouseDragged(MouseEvent e) {
+		}
 		public void mouseMoved(MouseEvent e) {
 			if (getADeplacer() != -1) {
 				vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2);
