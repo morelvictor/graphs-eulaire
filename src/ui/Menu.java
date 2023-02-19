@@ -14,6 +14,7 @@ public class Menu extends JPanel {
 		background = ImageIO.read(new File("../textures/background.png"));
 		JButton editorButton = new JButton(new ImageIcon("../textures/editeur_bouton.png"));
 		JButton gameButton = new JButton(new ImageIcon("../textures/jeu_bouton.png"));
+		JButton packButton = new JButton(new ImageIcon("../textures/pack_bouton.png"));
 
 		editorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -22,7 +23,6 @@ public class Menu extends JPanel {
 				frame.repaint();
 			}
 		});
-
 		gameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setContentPane(new Partie(background));
@@ -30,15 +30,28 @@ public class Menu extends JPanel {
 				frame.repaint();
 			}
 		});
+		packButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Next pack.");
+				// frame.setContentPane(new Partie(background));
+				frame.revalidate();
+				frame.repaint();
+			}
+		});
+
 		editorButton.setBorderPainted(false);
 		editorButton.setContentAreaFilled(false);
 		editorButton.setFocusPainted(false);
 		gameButton.setBorderPainted(false);
 		gameButton.setContentAreaFilled(false);
 		gameButton.setFocusPainted(false);
+		packButton.setBorderPainted(false);
+		packButton.setContentAreaFilled(false);
+		packButton.setFocusPainted(false);
 
 		add(editorButton);
 		add(gameButton);
+		add(packButton);
 	}
 
 	public void paintComponent(Graphics g) {
