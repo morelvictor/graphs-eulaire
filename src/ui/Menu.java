@@ -14,6 +14,7 @@ public class Menu extends JPanel {
 		background = ImageIO.read(new File("../textures/background.png"));
 		JButton editorButton = new JButton(new ImageIcon("../textures/editeur_bouton.png"));
 		JButton gameButton = new JButton(new ImageIcon("../textures/jeu_bouton.png"));
+		JLabel packLabel = new JLabel("Ω");
 		JButton packButton = new JButton(new ImageIcon("../textures/pack_bouton.png"));
 
 		var packs = new java.util.ArrayList<String>();
@@ -21,7 +22,6 @@ public class Menu extends JPanel {
 		for (var file : (new java.io.File("../packs")).listFiles()) {
 			packs.add(file.getName());
 		}
-		System.out.println(packs);
 
 		class Current {
 			public int v;
@@ -46,7 +46,7 @@ public class Menu extends JPanel {
 		packButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				current_pack.v = (current_pack.v + 1) % (packs.size() + 1);
-				System.out.println("Next pack: " + (current_pack.v == packs.size() ? "Ω" : packs.get(current_pack.v)));
+				packLabel.setText(current_pack.v == packs.size() ? "Ω" : packs.get(current_pack.v));
 				frame.revalidate();
 				frame.repaint();
 			}
@@ -65,6 +65,7 @@ public class Menu extends JPanel {
 		add(editorButton);
 		add(gameButton);
 		add(packButton);
+		add(packLabel);
 	}
 
 	public void paintComponent(Graphics g) {
