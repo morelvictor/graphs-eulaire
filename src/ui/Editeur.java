@@ -12,6 +12,7 @@ public class Editeur extends JPanel {
 
 	private VueGrapheEditeur vuegraphe;
 
+	private String pack;
 
 	private JButton poser_sommet;
 	private boolean peut_poser_sommet = false;
@@ -55,9 +56,10 @@ public class Editeur extends JPanel {
 
 	private JFrame frame;
 
-	public Editeur(JFrame f, Image bg) {
+	public Editeur(JFrame f, Image bg, String pack) {
 		background = bg;
 		frame = f;
+		this.pack = pack;
 
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
 		add(vuegraphe);

@@ -7,8 +7,8 @@ public class Partie extends JPanel {
 	Image background;
 	JButton regenerer = new JButton(new ImageIcon("../textures/retry.png"));
 
-	String pack;
-	String current_pack;
+	private String pack;
+	private String current_pack;
 
 	public Partie(Image bg, String pack) {
 		this.pack = pack;
