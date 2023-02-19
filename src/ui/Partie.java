@@ -54,4 +54,8 @@ public class Partie extends JPanel {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		regenerer.setBounds(getWidth() - 90, getHeight() / 2, 80, 50);
 	}
+
+	public void suivant() {
+		g.setGrapheJeu("example", 0);
+	}
 }

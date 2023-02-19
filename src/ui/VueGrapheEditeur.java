@@ -61,20 +61,4 @@ public class VueGrapheEditeur extends VueGraphe {
 			}
 		}
 	}
-
-	public void ajouteSommet(Point p) {
-		super.ajouteSommet(p);
-	}
-
-	public int getId(int x, int y) {
-		return super.getId(x, y);
-	}
-
-	public int supprSommet(int id) {
-		return super.supprSommet(id);
-	}
-
-	public void setCoordonnees(int id, int x, int y) {
-		super.setCoordonnees(id, x, y);
-	}
 }
