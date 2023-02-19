@@ -7,7 +7,12 @@ public class Partie extends JPanel {
 	Image background;
 	JButton regenerer = new JButton(new ImageIcon("../textures/retry.png"));
 
-	public Partie(Image bg) {
+	String pack;
+	String current_pack;
+
+	public Partie(Image bg, String pack) {
+		this.pack = pack;
+		// TODO: current_pack = pack;
 		background = bg;
 		g = new VueGraphePartie(this);
 		add(g);
@@ -24,7 +29,9 @@ public class Partie extends JPanel {
 		repaint();
 	}
 
-	public Partie(VueGraphe vg, Image bg) {
+	public Partie(VueGraphe vg, Image bg, String pack) {
+		this.pack = pack;
+		// TODO: current_pack = pack;
 		background = bg;
 		g = new VueGraphePartie(this);
 		g.setGraphe(vg.getGraphe());

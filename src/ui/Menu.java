@@ -16,6 +16,19 @@ public class Menu extends JPanel {
 		JButton gameButton = new JButton(new ImageIcon("../textures/jeu_bouton.png"));
 		JButton packButton = new JButton(new ImageIcon("../textures/pack_bouton.png"));
 
+		var packs = new java.util.ArrayList<String>();
+
+		for (var file : (new java.io.File("../packs")).listFiles()) {
+			packs.add(file.getName());
+		}
+		System.out.println(packs);
+
+		class Current {
+			public int v;
+		}
+		Current current_pack = new Current();
+		current_pack.v = packs.size();
+
 		editorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setContentPane(new Editeur(frame, background));
@@ -25,15 +38,15 @@ public class Menu extends JPanel {
 		});
 		gameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new Partie(background));
+				frame.setContentPane(new Partie(background, (current_pack.v == packs.size() ? null : packs.get(current_pack.v))));
 				frame.revalidate();
 				frame.repaint();
 			}
 		});
 		packButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Next pack.");
-				// frame.setContentPane(new Partie(background));
+				current_pack.v = (current_pack.v + 1) % (packs.size() + 1);
+				System.out.println("Next pack: " + (current_pack.v == packs.size() ? "Ω" : packs.get(current_pack.v)));
 				frame.revalidate();
 				frame.repaint();
 			}
