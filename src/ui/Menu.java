@@ -11,9 +11,9 @@ public class Menu extends JPanel {
 	public Menu(ContentFrame frame) throws Exception {
 		contentFrame = frame;
 
-		background = ImageIO.read(new File("../files/textures/background.png"));
-		JButton editorButton = new JButton(new ImageIcon("../files/textures/editeur_bouton.png"));
-		JButton gameButton = new JButton(new ImageIcon("../files/textures/jeu_bouton.png"));
+		background = ImageIO.read(new File("../textures/background.png"));
+		JButton editorButton = new JButton(new ImageIcon("../textures/editeur_bouton.png"));
+		JButton gameButton = new JButton(new ImageIcon("../textures/jeu_bouton.png"));
 
 		editorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

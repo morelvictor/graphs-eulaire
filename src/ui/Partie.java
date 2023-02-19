@@ -5,7 +5,7 @@ import javax.swing.*;
 public class Partie extends JPanel {
 	VueGraphePartie g;
 	Image background;
-	JButton regenerer = new JButton(new ImageIcon("../files/textures/retry.png"));
+	JButton regenerer = new JButton(new ImageIcon("../textures/retry.png"));
 
 	public Partie(Image bg) {
 		background = bg;

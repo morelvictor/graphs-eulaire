@@ -183,7 +183,7 @@ public abstract class VueGraphe extends JComponent {
 	public void exporter(int n) {
 		try {
 			n_graphes++;
-			BufferedWriter writer = new BufferedWriter(new FileWriter("../files/" + n + ".mzr"));
+			BufferedWriter writer = new BufferedWriter(new FileWriter("../packs/example/" + n + ".mzr"));
 			writer.write(this.toString());
 			writer.close();
 		} catch (IOException e) {
@@ -193,7 +193,7 @@ public abstract class VueGraphe extends JComponent {
 
 	public void importer(int n) {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("../files/" + n + ".mzr"));
+			BufferedReader reader = new BufferedReader(new FileReader("../packs/example/" + n + ".mzr"));
 			coordonnees = parseCoordonnees(reader.readLine());
 			graphe = parseGraphe(reader);
 			reader.close();
@@ -206,7 +206,7 @@ public abstract class VueGraphe extends JComponent {
 	public static int get_n_graphe() {
 		for (int res = 1; res < 100; res++) {
 			try {
-				BufferedReader reader = new BufferedReader(new FileReader("../files/" + res + ".mzr"));
+				BufferedReader reader = new BufferedReader(new FileReader("../packs/example/" + res + ".mzr"));
 			} catch (IOException e) {
 				return res - 1;
 			}
