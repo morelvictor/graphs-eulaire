@@ -372,7 +372,7 @@ public class Editeur extends JPanel {
 
 	public int get_graphe_nb() {
 		if (pack == null) {
-			return (new java.io.File("../packless")).listFiles().length;
+			return (new java.io.File("../packless")).listFiles().length - 1;
 		} else {
 			return (new java.io.File("../packs/" + pack)).listFiles().length;
 		}
