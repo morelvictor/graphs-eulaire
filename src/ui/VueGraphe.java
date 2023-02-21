@@ -19,9 +19,6 @@ public abstract class VueGraphe extends JComponent {
 	private Color COULEUR = Color.BLUE;
 	public int DIAMETRE = 15;
 
-	int id_graphe = 1;
-	static int n_graphes = get_n_graphe();
-
 	public VueGraphe(Color c, int d, MouseListener controleur) {
 		setPreferredSize(new Dimension(850, 850));
 		COULEUR = c;
@@ -61,6 +58,7 @@ public abstract class VueGraphe extends JComponent {
 	public void viderGraphe() {
 		graphe = new Graphe();
 		coordonnees = new LinkedList<Point>();
+		repaint();
 	}
 	// g.taille() doit valoir coords.size()
 	public void setGraphe(Graphe g, LinkedList<Point> coords) {
@@ -180,10 +178,14 @@ public abstract class VueGraphe extends JComponent {
 		return g;
 	}
 
-	public void exporter(int n) {
+	public void exporter(String pack, int n) {
 		try {
-			n_graphes++;
-			BufferedWriter writer = new BufferedWriter(new FileWriter("../files/" + n + ".mzr"));
+			BufferedWriter writer;
+			if (pack == null) {
+				writer = new BufferedWriter(new FileWriter("../packless/" + n + ".mzr"));
+			} else {
+				writer = new BufferedWriter(new FileWriter("../packs/" + pack + "/" + n + ".mzr"));
+			}
 			writer.write(this.toString());
 			writer.close();
 		} catch (IOException e) {
@@ -191,9 +193,14 @@ public abstract class VueGraphe extends JComponent {
 		}
 	}
 
-	public void importer(int n) {
+	public void importer(String pack, int n) {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("../files/" + n + ".mzr"));
+			BufferedReader reader;
+			if (pack == null) {
+				reader = new BufferedReader(new FileReader("../packless/" + n + ".mzr"));
+			} else {
+				reader = new BufferedReader(new FileReader("../packs/" + pack + "/" + n + ".mzr"));
+			}
 			coordonnees = parseCoordonnees(reader.readLine());
 			graphe = parseGraphe(reader);
 			reader.close();
@@ -202,16 +209,4 @@ public abstract class VueGraphe extends JComponent {
 			e.printStackTrace();
 		}
 	}
-
-	public static int get_n_graphe() {
-		for (int res = 1; res < 100; res++) {
-			try {
-				BufferedReader reader = new BufferedReader(new FileReader("../files/" + res + ".mzr"));
-			} catch (IOException e) {
-				return res - 1;
-			}
-		}
-		return -1;
-	}
-
 }

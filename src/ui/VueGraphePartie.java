@@ -18,7 +18,6 @@ public class VueGraphePartie extends VueGraphe {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseClicked(MouseEvent e) {
-
 				if (oujesuis < 0) {
 					if (getId(e.getX(), e.getY()) != -1) {
 						oujesuis = getId(e.getX(), e.getY());
@@ -26,7 +25,7 @@ public class VueGraphePartie extends VueGraphe {
 					}
 				} else {
 					int clicked = getId(e.getX(), e.getY());
-					if (getGraphe().getConnexions(oujesuis).contains(clicked)) {
+					if (getGraphe().getConnexion(oujesuis, clicked) != 0) {
 						getGraphe().setConnexion(oujesuis, clicked, false);
 						oujesuis = clicked;
 						repaint();
@@ -34,9 +33,6 @@ public class VueGraphePartie extends VueGraphe {
 				}
 			}
 		});
-		super.importer(id_graphe);
-		setOrigin();
-		regen();
 	}
 
 	@Override
@@ -46,15 +42,7 @@ public class VueGraphePartie extends VueGraphe {
 		g.setColor(getCouleur());
 
 		if (getGraphe().nbConnexions() == 0) {
-			if (id_graphe < n_graphes) {
-				id_graphe++;
-			} else {
-				id_graphe = 1;
-			}
-			super.importer(id_graphe);
-			setOrigin();
-			regen();
-			System.out.println(super.id_graphe);
+			partie.suivant();
 			return;
 		}
 
@@ -85,6 +73,12 @@ public class VueGraphePartie extends VueGraphe {
 				}
 			}
 		}
+	}
+
+	public void setGrapheJeu(String pack, int n) {
+		super.importer(pack, n);
+		setOrigin();
+		regen();
 	}
 
 	public void regen() {

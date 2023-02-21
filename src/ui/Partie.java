@@ -5,9 +5,39 @@ import javax.swing.*;
 public class Partie extends JPanel {
 	VueGraphePartie g;
 	Image background;
-	JButton regenerer = new JButton(new ImageIcon("../files/textures/retry.png"));
+	JButton regenerer = new JButton(new ImageIcon("../textures/retry.png"));
 
-	public Partie(Image bg) {
+	private static class Level {
+		public Level(String pack, int n) {
+			this.pack = pack;
+			this.n = n;
+		}
+		public String pack;
+		public int n;
+	}
+
+	private java.util.ArrayList<Level> levels = new java.util.ArrayList<Level>();
+	private int current_level = 0;
+
+	private void loadPack(String pack) {
+		if (pack == null) {
+			for (var p : (new java.io.File("../packs")).listFiles()) {
+				loadPack(p.getName());
+			}
+		} else {
+			int n = (new java.io.File("../packs/" + pack)).listFiles().length;
+			for (int i = 0; i < n; i++) {
+				levels.add(new Level(pack, i));
+			}
+		}
+	}
+
+	public Partie(Image bg, String pack) {
+		loadPack(pack);
+		if (levels.size() == 0) {
+			System.err.println("No levels in pack " + (pack == null ? "Ω" : pack) + ".");
+			System.exit(1);
+		}
 		background = bg;
 		g = new VueGraphePartie(this);
 		add(g);
@@ -24,7 +54,12 @@ public class Partie extends JPanel {
 		repaint();
 	}
 
-	public Partie(VueGraphe vg, Image bg) {
+	public Partie(VueGraphe vg, Image bg, String pack) {
+		loadPack(pack);
+		if (levels.size() == 0) {
+			System.err.println("No levels in pack " + (pack == null ? "Ω" : pack) + ".");
+			System.exit(1);
+		}
 		background = bg;
 		g = new VueGraphePartie(this);
 		g.setGraphe(vg.getGraphe());
@@ -46,5 +81,10 @@ public class Partie extends JPanel {
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		regenerer.setBounds(getWidth() - 90, getHeight() / 2, 80, 50);
+	}
+
+	public void suivant() {
+		g.setGrapheJeu(levels.get(current_level).pack, levels.get(current_level).n);
+		current_level = (current_level + 1) % levels.size();
 	}
 }
