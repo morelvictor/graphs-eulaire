@@ -32,11 +32,10 @@ public class VueGraphePartie extends VueGraphe {
 						getGraphe().setConnexion(oujesuis, clicked, false);
 						oujesuis = clicked;
 						repaint();
+						if (estFinie()) {
+							partie.suivant();
+						}
 					}
-				}
-				if (estFinie()) {
-					System.out.println("FINIE");
-					partie.suivant();
 				}
 			}
 		});

@@ -55,26 +55,8 @@ public class Partie extends JPanel {
 	}
 
 	public Partie(VueGraphe vg, Image bg, String pack) {
-		loadPack(pack);
-		if (levels.size() == 0) {
-			System.err.println("No levels in pack " + (pack == null ? "Ω" : pack) + ".");
-			System.exit(1);
-		}
-		background = bg;
-		g = new VueGraphePartie(this);
-		g.setGrapheJeu(levels.get(current_level).pack, levels.get(current_level).n);
+		this(bg, pack);
 		g.setCoordonnes(vg.getCoordonnees());
-		g.setOrigin();
-		add(g);
-		regenerer.setBorderPainted(false);
-		regenerer.setContentAreaFilled(false);
-		regenerer.setFocusPainted(false);
-		add(regenerer);
-		regenerer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				g.regen();
-			}
-		});
 	}
 
 	public void paintComponent(Graphics g) {
