@@ -12,24 +12,31 @@ public class VueGraphePartie extends VueGraphe {
 	public VueGraphePartie(Partie p) {
 		super(Color.black, 30, null);
 		partie = p;
+		setOrigin();
 		addMouseListener(new MouseListener() {
 			public void mouseExited(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseClicked(MouseEvent e) {
+				int clicked = getId(e.getX(), e.getY());
+				if (clicked == -1) return;
+
 				if (oujesuis < 0) {
 					if (getId(e.getX(), e.getY()) != -1) {
 						oujesuis = getId(e.getX(), e.getY());
 						repaint();
 					}
 				} else {
-					int clicked = getId(e.getX(), e.getY());
 					if (getGraphe().getConnexion(oujesuis, clicked) != 0) {
 						getGraphe().setConnexion(oujesuis, clicked, false);
 						oujesuis = clicked;
 						repaint();
 					}
+				}
+				if (estFinie()) {
+					System.out.println("FINIE");
+					partie.suivant();
 				}
 			}
 		});
@@ -40,11 +47,6 @@ public class VueGraphePartie extends VueGraphe {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 850, 850);
 		g.setColor(getCouleur());
-
-		if (getGraphe().nbConnexions() == 0) {
-			partie.suivant();
-			return;
-		}
 
 		LinkedList<Point> coord = getCoordonnees();
 		int diam = getDiametre();
@@ -99,5 +101,9 @@ public class VueGraphePartie extends VueGraphe {
 			System.out.println("This shouldn't happen.");
 			// This won't happen, java's just being a dick.
 		}
+	}
+
+	public boolean estFinie() {
+		return getGraphe().nbConnexions() == 0; // on peut aussi tester si la partie ne peut plus être gagnée
 	}
 }

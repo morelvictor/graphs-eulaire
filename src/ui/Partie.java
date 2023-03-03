@@ -41,13 +41,13 @@ public class Partie extends JPanel {
 		background = bg;
 		g = new VueGraphePartie(this);
 		add(g);
+		g.setGrapheJeu(levels.get(current_level).pack, levels.get(current_level).n);
 		regenerer.setBorderPainted(false);
 		regenerer.setContentAreaFilled(false);
 		regenerer.setFocusPainted(false);
 		add(regenerer);
 		regenerer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Je regenère la team");
 				g.regen();
 			}
 		});
@@ -62,7 +62,7 @@ public class Partie extends JPanel {
 		}
 		background = bg;
 		g = new VueGraphePartie(this);
-		g.setGraphe(vg.getGraphe());
+		g.setGrapheJeu(levels.get(current_level).pack, levels.get(current_level).n);
 		g.setCoordonnes(vg.getCoordonnees());
 		g.setOrigin();
 		add(g);
@@ -72,7 +72,6 @@ public class Partie extends JPanel {
 		add(regenerer);
 		regenerer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Je regenère la team");
 				g.regen();
 			}
 		});
@@ -84,7 +83,7 @@ public class Partie extends JPanel {
 	}
 
 	public void suivant() {
-		g.setGrapheJeu(levels.get(current_level).pack, levels.get(current_level).n);
 		current_level = (current_level + 1) % levels.size();
+		g.setGrapheJeu(levels.get(current_level).pack, levels.get(current_level).n);
 	}
 }
