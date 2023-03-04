@@ -50,20 +50,14 @@ public class Partie extends JPanel {
 				int oujesuis = g.getOujesuis();
 				if (clicked == -1) return;
 
-				if (oujesuis < 0) {
-					if (g.getId(e.getX(), e.getY()) != -1) {
-						g.setOujesuis(g.getId(e.getX(), e.getY()));
-						g.repaint();
-					}
-				} else {
-					if (g.getGraphe().getConnexion(oujesuis, clicked) != 0) {
-						g.getGraphe().setConnexion(oujesuis, clicked, false);
-						g.setOujesuis(clicked);
-						g.repaint();
-						if (estFinie()) {
-							suivant();
-						}
-					}
+				if (oujesuis < 0 && g.getId(e.getX(), e.getY()) != -1) {
+					g.setOujesuis(g.getId(e.getX(), e.getY()));
+					g.repaint();
+				} else if (g.getGraphe().getConnexion(oujesuis, clicked) != 0) {
+					g.getGraphe().setConnexion(oujesuis, clicked, false);
+					g.setOujesuis(clicked);
+					g.repaint();
+					if (estFinie()) finDePartie(); //suivant();
 				}
 			}
 		};
@@ -83,7 +77,6 @@ public class Partie extends JPanel {
 		repaint();
 	}
 
-
 	public Partie(VueGraphe vg, Image bg, String pack) {
 		this(bg, pack);
 		g.setCoordonnes(vg.getCoordonnees());
@@ -92,6 +85,27 @@ public class Partie extends JPanel {
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		regenerer.setBounds(getWidth() - 90, getHeight() / 2, 80, 50);
+	}
+
+	public void finDePartie() {
+		remove(g);
+		remove(regenerer);
+
+		JButton congrats = new JButton("NEXT");
+		congrats.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				suivant();
+				add(g);
+				add(regenerer);
+				remove(congrats);
+				validate();
+				repaint();
+			}
+		});
+
+		add(congrats);
+		validate();
+		repaint();
 	}
 
 	public void suivant() {
