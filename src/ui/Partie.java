@@ -97,7 +97,7 @@ public class Partie extends JPanel {
 				suivant();
 				add(g);
 				add(regenerer);
-				remove(congrats);
+					remove(congrats);
 				validate();
 				repaint();
 			}
