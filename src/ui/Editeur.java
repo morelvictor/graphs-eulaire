@@ -56,14 +56,19 @@ public class Editeur extends JPanel {
 
 	private JFrame frame;
 
-	public Editeur(JFrame f, Image bg, String pack) {
+	public Editeur(JFrame f, Image bg, String pack, int graph) {
 		background = bg;
 		frame = f;
 		this.pack = pack;
-		graphe_actuel = get_graphe_nb();
 
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
 		add(vuegraphe);
+		graphe_actuel = graph >= 0 ? graph : get_graphe_nb();
+		if (graphe_actuel < get_graphe_nb()) {
+			vuegraphe.importer(pack, graphe_actuel);
+		} else {
+			vuegraphe.viderGraphe();
+		}
 
 		poser_sommet = new JButton(new ImageIcon("../textures/poser_sommet.png"));
 		poser_sommet.setBorderPainted(false);
@@ -256,7 +261,7 @@ public class Editeur extends JPanel {
 
 		jouer.addActionListener((ActionEvent e) -> {
 			post_deplacement();
-			frame.setContentPane(new Partie(vuegraphe, background, pack));
+			frame.setContentPane(new Partie(frame, vuegraphe, background, pack, graphe_actuel, true));
 			frame.revalidate();
 			frame.repaint();
 		});
