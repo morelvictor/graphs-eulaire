@@ -39,7 +39,36 @@ public class Partie extends JPanel {
 			System.exit(1);
 		}
 		background = bg;
-		g = new VueGraphePartie(this);
+
+		MouseListener ml = new MouseListener() {
+			public void mouseExited(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {}
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {
+				int clicked = g.getId(e.getX(), e.getY());
+				int oujesuis = g.getOujesuis();
+				if (clicked == -1) return;
+
+				if (oujesuis < 0) {
+					if (g.getId(e.getX(), e.getY()) != -1) {
+						g.setOujesuis(g.getId(e.getX(), e.getY()));
+						g.repaint();
+					}
+				} else {
+					if (g.getGraphe().getConnexion(oujesuis, clicked) != 0) {
+						g.getGraphe().setConnexion(oujesuis, clicked, false);
+						g.setOujesuis(clicked);
+						g.repaint();
+						if (estFinie()) {
+							suivant();
+						}
+					}
+				}
+			}
+		};
+
+		g = new VueGraphePartie(this, ml);
 		add(g);
 		g.setGrapheJeu(levels.get(current_level).pack, levels.get(current_level).n);
 		regenerer.setBorderPainted(false);
@@ -54,6 +83,7 @@ public class Partie extends JPanel {
 		repaint();
 	}
 
+
 	public Partie(VueGraphe vg, Image bg, String pack) {
 		this(bg, pack);
 		g.setCoordonnes(vg.getCoordonnees());
@@ -67,5 +97,9 @@ public class Partie extends JPanel {
 	public void suivant() {
 		current_level = (current_level + 1) % levels.size();
 		g.setGrapheJeu(levels.get(current_level).pack, levels.get(current_level).n);
+	}
+
+	public boolean estFinie() {
+		return g.getGraphe().nbConnexions() == 0; // on peut aussi tester si la partie ne peut plus être gagnée
 	}
 }

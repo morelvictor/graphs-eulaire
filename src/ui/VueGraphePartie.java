@@ -9,36 +9,11 @@ public class VueGraphePartie extends VueGraphe {
 	Graphe origin;
 	Partie partie;
 
-	public VueGraphePartie(Partie p) {
+	public VueGraphePartie(Partie p, MouseListener ml) {
 		super(Color.black, 30, null);
 		partie = p;
 		setOrigin();
-		addMouseListener(new MouseListener() {
-			public void mouseExited(MouseEvent e) {}
-			public void mouseEntered(MouseEvent e) {}
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseClicked(MouseEvent e) {
-				int clicked = getId(e.getX(), e.getY());
-				if (clicked == -1) return;
-
-				if (oujesuis < 0) {
-					if (getId(e.getX(), e.getY()) != -1) {
-						oujesuis = getId(e.getX(), e.getY());
-						repaint();
-					}
-				} else {
-					if (getGraphe().getConnexion(oujesuis, clicked) != 0) {
-						getGraphe().setConnexion(oujesuis, clicked, false);
-						oujesuis = clicked;
-						repaint();
-						if (estFinie()) {
-							partie.suivant();
-						}
-					}
-				}
-			}
-		});
+		addMouseListener(ml);
 	}
 
 	@Override
@@ -76,6 +51,14 @@ public class VueGraphePartie extends VueGraphe {
 		}
 	}
 
+	public int getOujesuis() {
+		return oujesuis;
+	}
+
+	public void setOujesuis(int o) {
+		oujesuis =  o;
+	}
+
 	public void setGrapheJeu(String pack, int n) {
 		super.importer(pack, n);
 		setOrigin();
@@ -100,9 +83,5 @@ public class VueGraphePartie extends VueGraphe {
 			System.out.println("This shouldn't happen.");
 			// This won't happen, java's just being a dick.
 		}
-	}
-
-	public boolean estFinie() {
-		return getGraphe().nbConnexions() == 0; // on peut aussi tester si la partie ne peut plus être gagnée
 	}
 }
