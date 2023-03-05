@@ -15,6 +15,8 @@ public class Editeur extends JPanel {
 	private String pack;
 	private int graphe_actuel;
 
+	private boolean dragging = false;
+
 	private JButton poser_sommet;
 	private boolean peut_poser_sommet = false;
 
@@ -26,7 +28,6 @@ public class Editeur extends JPanel {
 	private JButton deplacer_som;
 	private boolean en_deplacement = false;
 	private int a_deplacer = -1;
-	private boolean deplacement_apppuye = false;
 	private Point pre_deplacement;
 
 	private JButton suppr_som;
@@ -439,6 +440,7 @@ public class Editeur extends JPanel {
 		public void mouseEntered(MouseEvent e) {}
 		public void mouseExited(MouseEvent e) {}
 		public void mousePressed(MouseEvent e) {
+			dragging = false;
 			if (getPeutPoserSommet()) {
 				ajouteNSommets(1);
 				vuegraphe.ajouteSommet(new Point(e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2));
@@ -464,7 +466,6 @@ public class Editeur extends JPanel {
 
 			if (getEnDeplacement()) {
 				if (getADeplacer() == -1 && id >= 0) {
-					deplacement_apppuye = false;
 					setADeplacer(id);
 					pre_deplacement = vuegraphe.getCoordonnees().get(id);
 				} else if (getADeplacer() != -1) {
@@ -476,19 +477,34 @@ public class Editeur extends JPanel {
 			repaint();
 		}
 		public void mouseReleased(MouseEvent e) {
-			if (getADeplacer() != -1 && deplacement_apppuye) {
-				vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
-				                         e.getY() - DIAMETRE / 2);
-				setADeplacer(-1);
+			if (dragging) {
+				if (getADeplacer() != -1) {
+					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
+					                         e.getY() - DIAMETRE / 2);
+					setADeplacer(-1);
+				}
+				if (getPeutLier()) {
+					setALier(-1);
+				}
 				repaint();
 			}
 		}
 		public void mouseDragged(MouseEvent e) {
+			dragging = true;
+			int id = vuegraphe.getId(e.getX(), e.getY());
 			if (getADeplacer() != -1) {
 				vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2);
-				repaint();
 			}
-			deplacement_apppuye = true;
+			if (getPeutLier() && id >= 0) {
+				if (getALier() == -1) {
+					setALier(id);
+				} else if (getALier() != id) {
+					ajouteNAretes(1);
+					vuegraphe.getGraphe().setConnexion(getALier(), id, true);
+					setALier(id);
+				}
+			}
+			repaint();
 		}
 		public void mouseMoved(MouseEvent e) {
 			if (getADeplacer() != -1) {
