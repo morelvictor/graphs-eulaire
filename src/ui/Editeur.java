@@ -444,10 +444,12 @@ public class Editeur extends JPanel {
 				if (getALier() == -1) {
 					setALier(id);
 				} else {
-					if (getALier() != id) {
+					if (getALier() == id) {
+						setALier(-1);
+					} else {
 						ajouteNAretes(1);
 						vuegraphe.getGraphe().setConnexion(getALier(), id, true);
-						setALier(-1);
+						setALier(id);
 					}
 				}
 			}
