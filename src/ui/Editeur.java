@@ -15,6 +15,8 @@ public class Editeur extends JPanel {
 	private String pack;
 	private int graphe_actuel;
 
+	private boolean dragging = false;
+
 	private JButton poser_sommet;
 	private boolean peut_poser_sommet = false;
 
@@ -56,14 +58,19 @@ public class Editeur extends JPanel {
 
 	private JFrame frame;
 
-	public Editeur(JFrame f, Image bg, String pack) {
+	public Editeur(JFrame f, Image bg, String pack, int graph) {
 		background = bg;
 		frame = f;
 		this.pack = pack;
-		graphe_actuel = get_graphe_nb();
 
 		vuegraphe = new VueGrapheEditeur(COULEUR, DIAMETRE, this, new ControleurSourisEditeur());
 		add(vuegraphe);
+		graphe_actuel = graph >= 0 ? graph : get_graphe_nb();
+		if (graphe_actuel < get_graphe_nb()) {
+			vuegraphe.importer(pack, graphe_actuel);
+		} else {
+			vuegraphe.viderGraphe();
+		}
 
 		poser_sommet = new JButton(new ImageIcon("../textures/poser_sommet.png"));
 		poser_sommet.setBorderPainted(false);
@@ -256,7 +263,7 @@ public class Editeur extends JPanel {
 
 		jouer.addActionListener((ActionEvent e) -> {
 			post_deplacement();
-			frame.setContentPane(new Partie(vuegraphe, background, pack));
+			frame.setContentPane(new Partie(frame, vuegraphe, background, pack, graphe_actuel, true));
 			frame.revalidate();
 			frame.repaint();
 		});
@@ -429,7 +436,11 @@ public class Editeur extends JPanel {
 
 
 	public class ControleurSourisEditeur implements MouseInputListener {
-		public void mouseClicked(MouseEvent e) {
+		public void mouseClicked(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {
+			dragging = false;
 			if (getPeutPoserSommet()) {
 				ajouteNSommets(1);
 				vuegraphe.ajouteSommet(new Point(e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2));
@@ -439,10 +450,12 @@ public class Editeur extends JPanel {
 				if (getALier() == -1) {
 					setALier(id);
 				} else {
-					if (getALier() != id) {
+					if (getALier() == id) {
+						setALier(-1);
+					} else {
 						ajouteNAretes(1);
 						vuegraphe.getGraphe().setConnexion(getALier(), id, true);
-						setALier(-1);
+						setALier(id);
 					}
 				}
 			}
@@ -455,9 +468,7 @@ public class Editeur extends JPanel {
 				if (getADeplacer() == -1 && id >= 0) {
 					setADeplacer(id);
 					pre_deplacement = vuegraphe.getCoordonnees().get(id);
-					return;
-				}
-				if (getADeplacer() != -1) {
+				} else if (getADeplacer() != -1) {
 					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
 					                         e.getY() - DIAMETRE / 2);
 					setADeplacer(-1);
@@ -465,17 +476,40 @@ public class Editeur extends JPanel {
 			}
 			repaint();
 		}
-
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
-		public void mousePressed(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
-		public void mouseDragged(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {
+			if (dragging) {
+				if (getADeplacer() != -1) {
+					vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2,
+					                         e.getY() - DIAMETRE / 2);
+					setADeplacer(-1);
+				}
+				if (getPeutLier()) {
+					setALier(-1);
+				}
+				repaint();
+			}
+		}
+		public void mouseDragged(MouseEvent e) {
+			dragging = true;
+			int id = vuegraphe.getId(e.getX(), e.getY());
+			if (getADeplacer() != -1) {
+				vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2);
+			}
+			if (getPeutLier() && id >= 0) {
+				if (getALier() == -1) {
+					setALier(id);
+				} else if (getALier() != id) {
+					ajouteNAretes(1);
+					vuegraphe.getGraphe().setConnexion(getALier(), id, true);
+					setALier(id);
+				}
+			}
+			repaint();
+		}
 		public void mouseMoved(MouseEvent e) {
 			if (getADeplacer() != -1) {
 				vuegraphe.setCoordonnees(a_deplacer, e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2);
 				repaint();
-
 			}
 		}
 	}

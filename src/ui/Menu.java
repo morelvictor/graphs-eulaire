@@ -31,14 +31,14 @@ public class Menu extends JPanel {
 
 		editorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new Editeur(frame, background, (current_pack.v == packs.size() ? null : packs.get(current_pack.v))));
+				frame.setContentPane(new Editeur(frame, background, (current_pack.v == packs.size() ? null : packs.get(current_pack.v)), -1));
 				frame.revalidate();
 				frame.repaint();
 			}
 		});
 		gameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new Partie(background, (current_pack.v == packs.size() ? null : packs.get(current_pack.v))));
+				frame.setContentPane(new Partie(frame, background, (current_pack.v == packs.size() ? null : packs.get(current_pack.v)), 0, false));
 				frame.revalidate();
 				frame.repaint();
 			}
