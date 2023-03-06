@@ -115,25 +115,29 @@ public class Partie extends JPanel {
 			g.regen();
 			return;
 		}
+		if (current_level + 1 == levels.size()) {
 
-		remove(g);
-		remove(regenerer);
+			remove(g);
+			remove(regenerer);
 
-		JButton congrats = new JButton("NEXT");
-		congrats.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				suivant();
-				add(g);
-				add(regenerer);
-				remove(congrats);
-				validate();
-				repaint();
-			}
-		});
+			JButton congrats = new JButton("NEXT");
+			congrats.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					suivant();
+					add(g);
+					add(regenerer);
+					remove(congrats);
+					validate();
+					repaint();
+				}
+			});
 
-		add(congrats);
-		validate();
-		repaint();
+			add(congrats);
+			validate();
+			repaint();
+		} else {
+			suivant();
+		}
 	}
 
 
