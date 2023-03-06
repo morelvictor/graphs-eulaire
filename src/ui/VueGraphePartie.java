@@ -9,30 +9,11 @@ public class VueGraphePartie extends VueGraphe {
 	Graphe origin;
 	Partie partie;
 
-	public VueGraphePartie(Partie p) {
+	public VueGraphePartie(Partie p, MouseListener ml) {
 		super(Color.black, 30, null);
 		partie = p;
-		addMouseListener(new MouseListener() {
-			public void mouseExited(MouseEvent e) {}
-			public void mouseEntered(MouseEvent e) {}
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseClicked(MouseEvent e) {
-				if (oujesuis < 0) {
-					if (getId(e.getX(), e.getY()) != -1) {
-						oujesuis = getId(e.getX(), e.getY());
-						repaint();
-					}
-				} else {
-					int clicked = getId(e.getX(), e.getY());
-					if (getGraphe().getConnexion(oujesuis, clicked) != 0) {
-						getGraphe().setConnexion(oujesuis, clicked, false);
-						oujesuis = clicked;
-						repaint();
-					}
-				}
-			}
-		});
+		setOrigin();
+		addMouseListener(ml);
 	}
 
 	@Override
@@ -40,11 +21,6 @@ public class VueGraphePartie extends VueGraphe {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 850, 850);
 		g.setColor(getCouleur());
-
-		if (getGraphe().nbConnexions() == 0) {
-			partie.suivant();
-			return;
-		}
 
 		LinkedList<Point> coord = getCoordonnees();
 		int diam = getDiametre();
@@ -73,6 +49,14 @@ public class VueGraphePartie extends VueGraphe {
 				}
 			}
 		}
+	}
+
+	public int getOujesuis() {
+		return oujesuis;
+	}
+
+	public void setOujesuis(int o) {
+		oujesuis =  o;
 	}
 
 	public void setGrapheJeu(String pack, int n) {
