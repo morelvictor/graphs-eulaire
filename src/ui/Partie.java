@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.util.LinkedList;
 
 public class Partie extends JPanel {
@@ -38,68 +39,68 @@ public class Partie extends JPanel {
 		}
 	}
 
-	public Partie(JFrame frame, Image bg, String pack, int graph, boolean testing_editing) {
-		current_level = graph;
+	public Partie(JFrame frame, Image bg, String pack, VueGraphe vg, int level) {
 		loadPack(pack);
 		if (levels.size() == 0) {
 			System.err.println("No levels in pack " + (pack == null ? "Ω" : pack) + ".");
 			System.exit(1);
 		}
+		current_level = level;
 		background = bg;
 
-		MouseListener ml = new MouseListener() {
+		MouseInputListener ml = new MouseInputListener() {
 			public void mouseExited(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
-			public void mouseClicked(MouseEvent e) {
-				int clicked = g.getId(e.getX(), e.getY());
-				int oujesuis = g.get_selected();
-				if (clicked == -1) {
+			public void mouseClicked(MouseEvent e) { next_point(e); }
+			public void mouseMoved(MouseEvent e) {}
+			public void mouseDragged(MouseEvent e) { next_point(e); }
+
+			private void next_point(MouseEvent e) {
+				final int point = g.getId(e.getX(), e.getY());
+				if (point == -1) {
 					return;
 				}
-
-				if (oujesuis < 0 && g.getId(e.getX(), e.getY()) != -1) {
-					g.select(g.getId(e.getX(), e.getY()));
-					g.repaint();
-				} else if (g.getGraphe().getConnexion(oujesuis, clicked) != 0) {
-					g.getGraphe().setConnexion(oujesuis, clicked, false);
-					g.select(clicked);
-					g.repaint();
+				if (g.get_selected() < 0) {
+					g.select(point);
+				} else if (g.getGraphe().getConnexion(g.get_selected(), point) != 0) {
+					g.getGraphe().setConnexion(g.get_selected(), point, false);
+					g.select(point);
 					if (estFinie()) {
-						finDePartie();         //suivant();
+						finDePartie();
 					}
 				}
 			}
 		};
-
-		g = new VueGraphe(false);
+		if (vg != null) {
+			g = vg;
+			g.set_editing(false);
+			for (var l : g.getMouseListeners()) {
+				g.removeMouseListener(l);
+			}
+			for (var l : g.getMouseMotionListeners()) {
+				g.removeMouseMotionListener(l);
+			}
+		} else {
+			g = new VueGraphe(false);
+		}
 		add(g);
 		g.addMouseListener(ml);
+		g.addMouseMotionListener(ml);
 
-		this.testing_editing = testing_editing;
-		if (testing_editing) {
-			editeur.setBorderPainted(false);
-			editeur.setContentAreaFilled(false);
-			editeur.setFocusPainted(false);
-			add(editeur);
-			editeur.addActionListener(e -> {
-				frame.setContentPane(new Editeur(frame, background, pack, current_level));
-				frame.revalidate();
-				frame.repaint();
-			});
-		} else {
-			g.importer(pack, graph);
-			g.select(-1);
-			update_current();
-		}
-
-		update_current();
+		editeur.setBorderPainted(false);
+		editeur.setContentAreaFilled(false);
+		editeur.setFocusPainted(false);
+		editeur.addActionListener(e -> {
+			frame.setContentPane(new Editeur(frame, background, pack, current_level));
+			frame.revalidate();
+			frame.repaint();
+		});
 
 		regenerer.setBorderPainted(false);
 		regenerer.setContentAreaFilled(false);
 		regenerer.setFocusPainted(false);
-		add(regenerer);
 		regenerer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				g.setGraphe(current_g, current_c);
@@ -107,75 +108,49 @@ public class Partie extends JPanel {
 				update_current();
 			}
 		});
-	}
 
-	public Partie(JFrame frame, VueGraphe g, Image bg, String pack, int graph, boolean testing_editing) {
-		this(frame, bg, pack, graph, testing_editing);
-		this.g.setGraphe(g.getGraphe(), g.getCoords());
-		this.g.set_editing(false);
+		add(regenerer);
+		testing_editing = vg != null;
+		if (testing_editing) {
+			add(editeur);
+		} else {
+			g.importer(pack, current_level);
+			g.select(-1);
+		}
 		update_current();
-		MouseListener ml = new MouseListener() {
-			public void mouseExited(MouseEvent e) {}
-			public void mouseEntered(MouseEvent e) {}
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseClicked(MouseEvent e) {
-				int clicked = g.getId(e.getX(), e.getY());
-				int oujesuis = g.get_selected();
-				if (clicked == -1) {
-					return;
-				}
-
-				if (oujesuis < 0 && g.getId(e.getX(), e.getY()) != -1) {
-					Partie.this.g.select(g.getId(e.getX(), e.getY()));
-					Partie.this.g.repaint();
-				} else if (g.getGraphe().getConnexion(oujesuis, clicked) != 0) {
-					Partie.this.g.getGraphe().setConnexion(oujesuis, clicked, false);
-					Partie.this.g.select(clicked);
-					Partie.this.g.repaint();
-					if (estFinie()) {
-						finDePartie();         //suivant();
-					}
-				}
-			}
-		};
-		this.g.addMouseListener(ml);
 	}
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-		regenerer.setBounds(getWidth() - 90, getHeight() / 2, 80, 50);
 	}
 
 	public void finDePartie() {
 		if (testing_editing) {
-			g.setGraphe(current_g, current_c);
-			update_current();
+			reset();
 			return;
 		}
-		if (current_level + 1 == levels.size()) {
-
-			remove(g);
-			remove(regenerer);
-
-			JButton congrats = new JButton("NEXT");
-			congrats.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					suivant();
-					add(g);
-					add(regenerer);
-					remove(congrats);
-					validate();
-					repaint();
-				}
-			});
-
-			add(congrats);
-			validate();
-			repaint();
-		} else {
+		if (current_level + 1 < levels.size()) {
 			suivant();
+			return;
 		}
+		remove(g);
+		remove(regenerer);
+
+		JButton congrats = new JButton("NEXT");
+		congrats.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				suivant();
+				add(g);
+				add(regenerer);
+				remove(congrats);
+				validate();
+				repaint();
+			}
+		});
+
+		add(congrats);
+		validate();
+		repaint();
 	}
 
 	public boolean estFinie() {
@@ -189,13 +164,17 @@ public class Partie extends JPanel {
 		g.select(-1);
 		update_current();
 	}
+
 	private void update_current() {
+		current_g = g.getGraphe();
+		current_c = g.getCoords();
+		reset();
+	}
+	private void reset() {
 		try {
-			current_g = g.getGraphe().clone();
+			g.setGraphe(current_g.clone(), current_c);
 		} catch (CloneNotSupportedException err) { // This won't happen, java's just being a dick.
 			System.err.println("This shouldn't happen.");
-			current_g = null;
 		}
-		current_c = g.getCoords();
 	}
 }

@@ -266,7 +266,7 @@ public class Editeur extends JPanel {
 
 		jouer.addActionListener((ActionEvent e) -> {
 			post_deplacement();
-			frame.setContentPane(new Partie(frame, vuegraphe, background, pack, graphe_actuel, true));
+			frame.setContentPane(new Partie(frame, background, pack, vuegraphe, graphe_actuel));
 			frame.revalidate();
 			frame.repaint();
 		});

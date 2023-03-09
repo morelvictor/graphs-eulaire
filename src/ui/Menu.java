@@ -40,9 +40,8 @@ public class Menu extends JPanel {
 		});
 		gameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new Partie(frame, background, (current_pack.v ==
-				                                                    packs.size() ? null : packs.get(
-											    current_pack.v)), 0, false));
+				final String pack = current_pack.v == packs.size() ? null : packs.get(current_pack.v);
+				frame.setContentPane(new Partie(frame, background, pack, null, 0));
 				frame.revalidate();
 				frame.repaint();
 			}

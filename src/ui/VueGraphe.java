@@ -52,6 +52,7 @@ public class VueGraphe extends JComponent {
 	public void ajouteSommet(Point p) {
 		graphe.addSommet();
 		coords.add(p);
+		repaint();
 	}
 
 	public Point getCoord(int i) {
@@ -59,6 +60,7 @@ public class VueGraphe extends JComponent {
 	}
 	public void setCoord(int i, int x, int y) {
 		coords.set(i, new Point(x, y));
+		repaint();
 	}
 
 	public void effacer() {
@@ -70,12 +72,15 @@ public class VueGraphe extends JComponent {
 	public int supprSommet(int id) {
 		coords.set(id, coords.get(coords.size() - 1));
 		coords.remove(coords.size() - 1);
-		return graphe.supprSommet(id);
+		final var res = graphe.supprSommet(id);
+		repaint();
+		return res;
 	}
 
 	// select(-1) pour déselectionner
 	public void select(int i) {
 		selected = i;
+		repaint();
 	}
 	// -1 si aucun sélectionné
 	public int get_selected() {
@@ -210,7 +215,13 @@ public class VueGraphe extends JComponent {
 			} else {
 				reader = new BufferedReader(new FileReader("../packs/" + pack + "/" + n + ".mzr"));
 			}
-			coords = deserialiseCoords(reader.readLine());
+			final var line = reader.readLine();
+			if (line == null) {
+				effacer();
+				reader.close();
+				return;
+			}
+			coords = deserialiseCoords(line);
 			graphe = deserialiseConnections(reader);
 			reader.close();
 			repaint();
