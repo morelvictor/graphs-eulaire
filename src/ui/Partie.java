@@ -10,8 +10,8 @@ public class Partie extends JPanel {
 	LinkedList<Point> current_c;
 
 	Image background;
-	JButton regenerer = new JButton(new ImageIcon("../textures/retry.png"));
-	JButton editeur = new JButton(new ImageIcon("../textures/jeu-editeur.png"));
+	JButton regenerer;
+	JButton editeur;
 	boolean testing_editing;
 
 	private static class Level {
@@ -56,22 +56,6 @@ public class Partie extends JPanel {
 			public void mouseClicked(MouseEvent e) { next_point(e); }
 			public void mouseMoved(MouseEvent e) {}
 			public void mouseDragged(MouseEvent e) { next_point(e); }
-
-			private void next_point(MouseEvent e) {
-				final int point = g.getId(e.getX(), e.getY());
-				if (point == -1) {
-					return;
-				}
-				if (g.get_selected() < 0) {
-					g.select(point);
-				} else if (g.getGraphe().getConnexion(g.get_selected(), point) != 0) {
-					g.getGraphe().setConnexion(g.get_selected(), point, false);
-					g.select(point);
-					if (estFinie()) {
-						finDePartie();
-					}
-				}
-			}
 		};
 		if (vg != null) {
 			g = vg;
@@ -89,24 +73,16 @@ public class Partie extends JPanel {
 		g.addMouseListener(ml);
 		g.addMouseMotionListener(ml);
 
-		editeur.setBorderPainted(false);
-		editeur.setContentAreaFilled(false);
-		editeur.setFocusPainted(false);
-		editeur.addActionListener(e -> {
+		editeur = Utils.generate_button("jeu-editeur", e -> {
 			frame.setContentPane(new Editeur(frame, background, pack, current_level));
 			frame.revalidate();
 			frame.repaint();
 		});
 
-		regenerer.setBorderPainted(false);
-		regenerer.setContentAreaFilled(false);
-		regenerer.setFocusPainted(false);
-		regenerer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				g.setGraphe(current_g, current_c);
-				g.select(-1);
-				update_current();
-			}
+		regenerer = Utils.generate_button("retry", e -> {
+			g.setGraphe(current_g, current_c);
+			g.select(-1);
+			update_current();
 		});
 
 		add(regenerer);
@@ -117,11 +93,14 @@ public class Partie extends JPanel {
 			g.importer(pack, current_level);
 			g.select(-1);
 		}
+
 		update_current();
 	}
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+		regenerer.setBounds(getWidth() - 120, 710, 90, 50);
+		editeur.setBounds(getWidth() - 120, 800, 90, 50);
 	}
 
 	public void finDePartie() {
@@ -151,6 +130,22 @@ public class Partie extends JPanel {
 		add(congrats);
 		validate();
 		repaint();
+	}
+
+	private void next_point(MouseEvent e) {
+		final int point = g.getId(e.getX(), e.getY());
+		if (point == -1) {
+			return;
+		}
+		if (g.get_selected() == -1) {
+			g.select(point);
+		} else if (g.getGraphe().getConnexion(g.get_selected(), point) != 0) {
+			g.getGraphe().setConnexion(g.get_selected(), point, false);
+			g.select(point);
+			if (estFinie()) {
+				finDePartie();
+			}
+		}
 	}
 
 	public boolean estFinie() {

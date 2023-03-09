@@ -6,33 +6,15 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 public class Editeur extends JPanel {
-	private static int DIAMETRE = 15;
-	private static Color COULEUR = new Color(39, 78, 140);
 	private static Image background;
 
 	private VueGraphe vuegraphe;
+	private InputHandler input_handler;
 
 	private String pack;
 	private int graphe_actuel;
 
-	private boolean dragging = false;
-
-	private JButton poser_sommet;
-	private boolean peut_poser_sommet = false;
-
-	private JButton lier;
-	private boolean peut_lier = false;
-	//indice dans la liste sommets du sommet à lier
-	private int a_lier = -1;
-
-	private JButton deplacer_som;
-	private boolean en_deplacement = false;
-	private int a_deplacer = -1;
-	private Point pre_deplacement;
-
-	private JButton suppr_som;
-	private boolean peut_suppr = false;
-
+	private JButton supprimer;
 	private JButton suppr_all;
 
 	private JButton exporter;
@@ -54,7 +36,7 @@ public class Editeur extends JPanel {
 	private JLabel n_sommets = new JLabel("0");
 	private JLabel n_aretes = new JLabel("0");
 
-	private JButton jouer = new JButton(new ImageIcon("../textures/jouer_editeur.png"));
+	private JButton jouer;
 
 	private JFrame frame;
 
@@ -65,6 +47,7 @@ public class Editeur extends JPanel {
 
 		vuegraphe = new VueGraphe(true);
 		add(vuegraphe);
+		input_handler = new PlacingInputHandler();
 		final var ml = new ControleurSourisEditeur();
 		vuegraphe.addMouseListener(ml);
 		vuegraphe.addMouseMotionListener(ml);
@@ -75,79 +58,17 @@ public class Editeur extends JPanel {
 			vuegraphe.effacer();
 		}
 
-		poser_sommet = new JButton(new ImageIcon("../textures/poser_sommet.png"));
-		poser_sommet.setBorderPainted(false);
-		poser_sommet.setContentAreaFilled(false);
-		poser_sommet.setFocusPainted(false);
-		add(poser_sommet);
-
-		poser_sommet.addActionListener((ActionEvent e) -> {
-			post_deplacement();
-			peut_poser_sommet = !peut_poser_sommet;
-			peut_lier = false;
-			peut_suppr = false;
-			en_deplacement = false;
+		supprimer = Utils.generate_button("suppr_sommet", e -> {
+			if (input_handler instanceof DeletingInputHandler) {
+				input_handler = new PlacingInputHandler();
+			} else {
+				input_handler = new DeletingInputHandler();
+			}
 			repaint();
 		});
+		add(supprimer);
 
-		lier = new JButton(new ImageIcon("../textures/lier_sommet.png"));
-		lier.setBorderPainted(false);
-		lier.setContentAreaFilled(false);
-		lier.setFocusPainted(false);
-		add(lier);
-
-		lier.addActionListener((ActionEvent e) -> {
-			post_deplacement();
-			peut_lier = !peut_lier;
-			peut_poser_sommet = false;
-			peut_suppr = false;
-			en_generation = false;
-			en_deplacement = false;
-			a_lier = -1;
-			repaint();
-		});
-
-
-		suppr_som = new JButton(new ImageIcon("../textures/suppr_sommet.png"));
-		suppr_som.setBorderPainted(false);
-		suppr_som.setContentAreaFilled(false);
-		suppr_som.setFocusPainted(false);
-		add(suppr_som);
-
-		suppr_som.addActionListener((ActionEvent e) -> {
-			post_deplacement();
-			peut_suppr = !peut_suppr;
-			peut_poser_sommet = false;
-			peut_lier = false;
-			en_generation = false;
-			en_deplacement = false;
-			repaint();
-		});
-
-		deplacer_som = new JButton(new ImageIcon("../textures/deplacer_sommet.png"));
-		deplacer_som.setBorderPainted(false);
-		deplacer_som.setContentAreaFilled(false);
-		deplacer_som.setFocusPainted(false);
-		add(deplacer_som);
-
-		deplacer_som.addActionListener((ActionEvent e) -> {
-			post_deplacement();
-			en_deplacement = !en_deplacement;
-			peut_poser_sommet = false;
-			peut_lier = false;
-			peut_suppr = false;
-			a_deplacer = -1;
-			repaint();
-		});
-
-		suppr_all = new JButton(new ImageIcon("../textures/suppr_tout.png"));
-		suppr_all.setBorderPainted(false);
-		suppr_all.setContentAreaFilled(false);
-		suppr_all.setFocusPainted(false);
-		add(suppr_all);
-
-		suppr_all.addActionListener((ActionEvent e) -> {
-			post_deplacement();
+		suppr_all = Utils.generate_button("suppr_tout", e -> {
 			nb_sommets = 0;
 			nb_aretes = 0;
 			n_sommets.setText("0");
@@ -156,26 +77,14 @@ public class Editeur extends JPanel {
 			vuegraphe.effacer();
 			repaint();
 		});
+		add(suppr_all);
 
-		exporter = new JButton(new ImageIcon("../textures/exporter.png"));
-		exporter.setBorderPainted(false);
-		exporter.setContentAreaFilled(false);
-		exporter.setFocusPainted(false);
-		add(exporter);
-
-		exporter.addActionListener((ActionEvent e) -> {
-			post_deplacement();
+		exporter = Utils.generate_button("exporter", e -> {
 			vuegraphe.exporter(pack, graphe_actuel);
 		});
+		add(exporter);
 
-		importer = new JButton(new ImageIcon("../textures/importer.png"));
-		importer.setBorderPainted(false);
-		importer.setContentAreaFilled(false);
-		importer.setFocusPainted(false);
-		add(importer);
-
-		importer.addActionListener((ActionEvent e) -> {
-			post_deplacement();
+		importer = Utils.generate_button("importer", e -> {
 			graphe_actuel = (graphe_actuel + 1) % (get_graphe_nb() + 1);
 			if (graphe_actuel < get_graphe_nb()) {
 				vuegraphe.importer(pack, graphe_actuel);
@@ -183,20 +92,10 @@ public class Editeur extends JPanel {
 				vuegraphe.effacer();
 			}
 		});
+		add(importer);
 
-		generer_random = new JButton(new ImageIcon("../textures/random.png"));
-		generer_random.setBorderPainted(false);
-		generer_random.setContentAreaFilled(false);
-		generer_random.setFocusPainted(false);
-		add(generer_random);
-
-
-		generer_random.addActionListener((ActionEvent e) -> {
-			post_deplacement();
+		generer_random = Utils.generate_button("random", e -> {
 			en_generation = !en_generation;
-			peut_suppr = false;
-			peut_lier = false;
-			peut_poser_sommet = false;
 			if (en_generation) {
 				nb_sommets = 5 + r.nextInt(20);
 				nb_aretes = r.nextInt(nb_sommets);
@@ -207,87 +106,51 @@ public class Editeur extends JPanel {
 			graphe_actuel = get_graphe_nb();
 			repaint();
 		});
+		add(generer_random);
 
-		ajoute_sommet = new JButton(new ImageIcon("../textures/ajoute.png"));
-		ajoute_sommet.setBorderPainted(false);
-		ajoute_sommet.setContentAreaFilled(false);
-		ajoute_sommet.setFocusPainted(false);
-		add(ajoute_sommet);
-
-		ajoute_sommet.addActionListener((ActionEvent e) -> {
-			post_deplacement();
+		ajoute_sommet = Utils.generate_button("ajoute", e -> {
 			ajouteNSommets(1);
 			vuegraphe.ajouteSommet(getRandomCoord());
 			repaint();
 		});
+		add(ajoute_sommet);
 
-		enleve_sommet = new JButton(new ImageIcon("../textures/enleve.png"));
-		enleve_sommet.setBorderPainted(false);
-		enleve_sommet.setContentAreaFilled(false);
-		enleve_sommet.setFocusPainted(false);
-		add(enleve_sommet);
-
-		enleve_sommet.addActionListener((ActionEvent e) -> {
-			post_deplacement();
+		enleve_sommet = Utils.generate_button("enleve", e -> {
 			if (nb_sommets > 0) {
 				ajouteNSommets(-1);
 				ajouteNAretes(-1 * vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille())));
 			}
 			repaint();
 		});
+		add(enleve_sommet);
 
-		ajoute_arete = new JButton(new ImageIcon("../textures/ajoute.png"));
-		ajoute_arete.setBorderPainted(false);
-		ajoute_arete.setContentAreaFilled(false);
-		ajoute_arete.setFocusPainted(false);
-		add(ajoute_arete);
-
-		ajoute_arete.addActionListener((ActionEvent e) -> {
-			post_deplacement();
+		ajoute_arete = Utils.generate_button("ajoute", e -> {
 			if (nb_sommets > 1) {
 				ajouteNAretes(1);
 				setConnexionRandom(true);
 				repaint();
 			}
 		});
+		add(ajoute_arete);
 
-		enleve_arete = new JButton(new ImageIcon("../textures/enleve.png"));
-		enleve_arete.setBorderPainted(false);
-		enleve_arete.setContentAreaFilled(false);
-		enleve_arete.setFocusPainted(false);
-		add(enleve_arete);
-
-		enleve_arete.addActionListener((ActionEvent e) -> {
-			post_deplacement();
+		enleve_arete = Utils.generate_button("enleve", e -> {
 			ajouteNAretes(-1);
 			setConnexionRandom(false);
 			repaint();
 		});
+		add(enleve_arete);
 
-		jouer.addActionListener((ActionEvent e) -> {
-			post_deplacement();
+		jouer = Utils.generate_button("jouer_editeur", e -> {
 			frame.setContentPane(new Partie(frame, background, pack, vuegraphe, graphe_actuel));
 			frame.revalidate();
 			frame.repaint();
 		});
-		jouer.setBorderPainted(false);
-		jouer.setContentAreaFilled(false);
-		jouer.setFocusPainted(false);
+		add(jouer);
 
 		add(sommet);
 		add(arete);
 		add(n_sommets);
 		add(n_aretes);
-		add(jouer);
-	}
-
-	public void post_deplacement() {
-		if (a_deplacer != -1) {
-			vuegraphe.setCoord(a_deplacer, (int) (pre_deplacement.getX()) - DIAMETRE / 2,
-			                         (int) (pre_deplacement.getY()) - DIAMETRE / 2);
-			setADeplacer(-1);
-			repaint();
-		}
 	}
 
 	public void ajouteNSommets(int n) {
@@ -351,35 +214,6 @@ public class Editeur extends JPanel {
 		return graphe;
 	}
 
-
-	public int getALier() {
-		return a_lier;
-	}
-
-	public boolean getPeutLier() {
-		return peut_lier;
-	}
-
-	public void setALier(int n) {
-		a_lier = n;
-	}
-
-	public int getADeplacer() {
-		return a_deplacer;
-	}
-
-	public boolean getEnDeplacement() {
-		return en_deplacement;
-	}
-
-	public void setADeplacer(int n) {
-		a_deplacer = n;
-	}
-
-	public boolean getPeutPoserSommet() {
-		return peut_poser_sommet;
-	}
-
 	public int get_graphe_nb() {
 		if (pack == null) {
 			return (new java.io.File("../packless")).listFiles().length - 1;
@@ -390,130 +224,102 @@ public class Editeur extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-		g.setColor(Color.WHITE);
-		g.fillRect(getWidth() - 45, 435, 20, 24);
-		g.fillRect(getWidth() - 55, 535, 20, 24);
-		g.setColor(COULEUR);
-		if (peut_poser_sommet) {
+		if (input_handler instanceof DeletingInputHandler) {
 			g.setColor(Color.green);
 			((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 49, 51, 51));
 		}
-		g.setColor(COULEUR);
-		if (peut_lier) {
-			g.setColor(Color.green);
-			((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 109, 51, 51));
-		}
-		g.setColor(COULEUR);
-		if (peut_suppr) {
-			g.setColor(Color.green);
-			((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 169, 51, 51));
-		}
-		g.setColor(COULEUR);
-		if (en_deplacement) {
-			g.setColor(Color.green);
-			((Graphics2D) g).draw(new Rectangle(getWidth() - 101, 229, 51, 51));
-		}
-		g.setColor(COULEUR);
 
-		poser_sommet.setBounds(getWidth() - 100, 50, 50, 50);
-		lier.setBounds(getWidth() - 100, 110, 50, 50);
-		suppr_som.setBounds(getWidth() - 100, 170, 50, 50);
-		deplacer_som.setBounds(getWidth() - 100, 230, 50, 50);
+		supprimer.setBounds(getWidth() - 100, 50, 50, 50);
+		suppr_all.setBounds(getWidth() - 100, 110, 50, 50);
 
-		suppr_all.setBounds(getWidth() - 100, 290, 50, 50);
+		generer_random.setBounds(getWidth() - 100, 170, 50, 50);
+		ajoute_sommet.setBounds(getWidth() - 100, 230, 50, 24);
+		sommet.setBounds(getWidth() - 115, 255, 75, 24);
+		n_sommets.setBounds(getWidth() - 45, 255, 24, 24);
+		enleve_sommet.setBounds(getWidth() - 100, 280, 50, 24);
+		ajoute_arete.setBounds(getWidth() - 100, 330, 50, 24);
+		arete.setBounds(getWidth() - 105, 345, 75, 24);
+		n_aretes.setBounds(getWidth() - 55, 345, 24, 24);
+		enleve_arete.setBounds(getWidth() - 100, 380, 50, 24);
 
-		generer_random.setBounds(getWidth() - 100, 350, 50, 50);
-		ajoute_sommet.setBounds(getWidth() - 100, 410, 50, 24);
-		sommet.setBounds(getWidth() - 115, 435, 75, 24);
-		n_sommets.setBounds(getWidth() - 45, 435, 24, 24);
-		enleve_sommet.setBounds(getWidth() - 100, 460, 50, 24);
-		ajoute_arete.setBounds(getWidth() - 100, 510, 50, 24);
-		arete.setBounds(getWidth() - 105, 535, 75, 24);
-		n_aretes.setBounds(getWidth() - 55, 535, 24, 24);
-		enleve_arete.setBounds(getWidth() - 100, 560, 50, 24);
-
-		exporter.setBounds(getWidth() - 100, 600, 50, 50);
-		importer.setBounds(getWidth() - 100, 660, 50, 50);
+		exporter.setBounds(getWidth() - 100, 420, 50, 50);
+		importer.setBounds(getWidth() - 100, 480, 50, 50);
 		jouer.setBounds(getWidth() - 120, 800, 100, 50);
 	}
 
 
 	public class ControleurSourisEditeur implements MouseInputListener {
-		public void mouseClicked(MouseEvent e) {}
+		int current_vertex = -1;
+		public void mouseClicked(MouseEvent e) {
+			if (current_vertex == -1) {
+				input_handler.on_point_click(e.getPoint());
+			} else {
+				input_handler.on_vertex_click(current_vertex);
+			}
+		}
 		public void mouseEntered(MouseEvent e) {}
 		public void mouseExited(MouseEvent e) {}
 		public void mousePressed(MouseEvent e) {
-			dragging = false;
-			if (getPeutPoserSommet()) {
-				ajouteNSommets(1);
-				vuegraphe.ajouteSommet(new Point(e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2));
-			}
-			int id = vuegraphe.getId(e.getX(), e.getY());
-			if (getPeutLier() && id >= 0) {
-				if (getALier() == -1) {
-					setALier(id);
-				} else {
-					if (getALier() == id) {
-						setALier(-1);
-					} else {
-						ajouteNAretes(1);
-						vuegraphe.getGraphe().setConnexion(getALier(), id, true);
-						setALier(id);
-					}
-				}
-			}
-			if (peut_suppr && id >= 0) {
-				ajouteNSommets(-1);
-				ajouteNAretes(-1 * vuegraphe.supprSommet(id));
-			}
-
-			if (getEnDeplacement()) {
-				if (getADeplacer() == -1 && id >= 0) {
-					setADeplacer(id);
-					pre_deplacement = vuegraphe.getCoord(id);
-				} else if (getADeplacer() != -1) {
-					vuegraphe.setCoord(a_deplacer, e.getX() - DIAMETRE / 2,
-					                         e.getY() - DIAMETRE / 2);
-					setADeplacer(-1);
-				}
-			}
-			repaint();
+			current_vertex = vuegraphe.getId(e.getX(), e.getY());
 		}
-		public void mouseReleased(MouseEvent e) {
-			if (dragging) {
-				if (getADeplacer() != -1) {
-					vuegraphe.setCoord(a_deplacer, e.getX() - DIAMETRE / 2,
-					                         e.getY() - DIAMETRE / 2);
-					setADeplacer(-1);
-				}
-				if (getPeutLier()) {
-					setALier(-1);
-				}
-				repaint();
-			}
-		}
+		public void mouseReleased(MouseEvent e) {}
 		public void mouseDragged(MouseEvent e) {
-			dragging = true;
-			int id = vuegraphe.getId(e.getX(), e.getY());
-			if (getADeplacer() != -1) {
-				vuegraphe.setCoord(a_deplacer, e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2);
+			if (current_vertex != -1) {
+				input_handler.on_vertex_drag(current_vertex, e.getPoint());
 			}
-			if (getPeutLier() && id >= 0) {
-				if (getALier() == -1) {
-					setALier(id);
-				} else if (getALier() != id) {
-					ajouteNAretes(1);
-					vuegraphe.getGraphe().setConnexion(getALier(), id, true);
-					setALier(id);
-				}
-			}
-			repaint();
 		}
-		public void mouseMoved(MouseEvent e) {
-			if (getADeplacer() != -1) {
-				vuegraphe.setCoord(a_deplacer, e.getX() - DIAMETRE / 2, e.getY() - DIAMETRE / 2);
+		public void mouseMoved(MouseEvent e) {}
+	}
+
+	private abstract class InputHandler {
+		public abstract void on_vertex_click(int vertex);
+		public abstract void on_point_click(Point p);
+		public abstract void on_vertex_drag(int vertex, Point p);
+	}
+	private class PlacingInputHandler extends InputHandler {
+		public void on_vertex_click(int vertex) {
+			if (vuegraphe.get_selected() == -1) {
+				vuegraphe.select(vertex);
+			} else if (vuegraphe.get_selected() == vertex) {
+				vuegraphe.select(-1);
+			} else {
+				vuegraphe.getGraphe().setConnexion(vuegraphe.get_selected(), vertex, true);
+				vuegraphe.select(vertex);
+				ajouteNAretes(1);
 				repaint();
 			}
+		}
+		public void on_point_click(Point p) {
+			vuegraphe.ajouteSommet(p);
+			ajouteNSommets(1);
+			repaint();
+		}
+		public void on_vertex_drag(int vertex, Point p) {
+			vuegraphe.setCoord(vertex, p.x, p.y);
+		}
+	}
+	private class DeletingInputHandler extends InputHandler {
+		int last_deleted = -1;
+		public void on_vertex_click(int vertex) {
+			ajouteNAretes(-vuegraphe.supprSommet(vertex));
+			ajouteNSommets(-1);
+			repaint();
+		}
+		public void on_point_click(Point p) {}
+		public void on_vertex_drag(int vertex, Point p) {
+			if (last_deleted == -1) {
+				last_deleted = vertex;
+			}
+			final var other_p = vuegraphe.getId(p.x, p.y);
+			if (other_p == -1 || last_deleted == other_p) {
+				return;
+			}
+			if (vuegraphe.getGraphe().getConnexion(last_deleted, other_p) > 0) {
+				ajouteNAretes(-1);
+			}
+			vuegraphe.getGraphe().setConnexion(last_deleted, other_p, false);
+			last_deleted = other_p;
+			repaint();
 		}
 	}
 }
