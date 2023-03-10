@@ -24,17 +24,12 @@ public class Editeur extends JPanel {
 	private static Random r = new Random();
 	private boolean en_generation = false;
 
-	private int nb_sommets = 0;
-	private int nb_aretes = 0;
-
 	private JButton ajoute_sommet;
 	private JButton ajoute_arete;
 	private JButton enleve_sommet;
 	private JButton enleve_arete;
-	private JLabel sommet = new JLabel("Sommet : ");
-	private JLabel arete = new JLabel("Arête : ");
-	private JLabel n_sommets = new JLabel("0");
-	private JLabel n_aretes = new JLabel("0");
+	private JLabel sommet = new JLabel("Sommets");
+	private JLabel arete = new JLabel("Arêtes");
 
 	private JButton jouer;
 
@@ -69,13 +64,8 @@ public class Editeur extends JPanel {
 		add(supprimer);
 
 		suppr_all = Utils.generate_button("suppr_tout", e -> {
-			nb_sommets = 0;
-			nb_aretes = 0;
-			n_sommets.setText("0");
-			n_aretes.setText("0");
 			graphe_actuel = get_graphe_nb();
 			vuegraphe.effacer();
-			repaint();
 		});
 		add(suppr_all);
 
@@ -97,45 +87,55 @@ public class Editeur extends JPanel {
 		generer_random = Utils.generate_button("random", e -> {
 			en_generation = !en_generation;
 			if (en_generation) {
-				nb_sommets = 5 + r.nextInt(20);
-				nb_aretes = r.nextInt(nb_sommets);
-				n_sommets.setText("" + nb_sommets);
-				n_aretes.setText("" + nb_aretes);
+				final int nb_sommets = 5 + r.nextInt(20);
+				final int nb_aretes = r.nextInt(nb_sommets);
 				vuegraphe.setGraphe(getNRandomSom(nb_sommets, nb_aretes), getNRandomCoord(nb_sommets));
 			}
 			graphe_actuel = get_graphe_nb();
-			repaint();
 		});
 		add(generer_random);
 
 		ajoute_sommet = Utils.generate_button("ajoute", e -> {
-			ajouteNSommets(1);
 			vuegraphe.ajouteSommet(getRandomCoord());
-			repaint();
 		});
 		add(ajoute_sommet);
 
+		add(sommet);
+
 		enleve_sommet = Utils.generate_button("enleve", e -> {
-			if (nb_sommets > 0) {
-				ajouteNSommets(-1);
-				ajouteNAretes(-1 * vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille())));
+			if (vuegraphe.getGraphe().taille() >= 1) {
+				vuegraphe.supprSommet(r.nextInt(vuegraphe.getGraphe().taille()));
 			}
-			repaint();
 		});
 		add(enleve_sommet);
 
 		ajoute_arete = Utils.generate_button("ajoute", e -> {
-			if (nb_sommets > 1) {
-				ajouteNAretes(1);
-				setConnexionRandom(true);
-				repaint();
+			if (vuegraphe.getGraphe().taille() < 2) {
+				return;
 			}
+			int v1 = r.nextInt(vuegraphe.getGraphe().taille());
+			int v2 = r.nextInt(vuegraphe.getGraphe().taille() - 1);
+			if (v1 == v2) {
+				v2 = vuegraphe.getGraphe().taille() - 1;
+			}
+			vuegraphe.getGraphe().setConnexion(v1, v2, true);
+			repaint();
 		});
 		add(ajoute_arete);
 
+		add(arete);
+
 		enleve_arete = Utils.generate_button("enleve", e -> {
-			ajouteNAretes(-1);
-			setConnexionRandom(false);
+			if (!vuegraphe.getGraphe().hasConnexions()) {
+				return;
+			}
+			int v1;
+			int v2;
+			do {
+				v1 = r.nextInt(vuegraphe.getGraphe().taille());
+				v2 = r.nextInt(vuegraphe.getGraphe().taille());
+			} while (v1 == v2 || vuegraphe.getGraphe().getConnexion(v1, v2) == 0);
+			vuegraphe.getGraphe().setConnexion(v1, v2, false);
 			repaint();
 		});
 		add(enleve_arete);
@@ -146,44 +146,6 @@ public class Editeur extends JPanel {
 			frame.repaint();
 		});
 		add(jouer);
-
-		add(sommet);
-		add(arete);
-		add(n_sommets);
-		add(n_aretes);
-	}
-
-	public void ajouteNSommets(int n) {
-		nb_sommets += n;
-		n_sommets.setText("" + nb_sommets);
-	}
-
-	public void ajouteNAretes(int n) {
-		if (nb_aretes + n >= 0) {
-			nb_aretes += n;
-			n_aretes.setText("" + nb_aretes);
-		}
-	}
-
-	public void setConnexionRandom(boolean b) {
-		if (!b && vuegraphe.getGraphe().nbConnexions() < 1) {
-			return;
-		}
-		int id1 = r.nextInt(vuegraphe.getGraphe().taille());
-		while (!b && vuegraphe.getGraphe().getConnexions(id1).size() < 1) {
-			id1 = r.nextInt(vuegraphe.getGraphe().taille());
-		}
-		int id2;
-		if (!b) {
-			ArrayList<Integer> l = vuegraphe.getGraphe().getConnexions(id1);
-			id2 = l.get(r.nextInt(l.size()));
-		} else {
-			id2 = r.nextInt(vuegraphe.getGraphe().taille());
-			while (id1 == id2) {
-				id2 = r.nextInt(vuegraphe.getGraphe().taille());
-			}
-		}
-		vuegraphe.getGraphe().setConnexion(id1, id2, b);
 	}
 
 	public static Point getRandomCoord() {
@@ -235,11 +197,9 @@ public class Editeur extends JPanel {
 		generer_random.setBounds(getWidth() - 100, 170, 50, 50);
 		ajoute_sommet.setBounds(getWidth() - 100, 230, 50, 24);
 		sommet.setBounds(getWidth() - 115, 255, 75, 24);
-		n_sommets.setBounds(getWidth() - 45, 255, 24, 24);
 		enleve_sommet.setBounds(getWidth() - 100, 280, 50, 24);
 		ajoute_arete.setBounds(getWidth() - 100, 330, 50, 24);
-		arete.setBounds(getWidth() - 105, 345, 75, 24);
-		n_aretes.setBounds(getWidth() - 55, 345, 24, 24);
+		arete.setBounds(getWidth() - 105, 355, 75, 24);
 		enleve_arete.setBounds(getWidth() - 100, 380, 50, 24);
 
 		exporter.setBounds(getWidth() - 100, 420, 50, 50);
@@ -285,14 +245,10 @@ public class Editeur extends JPanel {
 			} else {
 				vuegraphe.getGraphe().setConnexion(vuegraphe.get_selected(), vertex, true);
 				vuegraphe.select(vertex);
-				ajouteNAretes(1);
-				repaint();
 			}
 		}
 		public void on_point_click(Point p) {
 			vuegraphe.ajouteSommet(p);
-			ajouteNSommets(1);
-			repaint();
 		}
 		public void on_vertex_drag(int vertex, Point p) {
 			vuegraphe.setCoord(vertex, p.x, p.y);
@@ -301,9 +257,7 @@ public class Editeur extends JPanel {
 	private class DeletingInputHandler extends InputHandler {
 		int last_deleted = -1;
 		public void on_vertex_click(int vertex) {
-			ajouteNAretes(-vuegraphe.supprSommet(vertex));
-			ajouteNSommets(-1);
-			repaint();
+			vuegraphe.supprSommet(vertex);
 		}
 		public void on_point_click(Point p) {}
 		public void on_vertex_drag(int vertex, Point p) {
@@ -313,9 +267,6 @@ public class Editeur extends JPanel {
 			final var other_p = vuegraphe.getId(p.x, p.y);
 			if (other_p == -1 || last_deleted == other_p) {
 				return;
-			}
-			if (vuegraphe.getGraphe().getConnexion(last_deleted, other_p) > 0) {
-				ajouteNAretes(-1);
 			}
 			vuegraphe.getGraphe().setConnexion(last_deleted, other_p, false);
 			last_deleted = other_p;

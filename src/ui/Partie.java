@@ -149,7 +149,7 @@ public class Partie extends JPanel {
 	}
 
 	public boolean estFinie() {
-		return g.getGraphe().nbConnexions() == 0; // on peut aussi tester si la partie ne peut plus être gagnée
+		return !g.getGraphe().hasConnexions(); // on peut aussi tester si la partie ne peut plus être gagnée
 	}
 
 	public void suivant() {
@@ -166,10 +166,6 @@ public class Partie extends JPanel {
 		reset();
 	}
 	private void reset() {
-		try {
-			g.setGraphe(current_g.clone(), current_c);
-		} catch (CloneNotSupportedException err) { // This won't happen, java's just being a dick.
-			System.err.println("This shouldn't happen.");
-		}
+		g.setGraphe(current_g.clone(), current_c);
 	}
 }

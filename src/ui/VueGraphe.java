@@ -69,12 +69,11 @@ public class VueGraphe extends JComponent {
 		repaint();
 	}
 
-	public int supprSommet(int id) {
+	public void supprSommet(int id) {
 		coords.set(id, coords.get(coords.size() - 1));
 		coords.remove(coords.size() - 1);
-		final var res = graphe.supprSommet(id);
+		graphe.supprSommet(id);
 		repaint();
-		return res;
 	}
 
 	// select(-1) pour déselectionner
