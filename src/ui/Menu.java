@@ -1,18 +1,23 @@
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Menu extends JPanel {
-	ContentFrame contentFrame;
+	JFrame contentFrame;
 	Image background;
 
-	public Menu(ContentFrame frame) throws Exception {
+	public Menu(JFrame frame) {
 		contentFrame = frame;
-		background = ImageIO.read(new File("../textures/background.png"));
+		try {
+			background = ImageIO.read(new java.io.File("../textures/background.png"));
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 
 		var packs = new java.util.ArrayList<String>();
 		for (var file : (new java.io.File("../packs")).listFiles()) {
