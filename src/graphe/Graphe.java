@@ -1,7 +1,5 @@
 import java.lang.Cloneable;
-import java.lang.CloneNotSupportedException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 class Graphe implements Cloneable {
 	public Graphe() {
@@ -37,17 +35,10 @@ class Graphe implements Cloneable {
 			contenu[n][taille_ - 1] = 0;
 		}
 	}
-	public void setConnexion(int i, int j, boolean val) {
-		if (val) {
-			contenu[i][j] += contenu[i][j] == 0xFF ? 0 : 1;
-			if (i != j) {
-				contenu[j][i] += contenu[j][i] == 0xFF ? 0 : 1;
-			}
-		} else {
-			contenu[i][j] -= contenu[i][j] == 0x00 ? 0 : 1;
-			if (i != j) {
-				contenu[j][i] -= contenu[j][i] == 0x00 ? 0 : 1;
-			}
+	public void addConnections(int i, int j, int count) {
+		contenu[i][j] = (byte)Math.min(0xFF, Math.max(0x00, (int)contenu[i][j] + count)); // Clamp to a byte.
+		if (i != j) {
+			contenu[j][i] = (byte)Math.min(0xFF, Math.max(0x00, (int)contenu[j][i] + count)); // Clamp to a byte.
 		}
 	}
 	public void supprSommet(int i) {
@@ -86,10 +77,6 @@ class Graphe implements Cloneable {
 
 	public String toString() {
 		String res = "";
-
-		if (taille_ == 0) {
-			return res;
-		}
 
 		for (int i = 0; i < taille_; i++) {
 			res += contenu[i][0] + "";
@@ -134,34 +121,22 @@ class Graphe implements Cloneable {
 	}
 
 	public ArrayList<Integer> hierholzer() {
-		if (taille() == 0) {
-			System.err.println("Graph must not be empty for hierholzer to work.");
+		if (!estEulerien()) {
+			System.err.println("Graph isn't Eulerian.");
 			return null;
 		}
-
-		if (breadthFirst(0).size() != taille()) {
-			System.err.println("Graph must be connected for hierholzer to work.");
-			return null;
-		}
-		var odd_vertices = new ArrayList<Integer>();
-		for (int i = 0; i < taille(); i++) {
-			if ((getConnexions(i).size() - getConnexion(i, i)) % 2 == 1) {
-				odd_vertices.add(Integer.valueOf(i));
-			}
-		}
-		if (odd_vertices.size() > 2) {
-			System.err.println("Graph contains no Euler cycle or trail.");
-			return null;
-		}
-
 		Graphe g = clone();
 
-		var result = new ArrayList<Integer>();
-		if (odd_vertices.size() == 0) {
-			result.add(Integer.valueOf(0));
-		} else {
-			result.add(odd_vertices.get(0));
+		var odd_vertex = 0;
+		for (int i = 0; i < g.taille(); i++) {
+			if ((g.getConnexions(i).size() - g.getConnexion(i, i)) % 2 == 1) {
+				odd_vertex = i;
+			}
 		}
+
+		var result = new ArrayList<Integer>();
+		result.add(Integer.valueOf(odd_vertex));
+
 		int insertion_point = 0;
 		while (insertion_point >= 0) {
 			var nexts = g.getConnexions(result.get(insertion_point));
@@ -170,7 +145,7 @@ class Graphe implements Cloneable {
 			} else {
 				insertion_point++;
 				result.add(insertion_point, nexts.get(0));
-				g.setConnexion(result.get(insertion_point - 1), result.get(insertion_point), false);
+				g.addConnections(result.get(insertion_point - 1), result.get(insertion_point), -1);
 			}
 		}
 

@@ -180,9 +180,7 @@ public class VueGraphe extends JComponent {
 			for (int i = 0; i < taille; i++) {
 				ligne = (reader.readLine()).split(" ");
 				for (int j = 0; j <= i; j++) {
-					for (int k = 0; k < Integer.parseInt(ligne[j]); k++) {
-						g.setConnexion(j, i, true);
-					}
+					g.addConnections(j, i, Integer.parseInt(ligne[j]));
 				}
 			}
 		} catch (IOException e) {

@@ -140,7 +140,7 @@ public class Partie extends JPanel {
 		if (g.get_selected() == -1) {
 			g.select(point);
 		} else if (g.getGraphe().getConnexion(g.get_selected(), point) != 0) {
-			g.getGraphe().setConnexion(g.get_selected(), point, false);
+			g.getGraphe().addConnections(g.get_selected(), point, -1);
 			g.select(point);
 			if (estFinie()) {
 				finDePartie();

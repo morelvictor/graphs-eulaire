@@ -118,7 +118,7 @@ public class Editeur extends JPanel {
 			if (v1 == v2) {
 				v2 = vuegraphe.getGraphe().taille() - 1;
 			}
-			vuegraphe.getGraphe().setConnexion(v1, v2, true);
+			vuegraphe.getGraphe().addConnections(v1, v2, 1);
 			repaint();
 		});
 		add(ajoute_arete);
@@ -135,7 +135,7 @@ public class Editeur extends JPanel {
 				v1 = r.nextInt(vuegraphe.getGraphe().taille());
 				v2 = r.nextInt(vuegraphe.getGraphe().taille());
 			} while (v1 == v2 || vuegraphe.getGraphe().getConnexion(v1, v2) == 0);
-			vuegraphe.getGraphe().setConnexion(v1, v2, false);
+			vuegraphe.getGraphe().addConnections(v1, v2, -1);
 			repaint();
 		});
 		add(enleve_arete);
@@ -171,7 +171,7 @@ public class Editeur extends JPanel {
 			while (id2 == id1) {
 				id2 = r.nextInt(nb_sommets);
 			}
-			graphe.setConnexion(id1, id2, true);
+			graphe.addConnections(id1, id2, 1);
 		}
 		return graphe;
 	}
@@ -243,7 +243,7 @@ public class Editeur extends JPanel {
 			} else if (vuegraphe.get_selected() == vertex) {
 				vuegraphe.select(-1);
 			} else {
-				vuegraphe.getGraphe().setConnexion(vuegraphe.get_selected(), vertex, true);
+				vuegraphe.getGraphe().addConnections(vuegraphe.get_selected(), vertex, 1);
 				vuegraphe.select(vertex);
 			}
 		}
@@ -268,7 +268,7 @@ public class Editeur extends JPanel {
 			if (other_p == -1 || last_deleted == other_p) {
 				return;
 			}
-			vuegraphe.getGraphe().setConnexion(last_deleted, other_p, false);
+			vuegraphe.getGraphe().addConnections(last_deleted, other_p, -1);
 			last_deleted = other_p;
 			repaint();
 		}
