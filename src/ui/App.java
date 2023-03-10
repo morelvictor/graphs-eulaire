@@ -1,6 +1,5 @@
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.EventQueue;
+import javax.swing.JFrame;
 
 public class App {
 	public static void main(String[] args) {
