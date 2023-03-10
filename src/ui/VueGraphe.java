@@ -109,7 +109,8 @@ public class VueGraphe extends JComponent {
 		for (int i = 0; i < coords.size(); i++) {
 			final var coord1 = coords.get(i);
 			final var point_coord = new Point(coord1.x - point_radius, coord1.y - point_radius);
-			final var point = new Ellipse2D.Float(point_coord.x, point_coord.y, point_radius * 2, point_radius * 2);
+			final var point = new Ellipse2D.Float(point_coord.x, point_coord.y, point_radius * 2,
+			                                      point_radius * 2);
 			if (i == selected) {
 				g.setColor(color_selected);
 				g.draw(point);

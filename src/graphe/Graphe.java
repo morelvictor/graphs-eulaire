@@ -38,7 +38,7 @@ class Graphe implements Cloneable {
 	public void addConnections(int i, int j, int count) {
 		contenu[i][j] = (byte)Math.min(0xFF, Math.max(0x00, (int)contenu[i][j] + count)); // Clamp to a byte.
 		if (i != j) {
-			contenu[j][i] = (byte)Math.min(0xFF, Math.max(0x00, (int)contenu[j][i] + count)); // Clamp to a byte.
+			contenu[j][i] = (byte)Math.min(0xFF, Math.max(0x00, (int)contenu[j][i] + count));
 		}
 	}
 	public void supprSommet(int i) {

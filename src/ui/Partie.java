@@ -1,8 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
-import java.util.LinkedList;
 
 public class Partie extends JPanel {
 	VueGraphe g;
@@ -53,9 +53,13 @@ public class Partie extends JPanel {
 			public void mouseEntered(MouseEvent e) {}
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
-			public void mouseClicked(MouseEvent e) { next_point(e); }
+			public void mouseClicked(MouseEvent e) {
+				next_point(e);
+			}
 			public void mouseMoved(MouseEvent e) {}
-			public void mouseDragged(MouseEvent e) { next_point(e); }
+			public void mouseDragged(MouseEvent e) {
+				next_point(e);
+			}
 		};
 		if (vg != null) {
 			g = vg;
