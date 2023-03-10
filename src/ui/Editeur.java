@@ -35,22 +35,37 @@ public class Editeur extends JPanel {
 
 	private JFrame frame;
 
-	public Editeur(JFrame f, Image bg, String pack, int graph) {
+	public Editeur(JFrame frame, Image bg, String pack, VueGraphe vg, int level) {
 		background = bg;
-		frame = f;
+		this.frame = frame;
 		this.pack = pack;
 
-		vuegraphe = new VueGraphe(true);
+		if (vg != null) {
+			vuegraphe = vg;
+			vuegraphe.set_editing(true);
+			for (var l : vuegraphe.getMouseListeners()) {
+				vuegraphe.removeMouseListener(l);
+			}
+			for (var l : vuegraphe.getMouseMotionListeners()) {
+				vuegraphe.removeMouseMotionListener(l);
+			}
+		} else {
+			vuegraphe = new VueGraphe(true);
+		}
+		vuegraphe.select(-1);
 		add(vuegraphe);
-		input_handler = new PlacingInputHandler();
 		final var ml = new ControleurSourisEditeur();
 		vuegraphe.addMouseListener(ml);
 		vuegraphe.addMouseMotionListener(ml);
-		graphe_actuel = graph >= 0 ? graph : get_graphe_nb();
-		if (graphe_actuel < get_graphe_nb()) {
-			vuegraphe.importer(pack, graphe_actuel);
-		} else {
-			vuegraphe.effacer();
+
+		input_handler = new PlacingInputHandler();
+		graphe_actuel = level >= 0 ? level : get_graphe_nb();
+		if (vg == null) {
+			if (graphe_actuel < get_graphe_nb()) {
+				vuegraphe.importer(pack, graphe_actuel);
+			} else {
+				vuegraphe.effacer();
+			}
 		}
 
 		supprimer = Utils.generate_button("suppr_sommet", e -> {

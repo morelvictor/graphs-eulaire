@@ -69,12 +69,14 @@ public class Partie extends JPanel {
 		} else {
 			g = new VueGraphe(false);
 		}
+		g.select(-1);
 		add(g);
 		g.addMouseListener(ml);
 		g.addMouseMotionListener(ml);
 
 		editeur = Utils.generate_button("jeu-editeur", e -> {
-			frame.setContentPane(new Editeur(frame, background, pack, current_level));
+			reset();
+			frame.setContentPane(new Editeur(frame, background, pack, g, current_level));
 			frame.revalidate();
 			frame.repaint();
 		});
@@ -167,5 +169,6 @@ public class Partie extends JPanel {
 	}
 	private void reset() {
 		g.setGraphe(current_g.clone(), current_c);
+		g.select(-1);
 	}
 }
