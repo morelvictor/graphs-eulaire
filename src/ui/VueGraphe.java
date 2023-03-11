@@ -66,6 +66,7 @@ public class VueGraphe extends JComponent {
 	public void effacer() {
 		graphe = new Graphe();
 		coords = new LinkedList<Point>();
+		select(-1);
 		repaint();
 	}
 
