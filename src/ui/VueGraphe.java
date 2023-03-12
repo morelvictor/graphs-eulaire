@@ -12,125 +12,140 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
-public abstract class VueGraphe extends JComponent {
+public class VueGraphe extends JComponent {
+	private final Color color_bg = Color.WHITE;
+	private final Color color_default = Color.BLUE;
+	private final Color color_unsolvable = Color.RED;
+	private final Color color_selected = Color.GREEN;
+	private final int point_radius = 8;
+
+	private boolean editing;
+
 	private Graphe graphe;
-	private LinkedList<Point> coordonnees;
+	private LinkedList<Point> coords;
+	private int selected = -1;
 
-	private Color COULEUR = Color.BLUE;
-	public int DIAMETRE = 15;
-
-	public VueGraphe(Color c, int d, MouseListener controleur) {
+	public VueGraphe(boolean editing) {
+		this.editing = editing;
 		setPreferredSize(new Dimension(850, 850));
-		COULEUR = c;
-		DIAMETRE = d;
-		graphe = new Graphe();
-		coordonnees = new LinkedList<Point>();
-		addMouseListener(controleur);
 		setBorder(BorderFactory.createLineBorder(Color.black));
+		effacer();
 	}
 
-	public LinkedList<Point> getCoordonnees() {
-		return coordonnees;
-	}
-
-	public void setCoordonnes(LinkedList<Point> c) {
-		coordonnees = c;
-	}
-
-	public void setCoordonnees(int i, int x, int y) {
-		coordonnees.set(i, new Point(x, y));
-	}
-
-	public void supprCoordonnee(int i) {
-		coordonnees.remove(i);
-
+	public void set_editing(boolean v) {
+		editing = v;
 	}
 
 	public Graphe getGraphe() {
 		return graphe;
 	}
-
-	public void setGraphe(Graphe g) {
-		graphe = g;
-	}
-
-
-	public void viderGraphe() {
-		graphe = new Graphe();
-		coordonnees = new LinkedList<Point>();
-		repaint();
+	public LinkedList<Point> getCoords() {
+		return coords;
 	}
 	// g.taille() doit valoir coords.size()
-	public void setGraphe(Graphe g, LinkedList<Point> coords) {
-		graphe = g;
-		coordonnees = coords;
+	public void setGraphe(Graphe graphe, LinkedList<Point> coords) {
+		this.graphe = graphe;
+		this.coords = coords;
+		repaint();
 	}
+
 	public void ajouteSommet(Point p) {
 		graphe.addSommet();
-		coordonnees.add(p);
+		coords.add(p);
+		repaint();
 	}
 
-	public Color getCouleur() {
-		return COULEUR;
+	public Point getCoord(int i) {
+		return coords.get(i);
+	}
+	public void setCoord(int i, int x, int y) {
+		coords.set(i, new Point(x, y));
+		repaint();
 	}
 
-	public int getDiametre() {
-		return DIAMETRE;
+	public void effacer() {
+		graphe = new Graphe();
+		coords = new LinkedList<Point>();
+		select(-1);
+		repaint();
 	}
 
-	public int supprSommet(int id) {
-		coordonnees.set(id, coordonnees.get(coordonnees.size() - 1));
-		coordonnees.remove(coordonnees.size() - 1);
-		return graphe.supprSommet(id);
+	public void supprSommet(int id) {
+		coords.set(id, coords.get(coords.size() - 1));
+		coords.remove(coords.size() - 1);
+		graphe.supprSommet(id);
+		repaint();
+	}
+
+	// select(-1) pour déselectionner
+	public void select(int i) {
+		selected = i;
+		repaint();
+	}
+	// -1 si aucun sélectionné
+	public int get_selected() {
+		return selected;
 	}
 
 	public int getId(int x, int y) {
-		for (int i = 0; i < coordonnees.size(); i++) {
-			if ((x <= coordonnees.get(i).getX() + DIAMETRE) &&
-			    (x >= coordonnees.get(i).getX()) &&
-			    (y <= coordonnees.get(i).getY() + DIAMETRE) &&
-			    (y >= coordonnees.get(i).getY())) {
+		for (int i = 0; i < coords.size(); i++) {
+			final var point = coords.get(i);
+			final var dist_sq = Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2);
+			if (dist_sq < Math.pow(point_radius, 2)) {
 				return i;
 			}
 		}
 		return -1;
 	}
 
-	public void paintComponent(Graphics g) {
-		g.setColor(getCouleur());
+	public void paintComponent(Graphics g_) {
+		final var g = ((Graphics2D) g_);
 
-		LinkedList<Point> coord = getCoordonnees();
-		int diam = getDiametre();
+		g.setColor(color_bg);
+		g.fillRect(0, 0, 850, 850);
 
-		for (int i = 0; i < graphe.taille(); ++i) {
-			((Graphics2D) g).draw(new Ellipse2D.Double(coord.get(i).getX(), coord.get(i).getY(), diam,
-			                                           diam));
+		final Color color = graphe.estEulerien() || !editing ? color_default : color_unsolvable;
+		g.setColor(color);
+
+		for (int i = 0; i < coords.size(); i++) {
+			final var coord1 = coords.get(i);
+			final var point_coord = new Point(coord1.x - point_radius, coord1.y - point_radius);
+			final var point = new Ellipse2D.Float(point_coord.x, point_coord.y, point_radius * 2,
+			                                      point_radius * 2);
+			if (i == selected) {
+				g.setColor(color_selected);
+				g.draw(point);
+				g.setColor(color);
+			} else {
+				g.draw(point);
+			}
 
 			for (int j = i; j < getGraphe().taille(); ++j) {
-				if (getGraphe().getConnexion(i, j) != 0) {
-					int coord_i_x = (int) (coord.get(i).getX() + diam / 2);
-					int coord_i_y = (int) (coord.get(i).getY() + diam / 2);
-					int coord_j_x = (int) (coord.get(j).getX() + diam / 2);
-					int coord_j_y = (int) (coord.get(j).getY() + diam / 2);
-					g.drawLine(coord_i_x, coord_i_y, coord_j_x, coord_j_y);
-					if (getGraphe().getConnexion(i, j) > 1) {
-						g.drawString(getGraphe().getConnexion(i, j) + "", // uncrustify,
-						             (coord_i_x + coord_j_x) / 2, // what are you doing.
-						             (coord_i_y + coord_j_y) / 2);
-					}
+				final var connexion_n = graphe.getConnexion(i, j);
+				if (connexion_n == 0) {
+					continue;
 				}
+				final var coord2 = coords.get(j);
+				g.drawLine(coord1.x, coord1.y, coord2.x, coord2.y);
+				if (connexion_n <= 1) {
+					continue;
+				}
+				final var text_x = (coord1.x + coord2.x) / 2;
+				final var text_y = (coord1.y + coord2.y) / 2;
+				g.drawString(Integer.toString(connexion_n), text_x, text_y);
 			}
 		}
 	}
 
-	public String toString() {
+
+	public String serialise() {
 		String res = "";
 
-		if (coordonnees.size() == 0) {
+		if (coords.size() == 0) {
 			return res;
 		}
 
-		for (Point pos : coordonnees) {
+		for (Point pos : coords) {
 			res += " " + pos.getX() + ";" + pos.getY();
 		}
 		res = res.substring(1, res.length()) + "\n"; // retrait du premier espace
@@ -138,7 +153,7 @@ public abstract class VueGraphe extends JComponent {
 		return res + graphe.toString();
 	}
 
-	public LinkedList<Point> parseCoordonnees(String inp) {
+	public LinkedList<Point> deserialiseCoords(String inp) {
 		LinkedList<Point> resultat = new LinkedList<>();
 
 		String[] tab = inp.split(" ");
@@ -152,7 +167,7 @@ public abstract class VueGraphe extends JComponent {
 		return resultat;
 	}
 
-	public Graphe parseGraphe(BufferedReader reader) {
+	public Graphe deserialiseConnections(BufferedReader reader) {
 		Graphe g = new Graphe();
 		try {
 			reader.mark(0);
@@ -167,9 +182,7 @@ public abstract class VueGraphe extends JComponent {
 			for (int i = 0; i < taille; i++) {
 				ligne = (reader.readLine()).split(" ");
 				for (int j = 0; j <= i; j++) {
-					for (int k = 0; k < Integer.parseInt(ligne[j]); k++) {
-						g.setConnexion(j, i, true);
-					}
+					g.addConnections(j, i, Integer.parseInt(ligne[j]));
 				}
 			}
 		} catch (IOException e) {
@@ -186,7 +199,7 @@ public abstract class VueGraphe extends JComponent {
 			} else {
 				writer = new BufferedWriter(new FileWriter("../packs/" + pack + "/" + n + ".mzr"));
 			}
-			writer.write(this.toString());
+			writer.write(serialise());
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -201,8 +214,14 @@ public abstract class VueGraphe extends JComponent {
 			} else {
 				reader = new BufferedReader(new FileReader("../packs/" + pack + "/" + n + ".mzr"));
 			}
-			coordonnees = parseCoordonnees(reader.readLine());
-			graphe = parseGraphe(reader);
+			final var line = reader.readLine();
+			if (line == null) {
+				effacer();
+				reader.close();
+				return;
+			}
+			coords = deserialiseCoords(line);
+			graphe = deserialiseConnections(reader);
 			reader.close();
 			repaint();
 		} catch (IOException e) {

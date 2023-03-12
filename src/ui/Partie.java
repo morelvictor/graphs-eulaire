@@ -1,12 +1,17 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.LinkedList;
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 
 public class Partie extends JPanel {
-	VueGraphePartie g;
+	VueGraphe g;
+	Graphe current_g;
+	LinkedList<Point> current_c;
+
 	Image background;
-	JButton regenerer = new JButton(new ImageIcon("../textures/retry.png"));
-	JButton editeur = new JButton(new ImageIcon("../textures/jeu-editeur.png"));
+	JButton regenerer;
+	JButton editeur;
 	boolean testing_editing;
 
 	private static class Level {
@@ -34,119 +39,140 @@ public class Partie extends JPanel {
 		}
 	}
 
-	public Partie(JFrame frame, Image bg, String pack, int graph, boolean testing_editing) {
-		current_level = graph;
+	public Partie(JFrame frame, Image bg, String pack, VueGraphe vg, int level) {
 		loadPack(pack);
 		if (levels.size() == 0) {
 			System.err.println("No levels in pack " + (pack == null ? "Ω" : pack) + ".");
 			System.exit(1);
 		}
+		current_level = level;
 		background = bg;
 
-		MouseListener ml = new MouseListener() {
+		MouseInputListener ml = new MouseInputListener() {
 			public void mouseExited(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseClicked(MouseEvent e) {
-				int clicked = g.getId(e.getX(), e.getY());
-				int oujesuis = g.getOujesuis();
-				if (clicked == -1) {
-					return;
-				}
-
-				if (oujesuis < 0 && g.getId(e.getX(), e.getY()) != -1) {
-					g.setOujesuis(g.getId(e.getX(), e.getY()));
-					g.repaint();
-				} else if (g.getGraphe().getConnexion(oujesuis, clicked) != 0) {
-					g.getGraphe().setConnexion(oujesuis, clicked, false);
-					g.setOujesuis(clicked);
-					g.repaint();
-					if (estFinie()) {
-						finDePartie();         //suivant();
-					}
-				}
+				next_point(e);
+			}
+			public void mouseMoved(MouseEvent e) {}
+			public void mouseDragged(MouseEvent e) {
+				next_point(e);
 			}
 		};
-
-		g = new VueGraphePartie(this, ml);
-		add(g);
-
-		this.testing_editing = testing_editing;
-		if (testing_editing) {
-			editeur.setBorderPainted(false);
-			editeur.setContentAreaFilled(false);
-			editeur.setFocusPainted(false);
-			add(editeur);
-			editeur.addActionListener(e -> {
-				frame.setContentPane(new Editeur(frame, background, pack, current_level));
-				frame.revalidate();
-				frame.repaint();
-			});
+		if (vg != null) {
+			g = vg;
+			g.set_editing(false);
+			for (var l : g.getMouseListeners()) {
+				g.removeMouseListener(l);
+			}
+			for (var l : g.getMouseMotionListeners()) {
+				g.removeMouseMotionListener(l);
+			}
 		} else {
-			g.setGrapheJeu(pack, graph);
+			g = new VueGraphe(false);
+		}
+		g.select(-1);
+		add(g);
+		g.addMouseListener(ml);
+		g.addMouseMotionListener(ml);
+
+		editeur = Utils.generate_button("jeu-editeur", e -> {
+			reset();
+			frame.setContentPane(new Editeur(frame, background, pack, g, current_level));
+			frame.revalidate();
+			frame.repaint();
+		});
+
+		regenerer = Utils.generate_button("retry", e -> {
+			g.setGraphe(current_g, current_c);
+			g.select(-1);
+			update_current();
+		});
+
+		add(regenerer);
+		testing_editing = vg != null;
+		if (testing_editing) {
+			add(editeur);
+		} else {
+			g.importer(pack, current_level);
+			g.select(-1);
 		}
 
-		regenerer.setBorderPainted(false);
-		regenerer.setContentAreaFilled(false);
-		regenerer.setFocusPainted(false);
-		add(regenerer);
-		regenerer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				g.regen();
-			}
-		});
-	}
-
-	public Partie(JFrame frame, VueGraphe vg, Image bg, String pack, int graph, boolean testing_editing) {
-		this(frame, bg, pack, graph, testing_editing);
-		g.setGraphe(vg.getGraphe());
-		g.setCoordonnes(vg.getCoordonnees());
-		g.setOrigin();
+		update_current();
 	}
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-		regenerer.setBounds(getWidth() - 90, getHeight() / 2, 80, 50);
+		regenerer.setBounds(getWidth() - 120, 710, 90, 50);
+		editeur.setBounds(getWidth() - 120, 800, 90, 50);
 	}
 
 	public void finDePartie() {
 		if (testing_editing) {
-			g.regen();
+			reset();
 			return;
 		}
-		if (current_level + 1 == levels.size()) {
-
-			remove(g);
-			remove(regenerer);
-
-			JButton congrats = new JButton("NEXT");
-			congrats.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					suivant();
-					add(g);
-					add(regenerer);
-					remove(congrats);
-					validate();
-					repaint();
-				}
-			});
-
-			add(congrats);
-			validate();
-			repaint();
-		} else {
+		if (current_level + 1 < levels.size()) {
 			suivant();
+			return;
+		}
+		remove(g);
+		remove(regenerer);
+
+		JButton congrats = new JButton("NEXT");
+		congrats.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				suivant();
+				add(g);
+				add(regenerer);
+				remove(congrats);
+				validate();
+				repaint();
+			}
+		});
+
+		add(congrats);
+		validate();
+		repaint();
+	}
+
+	private void next_point(MouseEvent e) {
+		final int point = g.getId(e.getX(), e.getY());
+		if (point == -1) {
+			return;
+		}
+		if (g.get_selected() == -1) {
+			g.select(point);
+		} else if (g.getGraphe().getConnexion(g.get_selected(), point) != 0) {
+			g.getGraphe().addConnections(g.get_selected(), point, -1);
+			g.select(point);
+			if (estFinie()) {
+				finDePartie();
+			}
 		}
 	}
 
-
 	public boolean estFinie() {
-		return g.getGraphe().nbConnexions() == 0; // on peut aussi tester si la partie ne peut plus être gagnée
+		return !g.getGraphe().hasConnexions(); // on peut aussi tester si la partie ne peut plus être gagnée
 	}
 
 	public void suivant() {
 		current_level = (current_level + 1) % levels.size();
-		g.setGrapheJeu(levels.get(current_level).pack, levels.get(current_level).n);
+		final var lvl = levels.get(current_level);
+		g.importer(lvl.pack, lvl.n);
+		g.select(-1);
+		update_current();
+	}
+
+	private void update_current() {
+		current_g = g.getGraphe();
+		current_c = g.getCoords();
+		reset();
+	}
+	private void reset() {
+		g.setGraphe(current_g.clone(), current_c);
+		g.select(-1);
 	}
 }
