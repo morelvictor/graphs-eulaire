@@ -13,6 +13,7 @@ public class Partie extends JPanel {
 	JButton regenerer;
 	JButton editeur;
 	boolean testing_editing;
+	long debutTimer;
 
 	private static class Level {
 		public Level(String pack, int n) {
@@ -101,6 +102,7 @@ public class Partie extends JPanel {
 		}
 
 		update_current();
+		debutTimer = System.currentTimeMillis();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -122,18 +124,25 @@ public class Partie extends JPanel {
 		remove(regenerer);
 
 		JButton congrats = new JButton("NEXT");
+		JLabel timer =
+			new JLabel(Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
+		timer.setFont(new Font("Serif", Font.PLAIN, 20));
+
 		congrats.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				suivant();
 				add(g);
 				add(regenerer);
 				remove(congrats);
+				remove(timer);
 				validate();
 				repaint();
+				debutTimer = System.currentTimeMillis();
 			}
 		});
 
 		add(congrats);
+		add(timer);
 		validate();
 		repaint();
 	}
