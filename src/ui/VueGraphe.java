@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
 
 import javax.swing.*;
 
@@ -126,13 +127,21 @@ public class VueGraphe extends JComponent {
 					continue;
 				}
 				final var coord2 = coords.get(j);
-				g.drawLine(coord1.x, coord1.y, coord2.x, coord2.y);
-				if (connexion_n <= 1) {
-					continue;
+				final var orth = new Point(coord1.y - coord2.y, coord2.x - coord1.x);
+				final var orth_mag = Math.sqrt(orth.x * orth.x + orth.y * orth.y);
+				final var orth_norm =
+					new Point((int)(orth.x * 25 / orth_mag), (int)(orth.y * 25 / orth_mag));
+				final var coord_center =
+					new Point((coord1.x + coord2.x) / 2, (coord1.y + coord2.y) / 2);
+				for (int k = 0; k < connexion_n; k++) {
+					final var index = k - connexion_n / 2;
+					final var ctrl = new Point(coord_center.x + orth_norm.x * index,
+					                           coord_center.y + orth_norm.y * index);
+					final var curve = new Path2D.Float();
+					curve.moveTo(coord1.x, coord1.y);
+					curve.quadTo(ctrl.x, ctrl.y, coord2.x, coord2.y);
+					g.draw(curve);
 				}
-				final var text_x = (coord1.x + coord2.x) / 2;
-				final var text_y = (coord1.y + coord2.y) / 2;
-				g.drawString(Integer.toString(connexion_n), text_x, text_y);
 			}
 		}
 	}
