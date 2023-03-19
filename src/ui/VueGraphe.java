@@ -108,6 +108,7 @@ public class VueGraphe extends JComponent {
 		final Color color = graphe.estEulerien() || !editing ? color_default : color_unsolvable;
 		g.setColor(color);
 
+		g.setStroke(new BasicStroke(5));
 		for (int i = 0; i < coords.size(); i++) {
 			final var coord1 = coords.get(i);
 			final var point_coord = new Point(coord1.x - point_radius, coord1.y - point_radius);
@@ -139,7 +140,18 @@ public class VueGraphe extends JComponent {
 					                           coord_center.y + orth_norm.y * index);
 					final var curve = new Path2D.Float();
 					curve.moveTo(coord1.x, coord1.y);
-					curve.quadTo(ctrl.x, ctrl.y, coord2.x, coord2.y);
+					for (int l = 1; l <= 10; l++) {
+						final var t = l / 10.0;
+						final var tt = 1 - t;
+						final var p =
+							new Point((int)(tt * tt * coord1.x + 2 * tt * t * ctrl.x + t *
+							                t * coord2.x),
+							          (int)(tt * tt * coord1.y + 2 * tt * t * ctrl.y + t *
+							                t * coord2.y));
+						final var offset = new Point(Integer.hashCode(l) % 3 - 1,
+						                             p.hashCode() % 3 - 1);
+						curve.lineTo(p.x + offset.x, p.y + offset.y);
+					}
 					g.draw(curve);
 				}
 			}
