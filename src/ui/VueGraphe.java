@@ -152,8 +152,9 @@ public class VueGraphe extends JComponent {
 					                           coord_center.y + orth_norm.y * index);
 					final var curve = new Path2D.Float();
 					curve.moveTo(coord1.x, coord1.y);
-					for (int l = 1; l <= 10; l++) {
-						final var t = l / 10.0;
+					final int count = (int)coord_dir_mag / 10;
+					for (int l = 1; l <= count; l++) {
+						final var t = l / (float)count;
 						final var tt = 1 - t;
 						final var p =
 							new Point((int)(tt * tt * coord1.x + 2 * tt * t * ctrl.x + t *
