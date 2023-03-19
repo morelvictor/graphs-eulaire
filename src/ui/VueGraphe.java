@@ -102,6 +102,8 @@ public class VueGraphe extends JComponent {
 	public void paintComponent(Graphics g_) {
 		final var g = ((Graphics2D) g_);
 
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
 		g.setColor(color_bg);
 		g.fillRect(0, 0, 850, 850);
 
@@ -110,8 +112,8 @@ public class VueGraphe extends JComponent {
 
 		g.setStroke(new BasicStroke(5));
 		for (int i = 0; i < coords.size(); i++) {
-			final var coord1 = coords.get(i);
-			final var point_coord = new Point(coord1.x - point_radius, coord1.y - point_radius);
+			final var coord1_ = coords.get(i);
+			final var point_coord = new Point(coord1_.x - point_radius, coord1_.y - point_radius);
 			final var point = new Ellipse2D.Float(point_coord.x, point_coord.y, point_radius * 2,
 			                                      point_radius * 2);
 			if (i == selected) {
@@ -127,7 +129,17 @@ public class VueGraphe extends JComponent {
 				if (connexion_n == 0) {
 					continue;
 				}
-				final var coord2 = coords.get(j);
+				final var coord2_ = coords.get(j);
+				final var coord_dir = new Point(coord2_.x - coord1_.x, coord2_.y - coord1_.y);
+				final var coord_dir_mag =
+					Math.sqrt(coord_dir.x * coord_dir.x + coord_dir.y * coord_dir.y);
+				final var coord_dir_norm =
+					new Point((int)(coord_dir.x * point_radius / coord_dir_mag),
+					          (int)(coord_dir.y * point_radius / coord_dir_mag));
+				final var coord1 =
+					new Point(coord1_.x + coord_dir_norm.x, coord1_.y + coord_dir_norm.y);
+				final var coord2 =
+					new Point(coord2_.x - coord_dir_norm.x, coord2_.y - coord_dir_norm.y);
 				final var orth = new Point(coord1.y - coord2.y, coord2.x - coord1.x);
 				final var orth_mag = Math.sqrt(orth.x * orth.x + orth.y * orth.y);
 				final var orth_norm =
