@@ -199,6 +199,7 @@ public class Partie extends JPanel {
 		final var lvl = levels.get(current_level);
 		g.importer(lvl.pack, lvl.n);
 		solution = g.getGraphe().hierholzer();
+		indice_solution = 0;
 		g.select(-1);
 		update_current();
 	}
