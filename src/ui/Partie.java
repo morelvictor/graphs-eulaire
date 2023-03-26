@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -12,6 +13,9 @@ public class Partie extends JPanel {
 	Image background;
 	JButton regenerer;
 	JButton editeur;
+	JButton aide;
+	private ArrayList<Integer> solution;
+	private int indice_solution = 0;
 	boolean testing_editing;
 	long debutTimer;
 
@@ -50,14 +54,19 @@ public class Partie extends JPanel {
 		background = bg;
 
 		MouseInputListener ml = new MouseInputListener() {
-			public void mouseExited(MouseEvent e) {}
-			public void mouseEntered(MouseEvent e) {}
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+			}
+			public void mouseEntered(MouseEvent e) {
+			}
+			public void mouseReleased(MouseEvent e) {
+			}
+			public void mousePressed(MouseEvent e) {
+			}
 			public void mouseClicked(MouseEvent e) {
 				next_point(e);
 			}
-			public void mouseMoved(MouseEvent e) {}
+			public void mouseMoved(MouseEvent e) {
+			}
 			public void mouseDragged(MouseEvent e) {
 				next_point(e);
 			}
@@ -87,12 +96,20 @@ public class Partie extends JPanel {
 		});
 
 		regenerer = Utils.generate_button("retry", e -> {
+			indice_solution = 0;
 			g.setGraphe(current_g, current_c);
 			g.select(-1);
 			update_current();
 		});
 
+		solution = g.getGraphe().hierholzer();
+		aide = Utils.generate_button("aide_jeu", e -> {
+			next_point(solution.get(indice_solution));
+			indice_solution++;
+		});
+
 		add(regenerer);
+		add(aide);
 		testing_editing = vg != null;
 		if (testing_editing) {
 			add(editeur);
@@ -109,6 +126,7 @@ public class Partie extends JPanel {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		regenerer.setBounds(getWidth() - 120, 710, 90, 50);
 		editeur.setBounds(getWidth() - 120, 800, 90, 50);
+		aide.setBounds(getWidth() - 120, 620, 90, 50);
 	}
 
 	public void finDePartie() {
@@ -147,8 +165,7 @@ public class Partie extends JPanel {
 		repaint();
 	}
 
-	private void next_point(MouseEvent e) {
-		final int point = g.getId(e.getX(), e.getY());
+	private void next_point(int point) {
 		if (point == -1) {
 			return;
 		}
@@ -161,6 +178,16 @@ public class Partie extends JPanel {
 				finDePartie();
 			}
 		}
+	}
+
+	private void next_point(MouseEvent e) {
+		int n = g.getId(e.getX(), e.getY());
+		next_point(n);
+	}
+
+	private void next_point(Point p) {
+		int n = g.getId((int) p.getX(), (int) p.getY());
+		next_point(n);
 	}
 
 	public boolean estFinie() {
