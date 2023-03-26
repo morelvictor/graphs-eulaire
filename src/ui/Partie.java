@@ -10,6 +10,7 @@ public class Partie extends JPanel {
 	Graphe current_g;
 	LinkedList<Point> current_c;
 
+	String packname;
 	Image background;
 	JButton regenerer;
 	JButton editeur;
@@ -48,6 +49,8 @@ public class Partie extends JPanel {
 	}
 
 	public Partie(JFrame frame, Image bg, String pack, VueGraphe vg, int level) {
+		packname = pack;
+
 		loadPack(pack);
 		if (levels.size() == 0) {
 			System.err.println("No levels in pack " + (pack == null ? "Ω" : pack) + ".");
@@ -158,6 +161,9 @@ public class Partie extends JPanel {
 			new JLabel("SCORE : " + (temps + 3 * nb_aide));
 
 		score.setFont(new Font("Serif", Font.PLAIN, 20));
+
+		Classement classement = new Classement(packname);
+		add(classement);
 
 		congrats.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
