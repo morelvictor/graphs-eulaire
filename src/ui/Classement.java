@@ -96,7 +96,7 @@ public class Classement extends JComponent {
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < noms.size(); ++i) {
 			g.drawString(noms.get(i), 10, 20 * (i + 1));
-			g.drawString(scores.get(i) + "", 150, 20 * (i + 1));
+			g.drawString(scores.get(i) + "", 125, 20 * (i + 1));
 		}
 	}
 

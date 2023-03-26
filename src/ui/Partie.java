@@ -164,6 +164,7 @@ public class Partie extends JPanel {
 
 		Classement classement = new Classement(packname);
 		add(classement);
+		classement.setLocation(getWidth() - 300, 250);
 
 		congrats.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
