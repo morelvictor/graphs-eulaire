@@ -102,7 +102,6 @@ public class Partie extends JPanel {
 			update_current();
 		});
 
-		solution = g.getGraphe().hierholzer();
 		aide = Utils.generate_button("aide_jeu", e -> {
 			next_point(solution.get(indice_solution));
 			indice_solution++;
@@ -119,6 +118,7 @@ public class Partie extends JPanel {
 		}
 
 		update_current();
+		solution = g.getGraphe().hierholzer();
 		debutTimer = System.currentTimeMillis();
 	}
 
@@ -198,6 +198,7 @@ public class Partie extends JPanel {
 		current_level = (current_level + 1) % levels.size();
 		final var lvl = levels.get(current_level);
 		g.importer(lvl.pack, lvl.n);
+		solution = g.getGraphe().hierholzer();
 		g.select(-1);
 		update_current();
 	}
