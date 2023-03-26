@@ -16,6 +16,7 @@ public class Partie extends JPanel {
 	JButton aide;
 	private ArrayList<Integer> solution;
 	private int indice_solution = 0;
+	private boolean a_utilise_aide = false;
 	boolean testing_editing;
 	long debutTimer;
 
@@ -98,8 +99,8 @@ public class Partie extends JPanel {
 		});
 
 		aide = Utils.generate_button("aide_jeu", e -> {
-			next_point(solution.get(indice_solution));
-			indice_solution++;
+			next_point(solution.get(indice_solution++));
+			a_utilise_aide = true;
 		});
 
 		add(regenerer);
