@@ -13,10 +13,12 @@ public class Partie extends JPanel {
 	Image background;
 	JButton regenerer;
 	JButton editeur;
+	JLabel timer;
+	JLabel aides;
 	JButton aide;
 	private ArrayList<Integer> solution;
 	private int indice_solution = 0;
-	private boolean a_utilise_aide = false;
+	private int nb_aide = 0;
 	boolean testing_editing;
 	long debutTimer;
 
@@ -100,7 +102,7 @@ public class Partie extends JPanel {
 
 		aide = Utils.generate_button("aide_jeu", e -> {
 			next_point(solution.get(indice_solution++));
-			a_utilise_aide = true;
+			nb_aide++;
 		});
 
 		add(regenerer);
@@ -116,6 +118,14 @@ public class Partie extends JPanel {
 		update_current();
 		solution = g.getGraphe().hierholzer();
 		debutTimer = System.currentTimeMillis();
+		timer =
+			new JLabel("TEMPS : " +
+			           Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
+		timer.setFont(new Font("Serif", Font.PLAIN, 20));
+		add(timer);
+		aides = new JLabel("Nombre d'Aides : " + nb_aide);
+		aides.setFont(new Font("Serif", Font.PLAIN, 20));
+		add(aides);
 	}
 
 	public void paintComponent(Graphics g) {
@@ -123,6 +133,11 @@ public class Partie extends JPanel {
 		regenerer.setBounds(getWidth() - 120, 710, 90, 50);
 		editeur.setBounds(getWidth() - 120, 800, 90, 50);
 		aide.setBounds(getWidth() - 120, 620, 90, 50);
+		timer.setBounds(getWidth() - 300, 100, 200, 200);
+		timer.setText("TEMPS : " +
+		              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
+		aides.setBounds(getWidth() - 300, 130, 300, 200);
+		aides.setText("Nombre d'Aides : " + nb_aide);
 	}
 
 	public void finDePartie() {
@@ -136,11 +151,15 @@ public class Partie extends JPanel {
 		}
 		remove(g);
 		remove(regenerer);
+		remove(aide);
 
 		JButton congrats = new JButton("NEXT");
-		JLabel timer =
-			new JLabel(Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
-		timer.setFont(new Font("Serif", Font.PLAIN, 20));
+
+		double temps = (System.currentTimeMillis() - debutTimer) / 1000.0;
+		JLabel score =
+			new JLabel("SCORE : " + (temps + 3 * nb_aide));
+
+		score.setFont(new Font("Serif", Font.PLAIN, 20));
 
 		congrats.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -156,7 +175,7 @@ public class Partie extends JPanel {
 		});
 
 		add(congrats);
-		add(timer);
+		add(score);
 		validate();
 		repaint();
 	}
