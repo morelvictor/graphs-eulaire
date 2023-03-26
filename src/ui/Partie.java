@@ -134,8 +134,6 @@ public class Partie extends JPanel {
 		editeur.setBounds(getWidth() - 120, 800, 90, 50);
 		aide.setBounds(getWidth() - 120, 620, 90, 50);
 		timer.setBounds(getWidth() - 300, 100, 200, 200);
-		timer.setText("TEMPS : " +
-		              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
 		aides.setBounds(getWidth() - 300, 130, 300, 200);
 		aides.setText("Nombre d'Aides : " + nb_aide);
 	}
@@ -217,6 +215,8 @@ public class Partie extends JPanel {
 		indice_solution = 0;
 		g.select(-1);
 		update_current();
+		timer.setText("TEMPS : " +
+		              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
 	}
 
 	private void update_current() {
