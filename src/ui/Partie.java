@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -12,6 +13,12 @@ public class Partie extends JPanel {
 	Image background;
 	JButton regenerer;
 	JButton editeur;
+	JLabel timer;
+	JLabel aides;
+	JButton aide;
+	private ArrayList<Integer> solution;
+	private int indice_solution = 0;
+	private int nb_aide = 0;
 	boolean testing_editing;
 	long debutTimer;
 
@@ -87,12 +94,19 @@ public class Partie extends JPanel {
 		});
 
 		regenerer = Utils.generate_button("retry", e -> {
+			indice_solution = 0;
 			g.setGraphe(current_g, current_c);
 			g.select(-1);
 			update_current();
 		});
 
+		aide = Utils.generate_button("aide_jeu", e -> {
+			next_point(solution.get(indice_solution++));
+			nb_aide++;
+		});
+
 		add(regenerer);
+		add(aide);
 		testing_editing = vg != null;
 		if (testing_editing) {
 			add(editeur);
@@ -102,13 +116,26 @@ public class Partie extends JPanel {
 		}
 
 		update_current();
+		solution = g.getGraphe().hierholzer();
 		debutTimer = System.currentTimeMillis();
+		timer =
+			new JLabel("TEMPS : " +
+			           Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
+		timer.setFont(new Font("Serif", Font.PLAIN, 20));
+		add(timer);
+		aides = new JLabel("Nombre d'Aides : " + nb_aide);
+		aides.setFont(new Font("Serif", Font.PLAIN, 20));
+		add(aides);
 	}
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		regenerer.setBounds(getWidth() - 120, 710, 90, 50);
 		editeur.setBounds(getWidth() - 120, 800, 90, 50);
+		aide.setBounds(getWidth() - 120, 620, 90, 50);
+		timer.setBounds(getWidth() - 300, 100, 200, 200);
+		aides.setBounds(getWidth() - 300, 130, 300, 200);
+		aides.setText("Nombre d'Aides : " + nb_aide);
 	}
 
 	public void finDePartie() {
@@ -122,11 +149,15 @@ public class Partie extends JPanel {
 		}
 		remove(g);
 		remove(regenerer);
+		remove(aide);
 
 		JButton congrats = new JButton("NEXT");
-		JLabel timer =
-			new JLabel(Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
-		timer.setFont(new Font("Serif", Font.PLAIN, 20));
+
+		double temps = (System.currentTimeMillis() - debutTimer) / 1000.0;
+		JLabel score =
+			new JLabel("SCORE : " + (temps + 3 * nb_aide));
+
+		score.setFont(new Font("Serif", Font.PLAIN, 20));
 
 		congrats.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -142,13 +173,12 @@ public class Partie extends JPanel {
 		});
 
 		add(congrats);
-		add(timer);
+		add(score);
 		validate();
 		repaint();
 	}
 
-	private void next_point(MouseEvent e) {
-		final int point = g.getId(e.getX(), e.getY());
+	private void next_point(int point) {
 		if (point == -1) {
 			return;
 		}
@@ -163,6 +193,16 @@ public class Partie extends JPanel {
 		}
 	}
 
+	private void next_point(MouseEvent e) {
+		int n = g.getId(e.getX(), e.getY());
+		next_point(n);
+	}
+
+	private void next_point(Point p) {
+		int n = g.getId((int) p.getX(), (int) p.getY());
+		next_point(n);
+	}
+
 	public boolean estFinie() {
 		return !g.getGraphe().hasConnexions(); // on peut aussi tester si la partie ne peut plus être gagnée
 	}
@@ -171,8 +211,12 @@ public class Partie extends JPanel {
 		current_level = (current_level + 1) % levels.size();
 		final var lvl = levels.get(current_level);
 		g.importer(lvl.pack, lvl.n);
+		solution = g.getGraphe().hierholzer();
+		indice_solution = 0;
 		g.select(-1);
 		update_current();
+		timer.setText("TEMPS : " +
+		              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
 	}
 
 	private void update_current() {
