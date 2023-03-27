@@ -25,6 +25,10 @@ public class Classement extends JComponent {
 		setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 
+	public String getNom() {
+		return packname;
+	}
+
 	public String serialise() {
 		//transforme noms et scores en string au "format" mizair
 		String res = "";
