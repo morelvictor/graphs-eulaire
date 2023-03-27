@@ -25,6 +25,14 @@ public class Classement extends JComponent {
 		setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 
+	public void changePack(String nom) {
+		packname = nom;
+		scores.clear();
+		noms.clear();
+		deserialise(loadClassement(packname));
+		repaint();
+	}
+
 	public String getNom() {
 		return packname;
 	}
