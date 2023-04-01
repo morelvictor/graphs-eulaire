@@ -42,7 +42,7 @@ public class Editeur extends JPanel {
 
 		if (vg != null) {
 			vuegraphe = vg;
-			vuegraphe.set_editing(true);
+			vuegraphe.setModeGraphique(new GraphiqueEditeur());
 			for (var l : vuegraphe.getMouseListeners()) {
 				vuegraphe.removeMouseListener(l);
 			}
@@ -50,7 +50,7 @@ public class Editeur extends JPanel {
 				vuegraphe.removeMouseMotionListener(l);
 			}
 		} else {
-			vuegraphe = new VueGraphe(true);
+			vuegraphe = new VueGraphe(new GraphiqueEditeur());
 		}
 		vuegraphe.select(-1);
 		add(vuegraphe);
@@ -232,18 +232,22 @@ public class Editeur extends JPanel {
 				input_handler.on_vertex_click(current_vertex);
 			}
 		}
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {
+		}
+		public void mouseExited(MouseEvent e) {
+		}
 		public void mousePressed(MouseEvent e) {
 			current_vertex = vuegraphe.getId(e.getX(), e.getY());
 		}
-		public void mouseReleased(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {
+		}
 		public void mouseDragged(MouseEvent e) {
 			if (current_vertex != -1) {
 				input_handler.on_vertex_drag(current_vertex, e.getPoint());
 			}
 		}
-		public void mouseMoved(MouseEvent e) {}
+		public void mouseMoved(MouseEvent e) {
+		}
 	}
 
 	private abstract class InputHandler {
@@ -274,7 +278,8 @@ public class Editeur extends JPanel {
 		public void on_vertex_click(int vertex) {
 			vuegraphe.supprSommet(vertex);
 		}
-		public void on_point_click(Point p) {}
+		public void on_point_click(Point p) {
+		}
 		public void on_vertex_drag(int vertex, Point p) {
 			if (last_deleted == -1) {
 				last_deleted = vertex;

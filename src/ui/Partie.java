@@ -57,21 +57,26 @@ public class Partie extends JPanel {
 		background = bg;
 
 		MouseInputListener ml = new MouseInputListener() {
-			public void mouseExited(MouseEvent e) {}
-			public void mouseEntered(MouseEvent e) {}
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+			}
+			public void mouseEntered(MouseEvent e) {
+			}
+			public void mouseReleased(MouseEvent e) {
+			}
+			public void mousePressed(MouseEvent e) {
+			}
 			public void mouseClicked(MouseEvent e) {
 				next_point(e);
 			}
-			public void mouseMoved(MouseEvent e) {}
+			public void mouseMoved(MouseEvent e) {
+			}
 			public void mouseDragged(MouseEvent e) {
 				next_point(e);
 			}
 		};
 		if (vg != null) {
 			g = vg;
-			g.set_editing(false);
+			g.setModeGraphique(new GraphiqueDefaut());
 			for (var l : g.getMouseListeners()) {
 				g.removeMouseListener(l);
 			}
@@ -79,7 +84,7 @@ public class Partie extends JPanel {
 				g.removeMouseMotionListener(l);
 			}
 		} else {
-			g = new VueGraphe(false);
+			g = new VueGraphe(new GraphiqueDefaut());
 		}
 		g.select(-1);
 		add(g);
