@@ -13,6 +13,7 @@ public class Partie extends JPanel {
 	Image background;
 	JButton regenerer;
 	JButton editeur;
+	JButton menu;
 	JLabel timer;
 	JLabel aides;
 	JButton aide;
@@ -93,6 +94,12 @@ public class Partie extends JPanel {
 			frame.repaint();
 		});
 
+		menu = Utils.generate_button("retour-menu", e -> {
+			frame.setContentPane(new Menu(frame));
+			frame.revalidate();
+			frame.repaint();
+		});
+
 		regenerer = Utils.generate_button("retry", e -> {
 			indice_solution = 0;
 			g.setGraphe(current_g, current_c);
@@ -107,6 +114,7 @@ public class Partie extends JPanel {
 
 		add(regenerer);
 		add(aide);
+		add(menu);
 		testing_editing = vg != null;
 		if (testing_editing) {
 			add(editeur);
@@ -134,6 +142,7 @@ public class Partie extends JPanel {
 		editeur.setBounds(getWidth() - 120, 800, 90, 50);
 		aide.setBounds(getWidth() - 120, 620, 90, 50);
 		timer.setBounds(getWidth() - 300, 100, 200, 200);
+		menu.setBounds(getWidth() - 300, 100, 200, 200);
 		aides.setBounds(getWidth() - 300, 130, 300, 200);
 		aides.setText("Nombre d'Aides : " + nb_aide);
 	}
