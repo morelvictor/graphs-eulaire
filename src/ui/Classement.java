@@ -17,11 +17,13 @@ public class Classement extends JComponent {
 	private String packname;
 	private LinkedList<Double> scores = new LinkedList<Double>();
 	private LinkedList<String> noms = new LinkedList<String>();
+	private Font font;
 
-	public Classement(String packname) {
+	public Classement(String packname, Font font) {
+		this.font = font;
 		this.packname = packname;
 		deserialise(loadClassement(packname));
-		setPreferredSize(new Dimension(200, 500));
+		setPreferredSize(new Dimension(300, 500));
 		setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 
@@ -103,12 +105,13 @@ public class Classement extends JComponent {
 	}
 
 	public void paintComponent(Graphics g) {
+		g.setFont(font);
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, 200, 500);
+		g.fillRect(0, 0, 400, 500);
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < noms.size(); ++i) {
-			g.drawString(noms.get(i), 10, 20 * (i + 1));
-			g.drawString(scores.get(i) + "", 125, 20 * (i + 1));
+			g.drawString(noms.get(i) + " : ", 10, 25 * (i + 1));
+			g.drawString(scores.get(i) + "", 200, 25 * (i + 1));
 		}
 	}
 

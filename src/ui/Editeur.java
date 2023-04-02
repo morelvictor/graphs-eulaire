@@ -35,8 +35,11 @@ public class Editeur extends JPanel {
 
 	private JFrame frame;
 
-	public Editeur(JFrame frame, Image bg, String pack, VueGraphe vg, int level) {
+	private Font font;
+
+	public Editeur(JFrame frame, Image bg, String pack, VueGraphe vg, int level, Font font) {
 		background = bg;
+		this.font = font;
 		this.frame = frame;
 		this.pack = pack;
 
@@ -156,7 +159,7 @@ public class Editeur extends JPanel {
 		add(enleve_arete);
 
 		jouer = Utils.generate_button("jouer_editeur", e -> {
-			frame.setContentPane(new Partie(frame, background, pack, vuegraphe, graphe_actuel));
+			frame.setContentPane(new Partie(frame, background, pack, vuegraphe, graphe_actuel, font));
 			frame.revalidate();
 			frame.repaint();
 		});

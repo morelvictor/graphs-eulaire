@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.*;
@@ -10,6 +11,7 @@ public class Partie extends JPanel {
 	Graphe current_g;
 	LinkedList<Point> current_c;
 
+	Font font;
 	Image background;
 	JButton regenerer;
 	JButton editeur;
@@ -53,7 +55,8 @@ public class Partie extends JPanel {
 		}
 	}
 
-	public Partie(JFrame frame, Image bg, String pack, VueGraphe vg, int level) {
+	public Partie(JFrame frame, Image bg, String pack, VueGraphe vg, int level, Font font) {
+		this.font = font;
 		packname = pack;
 		if (pack == null) {
 			omega = true;
@@ -99,7 +102,7 @@ public class Partie extends JPanel {
 
 		editeur = Utils.generate_button("jeu-editeur", e -> {
 			reset();
-			frame.setContentPane(new Editeur(frame, background, pack, g, current_level));
+			frame.setContentPane(new Editeur(frame, background, pack, g, current_level, font));
 			frame.revalidate();
 			frame.repaint();
 		});
@@ -132,13 +135,13 @@ public class Partie extends JPanel {
 		timer =
 			new JLabel("TEMPS : " +
 			           Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
-		timer.setFont(new Font("Serif", Font.PLAIN, 20));
+		timer.setFont(font);
 		add(timer);
 		aides = new JLabel("Nombre d'Aides : " + nb_aide);
-		aides.setFont(new Font("Serif", Font.PLAIN, 20));
+		aides.setFont(font);
 		add(aides);
-		pack_actuel = new JLabel("Pack : " + packname);
-		pack_actuel.setFont(new Font("Serif", Font.PLAIN, 20));
+		pack_actuel = new JLabel("PACK : " + packname);
+		pack_actuel.setFont(font);
 		add(pack_actuel);
 
 	}
@@ -148,11 +151,11 @@ public class Partie extends JPanel {
 		regenerer.setBounds(getWidth() - 120, 710, 90, 50);
 		editeur.setBounds(getWidth() - 120, 800, 90, 50);
 		aide.setBounds(getWidth() - 120, 620, 90, 50);
-		pack_actuel.setBounds(getWidth() - 300, 250, 200, 200);
-		timer.setBounds(getWidth() - 300, 280, 200, 200);
+		pack_actuel.setBounds(getWidth() - 300, 250, 300, 200);
+		timer.setBounds(getWidth() - 300, 280, 300, 200);
 		aides.setBounds(getWidth() - 300, 310, 300, 200);
 		aides.setText("Nombre d'Aides : " + nb_aide);
-		pack_actuel.setText("Pack : " + packname);
+		pack_actuel.setText("PACK : " + packname);
 	}
 
 	public void finDePartie() {
@@ -172,25 +175,26 @@ public class Partie extends JPanel {
 
 
 		double temps = (System.currentTimeMillis() - debutTimer) / 1000.0;
-		double score_ = Math.floor((temps + 3 * nb_aide) * 1000) / 1000;
+		double score_ = Math.floor((temps + 6 * nb_aide) * 1000) / 1000;
 		JLabel score =
 			new JLabel("VOTRE SCORE : " + score_);
-		score.setFont(new Font("Serif", Font.PLAIN, 20));
+		score.setFont(font);
 		score.setBounds(getWidth() - 300, 360, 400, 200);
 
-		nomjoueur = new JTextArea("Entrez votre nom");
-		nomjoueur.setBounds(getWidth() - 300, 500, 120, 15);
+		nomjoueur = new JTextArea("Nom");
+		nomjoueur.setFont(font);
+		nomjoueur.setBounds(getWidth() - 300, 500, 195, 50);
 
 		Classement classement;
 		if (omega) {
-			classement = new Classement("null");
+			classement = new Classement("null", font);
 		} else {
-			classement = new Classement(packname);
+			classement = new Classement(packname, font);
 		}
-		classement.setBounds(getWidth() - 550, 360, 200, 500);
+		classement.setBounds(getWidth() - 650, 360, 300, 500);
 
 		save_score = Utils.generate_button("save", e -> {
-			String tmp = nomjoueur.getText();
+			String tmp = nomjoueur.getText().replaceAll(" ", "-");
 			classement.ajouteScore(tmp, score_);
 			repaint();
 			score_ajoute(classement);
