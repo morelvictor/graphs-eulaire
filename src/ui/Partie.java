@@ -274,9 +274,6 @@ public class Partie extends JPanel {
 		current_level = (current_level + 1) % levels.size();
 		final var lvl = levels.get(current_level);
 		g.importer(lvl.pack, lvl.n);
-		solution = g.getGraphe().hierholzer();
-		indice_solution = 0;
-		g.select(-1);
 		update_current();
 		// packname = lvl.pack;
 		timer.setText("TEMPS : " +
@@ -291,5 +288,7 @@ public class Partie extends JPanel {
 	private void reset() {
 		g.setGraphe(current_g.clone(), current_c);
 		g.select(-1);
+		solution = g.getGraphe().hierholzer();
+		indice_solution = 0;
 	}
 }
