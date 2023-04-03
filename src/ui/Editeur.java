@@ -45,7 +45,7 @@ public class Editeur extends JPanel {
 
 		if (vg != null) {
 			vuegraphe = vg;
-			vuegraphe.set_editing(true);
+			vuegraphe.setModeGraphique(new GraphiqueEditeur());
 			for (var l : vuegraphe.getMouseListeners()) {
 				vuegraphe.removeMouseListener(l);
 			}
@@ -53,7 +53,7 @@ public class Editeur extends JPanel {
 				vuegraphe.removeMouseMotionListener(l);
 			}
 		} else {
-			vuegraphe = new VueGraphe(true);
+			vuegraphe = new VueGraphe(new GraphiqueEditeur());
 		}
 		vuegraphe.select(-1);
 		add(vuegraphe);

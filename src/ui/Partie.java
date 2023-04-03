@@ -85,7 +85,7 @@ public class Partie extends JPanel {
 		};
 		if (vg != null) {
 			g = vg;
-			g.set_editing(false);
+			g.setModeGraphique(new GraphiqueDefaut());
 			for (var l : g.getMouseListeners()) {
 				g.removeMouseListener(l);
 			}
@@ -93,7 +93,7 @@ public class Partie extends JPanel {
 				g.removeMouseMotionListener(l);
 			}
 		} else {
-			g = new VueGraphe(false);
+			g = new VueGraphe(new GraphiqueDefaut());
 		}
 		g.select(-1);
 		add(g);
