@@ -19,7 +19,7 @@ public class Partie extends JPanel {
 	JLabel aides;
 	JLabel pack_actuel;
 	String packname;
-	boolean omega = false;
+	boolean omega;
 	JButton aide;
 	JTextArea nomjoueur;
 	JButton save_score;
@@ -57,10 +57,8 @@ public class Partie extends JPanel {
 
 	public Partie(JFrame frame, Image bg, String pack, VueGraphe vg, int level, Font font) {
 		this.font = font;
-		packname = pack;
-		if (pack == null) {
-			omega = true;
-		}
+		packname = pack != null ? pack : "ALL";
+		omega = pack == null;
 
 		loadPack(pack);
 		if (levels.size() == 0) {
@@ -280,7 +278,7 @@ public class Partie extends JPanel {
 		indice_solution = 0;
 		g.select(-1);
 		update_current();
-		packname = lvl.pack;
+		// packname = lvl.pack;
 		timer.setText("TEMPS : " +
 		              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
 	}
