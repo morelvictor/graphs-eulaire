@@ -13,6 +13,5 @@ interface ModeGraphique {
 
 	void render_sommets(Graphics2D g, LinkedList<Point> coords, int selected);
 	void render_aretes(Graphics2D g, Graphe graphe, LinkedList<Point> coords);
-	default void render_background() {
-	}
+	default void render_background() {}
 }

@@ -181,7 +181,7 @@ public class Partie extends JPanel {
 
 		nomjoueur = new JTextArea("Nom");
 		nomjoueur.setFont(font);
-		nomjoueur.setBounds(getWidth() - 300, 500, 195, 50);
+		nomjoueur.setBounds(getWidth() - 300, 500, 160, 50);
 
 		Classement classement;
 		if (omega) {
@@ -193,7 +193,7 @@ public class Partie extends JPanel {
 
 		save_score = Utils.generate_button("save", e -> {
 			String tmp = nomjoueur.getText().replaceAll(" ", "-");
-			classement.ajouteScore(tmp, score_);
+			classement.ajouteScore(tmp.substring(0, Math.min(10, tmp.length())), score_);
 			repaint();
 			score_ajoute(classement);
 		});
