@@ -35,8 +35,11 @@ public class Editeur extends JPanel {
 
 	private JFrame frame;
 
-	public Editeur(JFrame frame, Image bg, String pack, VueGraphe vg, int level) {
+	private Font font;
+
+	public Editeur(JFrame frame, Image bg, String pack, VueGraphe vg, int level, Font font) {
 		background = bg;
+		this.font = font;
 		this.frame = frame;
 		this.pack = pack;
 
@@ -156,7 +159,7 @@ public class Editeur extends JPanel {
 		add(enleve_arete);
 
 		jouer = Utils.generate_button("jouer_editeur", e -> {
-			frame.setContentPane(new Partie(frame, background, pack, vuegraphe, graphe_actuel));
+			frame.setContentPane(new Partie(frame, background, pack, vuegraphe, graphe_actuel, font));
 			frame.revalidate();
 			frame.repaint();
 		});
@@ -232,22 +235,18 @@ public class Editeur extends JPanel {
 				input_handler.on_vertex_click(current_vertex);
 			}
 		}
-		public void mouseEntered(MouseEvent e) {
-		}
-		public void mouseExited(MouseEvent e) {
-		}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
 		public void mousePressed(MouseEvent e) {
 			current_vertex = vuegraphe.getId(e.getX(), e.getY());
 		}
-		public void mouseReleased(MouseEvent e) {
-		}
+		public void mouseReleased(MouseEvent e) {}
 		public void mouseDragged(MouseEvent e) {
 			if (current_vertex != -1) {
 				input_handler.on_vertex_drag(current_vertex, e.getPoint());
 			}
 		}
-		public void mouseMoved(MouseEvent e) {
-		}
+		public void mouseMoved(MouseEvent e) {}
 	}
 
 	private abstract class InputHandler {
@@ -278,8 +277,7 @@ public class Editeur extends JPanel {
 		public void on_vertex_click(int vertex) {
 			vuegraphe.supprSommet(vertex);
 		}
-		public void on_point_click(Point p) {
-		}
+		public void on_point_click(Point p) {}
 		public void on_vertex_drag(int vertex, Point p) {
 			if (last_deleted == -1) {
 				last_deleted = vertex;

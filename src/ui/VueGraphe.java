@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Ellipse2D;
 
 import javax.swing.*;
 
@@ -101,9 +100,12 @@ public class VueGraphe extends JComponent {
 	public void paintComponent(Graphics g_) {
 		final var g = ((Graphics2D) g_);
 
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
 		g.setColor(color_bg);
 		g.fillRect(0, 0, 850, 850);
 		g.setColor(color_default);
+		g.setStroke(new BasicStroke(5));
 
 		modeGraphique.render_sommets(g, coords, selected);
 		modeGraphique.render_aretes(g, graphe, coords);
