@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 
-public class Partie extends JPanel {
+public class Partie extends JPanel implements KeyListener {
 	VueGraphe g;
 	Graphe current_g;
 	LinkedList<Point> current_c;
@@ -55,7 +55,7 @@ public class Partie extends JPanel {
 		}
 	}
 
-	public Partie(JFrame frame, Image bg, String pack, VueGraphe vg, int level, Font font) {
+	public Partie(App app, Image bg, String pack, VueGraphe vg, int level, Font font) {
 		this.font = font;
 		packname = pack != null ? pack : "ALL";
 		omega = pack == null;
@@ -67,6 +67,8 @@ public class Partie extends JPanel {
 		}
 		current_level = level;
 		background = bg;
+
+		app.frame.addKeyListener(this);
 
 		MouseInputListener ml = new MouseInputListener() {
 			public void mouseExited(MouseEvent e) {}
@@ -100,9 +102,9 @@ public class Partie extends JPanel {
 
 		editeur = Utils.generate_button("jeu-editeur", e -> {
 			reset();
-			frame.setContentPane(new Editeur(frame, background, pack, g, current_level, font));
-			frame.revalidate();
-			frame.repaint();
+			app.frame.setContentPane(new Editeur(app, background, pack, g, current_level, font));
+			app.frame.revalidate();
+			app.frame.repaint();
 		});
 
 		regenerer = Utils.generate_button("retry", e -> {
@@ -291,4 +293,17 @@ public class Partie extends JPanel {
 		solution = g.getGraphe().hierholzer();
 		indice_solution = 0;
 	}
+
+	public void keyPressed(KeyEvent e) {
+		System.out.println("pressed");
+	}
+
+	public void keyReleased(KeyEvent e) {
+		System.out.println("released");
+	}
+
+	public void keyTyped(KeyEvent e) {
+		System.out.println("typed");
+	}
+
 }
