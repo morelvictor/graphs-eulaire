@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.io.*;
+import java.util.Collections;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -37,9 +38,10 @@ public class Menu extends JPanel {
 		for (var file : (new java.io.File("../packs")).listFiles()) {
 			packs.add(file.getName());
 		}
+		Collections.sort(packs);
 
 		var current_pack = new Object() {
-			public int v = packs.size();
+			public int v = 0;
 		};
 		JButton editorButton = Utils.generate_button("editeur_bouton", e -> {
 			final String pack = current_pack.v == packs.size() ? null : packs.get(current_pack.v);
@@ -55,7 +57,7 @@ public class Menu extends JPanel {
 			frame.repaint();
 		});
 		gameButton.setBounds(getWidth() / 2, getHeight() / 4, 200, 100);
-		JLabel packLabel = new JLabel("ALL");
+		JLabel packLabel = new JLabel(current_pack.v == packs.size() ? "ALL" : packs.get(current_pack.v));
 		packLabel.setFont(font);
 		JButton packButton = Utils.generate_button("pack_bouton", e -> {
 			current_pack.v = (current_pack.v + 1) % (packs.size() + 1);
