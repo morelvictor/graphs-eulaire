@@ -98,6 +98,7 @@ public class Editeur extends JPanel {
 				vuegraphe.importer(pack, graphe_actuel);
 			} else {
 				vuegraphe.effacer();
+				vuegraphe.setModeGraphique(new GraphiqueEditeur(null));
 			}
 		});
 		add(importer);

@@ -31,9 +31,6 @@ public class Menu extends JPanel {
 		}
 
 
-		classement = new Classement("null", font);
-		classement.setBounds(2 * getWidth() / 3, getHeight() - 100, 300, 500);
-
 		var packs = new java.util.ArrayList<String>();
 		for (var file : (new java.io.File("../packs")).listFiles()) {
 			packs.add(file.getName());
@@ -43,6 +40,9 @@ public class Menu extends JPanel {
 		var current_pack = new Object() {
 			public int v = 0;
 		};
+		classement = new Classement(current_pack.v == packs.size() ? "null" : packs.get(current_pack.v), font);
+		classement.setBounds(2 * getWidth() / 3, getHeight() - 100, 300, 500);
+
 		JButton editorButton = Utils.generate_button("editeur_bouton", e -> {
 			final String pack = current_pack.v == packs.size() ? null : packs.get(current_pack.v);
 			frame.setContentPane(new Editeur(frame, background, pack, null, -1, font));
