@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -67,8 +68,10 @@ public class Classement extends JComponent {
 		LinkedList<String> res = new LinkedList<String>();
 		String tmp;
 		try {
+			File f = new File("../classements/" + name + ".mizair");
+			f.createNewFile();
 			BufferedReader reader =
-				new BufferedReader(new FileReader("../classements/" + name + ".mizair"));
+				new BufferedReader(new FileReader(f));
 			tmp = reader.readLine();
 			while (tmp != null) {
 				res.add(tmp);
