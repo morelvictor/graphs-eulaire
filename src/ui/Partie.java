@@ -56,7 +56,9 @@ public class Partie extends JPanel {
 	private void loadPack(String pack) {
 		if (pack == null) {
 			for (var p : (new java.io.File("../packs")).listFiles()) {
-				loadPack(p.getName());
+				if (!p.getName().equals("aa-tutorial")) {
+					loadPack(p.getName());
+				}
 			}
 		} else {
 			int n = get_graphe_nb(pack);
