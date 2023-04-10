@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 
-public class Partie extends JPanel implements KeyListener {
+public class Partie extends JPanel {
 	VueGraphe g;
 	Graphe current_g;
 	LinkedList<Point> current_c;
@@ -67,8 +67,6 @@ public class Partie extends JPanel implements KeyListener {
 		}
 		current_level = level;
 		background = bg;
-
-		app.frame.addKeyListener(this);
 
 		MouseInputListener ml = new MouseInputListener() {
 			public void mouseExited(MouseEvent e) {}
@@ -293,17 +291,4 @@ public class Partie extends JPanel implements KeyListener {
 		solution = g.getGraphe().hierholzer();
 		indice_solution = 0;
 	}
-
-	public void keyPressed(KeyEvent e) {
-		System.out.println("pressed");
-	}
-
-	public void keyReleased(KeyEvent e) {
-		System.out.println("released");
-	}
-
-	public void keyTyped(KeyEvent e) {
-		System.out.println("typed");
-	}
-
 }
