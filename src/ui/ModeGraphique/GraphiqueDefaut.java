@@ -1,11 +1,19 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 
 import java.util.LinkedList;
 import javax.swing.*;
 
-public class GraphiqueDefaut implements ModeGraphique {
+public class GraphiqueDefaut extends ModeGraphique {
+	GraphiqueDefaut(BufferedImage bg) {
+		super(bg);
+	}
+	GraphiqueDefaut() {
+		super(null);
+	}
+
 	public void render_sommets(Graphics2D g, LinkedList<Point> coords, int selected) {
 		for (int i = 0; i < coords.size(); i++) {
 			final var coord1 = coords.get(i);
@@ -69,6 +77,15 @@ public class GraphiqueDefaut implements ModeGraphique {
 					g.draw(curve);
 				}
 			}
+		}
+	}
+
+	void render_background(Graphics2D g) {
+		if (image_bg == null) {
+			g.setColor(color_bg);
+			g.fillRect(0, 0, 850, 850);
+		} else {
+			g.drawImage(image_bg, null, 0, 0);
 		}
 	}
 }
