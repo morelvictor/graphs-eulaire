@@ -54,9 +54,7 @@ public class Menu extends JPanel {
 		});
 		packButton.setBounds(2 * getWidth() / 3, getHeight() / 4, 200, 100);
 
-		JButton settingsButton = new JButton("Reglages");
-		settingsButton.setFont(app.settings.font);
-		settingsButton.addActionListener((e) -> {
+		JButton settingsButton = Utils.generate_button("reglages", e -> {
 			app.frame.setContentPane(new VueSettings(app));
 			app.frame.revalidate();
 			app.frame.repaint();
