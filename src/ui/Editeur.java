@@ -22,7 +22,6 @@ public class Editeur extends JPanel {
 
 	private JButton generer_random;
 	private static Random r = new Random();
-	private boolean en_generation = false;
 
 	private JButton ajoute_sommet;
 	private JButton ajoute_arete;
@@ -104,13 +103,10 @@ public class Editeur extends JPanel {
 		add(importer);
 
 		generer_random = Utils.generate_button("random", e -> {
-			en_generation = !en_generation;
-			if (en_generation) {
-				final int nb_sommets = 5 + r.nextInt(20);
-				final int nb_aretes = r.nextInt(nb_sommets);
-				vuegraphe.setGraphe(getNRandomSom(nb_sommets, nb_aretes), getNRandomCoord(nb_sommets));
-				vuegraphe.setModeGraphique(new GraphiqueEditeur());
-			}
+			final int nb_sommets = 5 + r.nextInt(20);
+			final int nb_aretes = r.nextInt(nb_sommets);
+			vuegraphe.setGraphe(getNRandomSom(nb_sommets, nb_aretes), getNRandomCoord(nb_sommets));
+			vuegraphe.setModeGraphique(new GraphiqueEditeur());
 			graphe_actuel = get_graphe_nb();
 		});
 		add(generer_random);
