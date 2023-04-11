@@ -20,7 +20,7 @@ public class Partie extends JPanel {
 	JLabel aides;
 	JLabel pack_actuel;
 	String packname;
-	boolean omega = false;
+	boolean omega;
 	JButton aide;
 	JTextArea nomjoueur;
 	JButton save_score;
@@ -56,12 +56,10 @@ public class Partie extends JPanel {
 		}
 	}
 
-	public Partie(JFrame frame, Image bg, String pack, VueGraphe vg, int level, Font font) {
+	public Partie(App app, Image bg, String pack, VueGraphe vg, int level, Font font) {
 		this.font = font;
-		packname = pack;
-		if (pack == null) {
-			omega = true;
-		}
+		packname = pack != null ? pack : "ALL";
+		omega = pack == null;
 
 		loadPack(pack);
 		if (levels.size() == 0) {
@@ -86,7 +84,7 @@ public class Partie extends JPanel {
 		};
 		if (vg != null) {
 			g = vg;
-			g.set_editing(false);
+			g.setModeGraphique(new GraphiqueDefaut());
 			for (var l : g.getMouseListeners()) {
 				g.removeMouseListener(l);
 			}
@@ -94,7 +92,7 @@ public class Partie extends JPanel {
 				g.removeMouseMotionListener(l);
 			}
 		} else {
-			g = new VueGraphe(false);
+			g = new VueGraphe(new GraphiqueDefaut());
 		}
 		g.select(-1);
 		add(g);
@@ -103,9 +101,9 @@ public class Partie extends JPanel {
 
 		editeur = Utils.generate_button("jeu-editeur", e -> {
 			reset();
-			frame.setContentPane(new Editeur(frame, background, pack, g, current_level, font));
-			frame.revalidate();
-			frame.repaint();
+			app.frame.setContentPane(new Editeur(app, background, pack, g, current_level, font));
+			app.frame.revalidate();
+			app.frame.repaint();
 		});
 
 		menu = Utils.generate_button("retour-menu", e -> {
@@ -192,7 +190,7 @@ public class Partie extends JPanel {
 
 		nomjoueur = new JTextArea("Nom");
 		nomjoueur.setFont(font);
-		nomjoueur.setBounds(getWidth() - 300, 500, 195, 50);
+		nomjoueur.setBounds(getWidth() - 300, 500, 160, 50);
 
 		Classement classement;
 		if (omega) {
@@ -204,7 +202,7 @@ public class Partie extends JPanel {
 
 		save_score = Utils.generate_button("save", e -> {
 			String tmp = nomjoueur.getText().replaceAll(" ", "-");
-			classement.ajouteScore(tmp, score_);
+			classement.ajouteScore(tmp.substring(0, Math.min(10, tmp.length())), score_);
 			repaint();
 			score_ajoute(classement);
 		});
@@ -285,11 +283,8 @@ public class Partie extends JPanel {
 		current_level = (current_level + 1) % levels.size();
 		final var lvl = levels.get(current_level);
 		g.importer(lvl.pack, lvl.n);
-		solution = g.getGraphe().hierholzer();
-		indice_solution = 0;
-		g.select(-1);
 		update_current();
-		packname = lvl.pack;
+		// packname = lvl.pack;
 		timer.setText("TEMPS : " +
 		              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
 	}
@@ -302,5 +297,7 @@ public class Partie extends JPanel {
 	private void reset() {
 		g.setGraphe(current_g.clone(), current_c);
 		g.select(-1);
+		solution = g.getGraphe().hierholzer();
+		indice_solution = 0;
 	}
 }

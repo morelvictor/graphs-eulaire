@@ -33,19 +33,19 @@ public class Editeur extends JPanel {
 
 	private JButton jouer;
 
-	private JFrame frame;
+	private App app;
 
 	private Font font;
 
-	public Editeur(JFrame frame, Image bg, String pack, VueGraphe vg, int level, Font font) {
+	public Editeur(App app, Image bg, String pack, VueGraphe vg, int level, Font font) {
 		background = bg;
 		this.font = font;
-		this.frame = frame;
+		this.app = app;
 		this.pack = pack;
 
 		if (vg != null) {
 			vuegraphe = vg;
-			vuegraphe.set_editing(true);
+			vuegraphe.setModeGraphique(new GraphiqueEditeur());
 			for (var l : vuegraphe.getMouseListeners()) {
 				vuegraphe.removeMouseListener(l);
 			}
@@ -53,7 +53,7 @@ public class Editeur extends JPanel {
 				vuegraphe.removeMouseMotionListener(l);
 			}
 		} else {
-			vuegraphe = new VueGraphe(true);
+			vuegraphe = new VueGraphe(new GraphiqueEditeur());
 		}
 		vuegraphe.select(-1);
 		add(vuegraphe);
@@ -159,9 +159,9 @@ public class Editeur extends JPanel {
 		add(enleve_arete);
 
 		jouer = Utils.generate_button("jouer_editeur", e -> {
-			frame.setContentPane(new Partie(frame, background, pack, vuegraphe, graphe_actuel, font));
-			frame.revalidate();
-			frame.repaint();
+			app.frame.setContentPane(new Partie(app, background, pack, vuegraphe, graphe_actuel, font));
+			app.frame.revalidate();
+			app.frame.repaint();
 		});
 		add(jouer);
 	}

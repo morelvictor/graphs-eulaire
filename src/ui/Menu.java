@@ -4,13 +4,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Menu extends JPanel {
-	JFrame contentFrame;
+	App app;
 	Image background;
 	Classement classement;
-	Font font;
 
-	public Menu(JFrame frame) {
-		contentFrame = frame;
+	public Menu(App app) {
+		this.app = app;
 		try {
 			background = ImageIO.read(new java.io.File("../textures/background.png"));
 		} catch (java.io.IOException e) {
@@ -18,19 +17,9 @@ public class Menu extends JPanel {
 			System.exit(1);
 		}
 
-		frame.setLayout(null);
+		app.frame.setLayout(null);
 
-		try {
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
-			                                new File("../textures/IAmTheCrayonMaster.ttf")));
-			font = new Font("IAmTheCrayonMaster", Font.BOLD, 30);
-		} catch (IOException | FontFormatException e) {
-			font = new Font("Serif", Font.PLAIN, 20);
-		}
-
-
-		classement = new Classement("null", font);
+		classement = new Classement("null", app.settings.font);
 		classement.setBounds(2 * getWidth() / 3, getHeight() - 100, 300, 500);
 
 		var packs = new java.util.ArrayList<String>();
@@ -43,28 +32,35 @@ public class Menu extends JPanel {
 		};
 		JButton editorButton = Utils.generate_button("editeur_bouton", e -> {
 			final String pack = current_pack.v == packs.size() ? null : packs.get(current_pack.v);
-			frame.setContentPane(new Editeur(frame, background, pack, null, -1, font));
-			frame.revalidate();
-			frame.repaint();
+			app.frame.setContentPane(new Editeur(app, background, pack, null, -1, app.settings.font));
+			app.frame.revalidate();
+			app.frame.repaint();
 		});
 		editorButton.setBounds(getWidth() / 3, getHeight() / 4, 200, 100);
 		JButton gameButton = Utils.generate_button("jeu_bouton", e -> {
 			final String pack = current_pack.v == packs.size() ? null : packs.get(current_pack.v);
-			frame.setContentPane(new Partie(frame, background, pack, null, 0, font));
-			frame.revalidate();
-			frame.repaint();
+			app.frame.setContentPane(new Partie(app, background, pack, null, 0, app.settings.font));
+			app.frame.revalidate();
+			app.frame.repaint();
 		});
 		gameButton.setBounds(getWidth() / 2, getHeight() / 4, 200, 100);
 		JLabel packLabel = new JLabel("ALL");
-		packLabel.setFont(font);
+		packLabel.setFont(app.settings.font);
 		JButton packButton = Utils.generate_button("pack_bouton", e -> {
 			current_pack.v = (current_pack.v + 1) % (packs.size() + 1);
 			packLabel.setText(current_pack.v == packs.size() ? "ALL" : packs.get(current_pack.v));
 			classement.changePack(current_pack.v == packs.size() ? "null" : packs.get(current_pack.v));
-			frame.repaint();
+			app.frame.repaint();
 		});
 		packButton.setBounds(2 * getWidth() / 3, getHeight() / 4, 200, 100);
 
+		JButton settingsButton = Utils.generate_button("reglages", e -> {
+			app.frame.setContentPane(new VueSettings(app));
+			app.frame.revalidate();
+			app.frame.repaint();
+		});
+
+		add(settingsButton);
 		add(editorButton);
 		add(gameButton);
 		add(packButton);

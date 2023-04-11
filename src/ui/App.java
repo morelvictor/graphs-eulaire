@@ -1,16 +1,27 @@
-import java.awt.EventQueue;
+import java.awt.*;
+import java.io.*;
 import javax.swing.JFrame;
 
 public class App {
+
+	JFrame frame;
+	Settings settings;
+
+	App() {
+		settings = new Settings();
+	}
+
 	public static void main(String[] args) {
+		App app = new App();
+
 		EventQueue.invokeLater(() -> {
-			var frame = new JFrame();
-			frame.setTitle("EULAIRE");
-			frame.setSize(1000, 1000);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setVisible(true);
-			frame.setContentPane(new Menu(frame));
-			frame.pack();
+			app.frame = new JFrame();
+			app.frame.setTitle("EULAIRE");
+			app.frame.setSize(1000, 1000);
+			app.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			app.frame.setVisible(true);
+			app.frame.setContentPane(new Menu(app));
+			app.frame.pack();
 		});
 	}
 }
