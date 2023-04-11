@@ -19,15 +19,16 @@ public class VueSettings extends JPanel {
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		JLabel retryLabel = new JLabel("Retry: " + KeyEvent.getKeyText(app.settings.retryKey));
+		JLabel retryLabel = new JLabel("Retry: " + Utils.getKeyText(app.settings.retryKey));
 		retryLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		retryLabel.setFont(app.settings.font);
-		JLabel menuLabel = new JLabel("Menu: " + KeyEvent.getKeyText(app.settings.menuKey));
+		JLabel menuLabel = new JLabel("Menu: " + Utils.getKeyText(app.settings.menuKey));
+		System.out.println(Utils.getKeyText(app.settings.menuKey));
 		menuLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		menuLabel.setFont(app.settings.font);
 
 		JLabel evidentLabel =
-			new JLabel("Déplacement évident: " + KeyEvent.getKeyText(app.settings.evidentMoveKey));
+			new JLabel("Déplacement évident: " + Utils.getKeyText(app.settings.evidentMoveKey));
 		evidentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		evidentLabel.setFont(app.settings.font);
 
