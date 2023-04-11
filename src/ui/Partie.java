@@ -107,9 +107,9 @@ public class Partie extends JPanel {
 		});
 
 		menu = Utils.generate_button("retour-menu", e -> {
-			frame.setContentPane(new Menu(frame));
-			frame.revalidate();
-			frame.repaint();
+			app.frame.setContentPane(new Menu(app));
+			app.frame.revalidate();
+			app.frame.repaint();
 		});
 
 		regenerer = Utils.generate_button("retry", e -> {
