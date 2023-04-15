@@ -17,7 +17,7 @@ public class App {
 		EventQueue.invokeLater(() -> {
 			app.frame = new JFrame();
 			app.frame.setTitle("EULAIRE");
-			app.frame.setSize(1000, 1000);
+			app.frame.setSize(1250, 1000);
 			app.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			app.frame.setVisible(true);
 			app.frame.setContentPane(new Menu(app));

@@ -43,13 +43,26 @@ public class Partie extends JPanel {
 	private java.util.ArrayList<Level> levels = new java.util.ArrayList<Level>();
 	private int current_level = 0;
 
+	private int get_graphe_nb(String pack) {
+		final var files = new java.io.File("../packs/" + pack).listFiles();
+		int n = 0;
+		for (var f : files) {
+			if (f.getName().endsWith(".mzr")) {
+				n++;
+			}
+		}
+		return n;
+	}
+
 	private void loadPack(String pack) {
 		if (pack == null) {
 			for (var p : (new java.io.File("../packs")).listFiles()) {
-				loadPack(p.getName());
+				if (!p.getName().equals("aa-tutorial")) {
+					loadPack(p.getName());
+				}
 			}
 		} else {
-			int n = (new java.io.File("../packs/" + pack)).listFiles().length;
+			int n = get_graphe_nb(pack);
 			for (int i = 0; i < n; i++) {
 				levels.add(new Level(pack, i));
 			}
@@ -84,7 +97,7 @@ public class Partie extends JPanel {
 		};
 		if (vg != null) {
 			g = vg;
-			g.setModeGraphique(new GraphiqueDefaut());
+			g.setModeGraphique(new GraphiqueDefaut(vg.getModeGraphique().image_bg));
 			for (var l : g.getMouseListeners()) {
 				g.removeMouseListener(l);
 			}

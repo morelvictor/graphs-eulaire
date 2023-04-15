@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.io.*;
+import java.util.Collections;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -19,17 +20,21 @@ public class Menu extends JPanel {
 
 		app.frame.setLayout(null);
 
-		classement = new Classement("null", app.settings.font);
-		classement.setBounds(2 * getWidth() / 3, getHeight() - 100, 300, 500);
-
 		var packs = new java.util.ArrayList<String>();
 		for (var file : (new java.io.File("../packs")).listFiles()) {
 			packs.add(file.getName());
 		}
+		Collections.sort(packs);
 
 		var current_pack = new Object() {
-			public int v = packs.size();
+			public int v = 0;
 		};
+		{
+			String pack = current_pack.v == packs.size() ? "null" : packs.get(current_pack.v);
+			classement = new Classement(pack, app.settings.font);
+			classement.setBounds(2 * getWidth() / 3, getHeight() - 100, 300, 500);
+		}
+
 		JButton editorButton = Utils.generate_button("editeur_bouton", e -> {
 			final String pack = current_pack.v == packs.size() ? null : packs.get(current_pack.v);
 			app.frame.setContentPane(new Editeur(app, background, pack, null, -1, app.settings.font));
@@ -44,7 +49,7 @@ public class Menu extends JPanel {
 			app.frame.repaint();
 		});
 		gameButton.setBounds(getWidth() / 2, getHeight() / 4, 200, 100);
-		JLabel packLabel = new JLabel("ALL");
+		JLabel packLabel = new JLabel(current_pack.v == packs.size() ? "ALL" : packs.get(current_pack.v));
 		packLabel.setFont(app.settings.font);
 		JButton packButton = Utils.generate_button("pack_bouton", e -> {
 			current_pack.v = (current_pack.v + 1) % (packs.size() + 1);

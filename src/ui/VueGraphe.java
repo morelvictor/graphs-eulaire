@@ -1,10 +1,13 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -33,6 +36,9 @@ public class VueGraphe extends JComponent {
 
 	public void setModeGraphique(ModeGraphique mg) {
 		modeGraphique = mg;
+	}
+	public ModeGraphique getModeGraphique() {
+		return modeGraphique;
 	}
 
 	public Graphe getGraphe() {
@@ -101,13 +107,15 @@ public class VueGraphe extends JComponent {
 		final var g = ((Graphics2D) g_);
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		g.setColor(color_bg);
-		g.fillRect(0, 0, 850, 850);
-		g.setColor(color_default);
 		g.setStroke(new BasicStroke(5));
 
+		g.setColor(modeGraphique.color_bg);
+		modeGraphique.render_background(g);
+
+		g.setColor(modeGraphique.color_default);
 		modeGraphique.render_sommets(g, coords, selected);
+
+		g.setColor(modeGraphique.color_default);
 		modeGraphique.render_aretes(g, graphe, coords);
 	}
 
@@ -181,13 +189,9 @@ public class VueGraphe extends JComponent {
 	}
 
 	public void importer(String pack, int n) {
+		String name = pack == null ? ("../packless/" + n) : ("../packs/" + pack + "/" + n);
 		try {
-			BufferedReader reader;
-			if (pack == null) {
-				reader = new BufferedReader(new FileReader("../packless/" + n + ".mzr"));
-			} else {
-				reader = new BufferedReader(new FileReader("../packs/" + pack + "/" + n + ".mzr"));
-			}
+			BufferedReader reader = new BufferedReader(new FileReader(name + ".mzr"));
 			final var line = reader.readLine();
 			if (line == null) {
 				effacer();
@@ -198,6 +202,14 @@ public class VueGraphe extends JComponent {
 			graphe = deserialiseConnections(reader);
 			reader.close();
 			repaint();
+
+			File img_file = new File(name + ".png");
+			BufferedImage img = img_file.exists() ? ImageIO.read(img_file) : null;
+			if (modeGraphique instanceof GraphiqueEditeur) {
+				modeGraphique = new GraphiqueEditeur(img);
+			} else {
+				modeGraphique = new GraphiqueDefaut(img);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

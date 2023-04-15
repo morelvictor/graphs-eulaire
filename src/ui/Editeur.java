@@ -22,7 +22,6 @@ public class Editeur extends JPanel {
 
 	private JButton generer_random;
 	private static Random r = new Random();
-	private boolean en_generation = false;
 
 	private JButton ajoute_sommet;
 	private JButton ajoute_arete;
@@ -45,7 +44,7 @@ public class Editeur extends JPanel {
 
 		if (vg != null) {
 			vuegraphe = vg;
-			vuegraphe.setModeGraphique(new GraphiqueEditeur());
+			vuegraphe.setModeGraphique(new GraphiqueEditeur(vg.getModeGraphique().image_bg));
 			for (var l : vuegraphe.getMouseListeners()) {
 				vuegraphe.removeMouseListener(l);
 			}
@@ -98,17 +97,16 @@ public class Editeur extends JPanel {
 				vuegraphe.importer(pack, graphe_actuel);
 			} else {
 				vuegraphe.effacer();
+				vuegraphe.setModeGraphique(new GraphiqueEditeur(null));
 			}
 		});
 		add(importer);
 
 		generer_random = Utils.generate_button("random", e -> {
-			en_generation = !en_generation;
-			if (en_generation) {
-				final int nb_sommets = 5 + r.nextInt(20);
-				final int nb_aretes = r.nextInt(nb_sommets);
-				vuegraphe.setGraphe(getNRandomSom(nb_sommets, nb_aretes), getNRandomCoord(nb_sommets));
-			}
+			final int nb_sommets = 5 + r.nextInt(20);
+			final int nb_aretes = r.nextInt(nb_sommets);
+			vuegraphe.setGraphe(getNRandomSom(nb_sommets, nb_aretes), getNRandomCoord(nb_sommets));
+			vuegraphe.setModeGraphique(new GraphiqueEditeur());
 			graphe_actuel = get_graphe_nb();
 		});
 		add(generer_random);
@@ -195,11 +193,15 @@ public class Editeur extends JPanel {
 	}
 
 	public int get_graphe_nb() {
-		if (pack == null) {
-			return (new java.io.File("../packless")).listFiles().length - 1;
-		} else {
-			return (new java.io.File("../packs/" + pack)).listFiles().length;
+		String name = pack == null ? "../packless" : "../packs/" + pack;
+		final var files = new java.io.File(name).listFiles();
+		int n = 0;
+		for (var f : files) {
+			if (f.getName().endsWith(".mzr")) {
+				n++;
+			}
 		}
+		return n;
 	}
 
 	public void paintComponent(Graphics g) {
