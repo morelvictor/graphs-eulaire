@@ -15,6 +15,7 @@ public class Partie extends JPanel {
 	Image background;
 	JButton regenerer;
 	JButton editeur;
+	JButton menu;
 	JLabel timer;
 	JLabel aides;
 	JLabel pack_actuel;
@@ -105,6 +106,12 @@ public class Partie extends JPanel {
 			app.frame.repaint();
 		});
 
+		menu = Utils.generate_button("retour-menu", e -> {
+			app.frame.setContentPane(new Menu(app));
+			app.frame.revalidate();
+			app.frame.repaint();
+		});
+
 		regenerer = Utils.generate_button("retry", e -> {
 			indice_solution = 0;
 			g.setGraphe(current_g, current_c);
@@ -119,6 +126,7 @@ public class Partie extends JPanel {
 
 		add(regenerer);
 		add(aide);
+		add(menu);
 		testing_editing = vg != null;
 		if (testing_editing) {
 			add(editeur);
@@ -147,8 +155,9 @@ public class Partie extends JPanel {
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		regenerer.setBounds(getWidth() - 120, 710, 90, 50);
-		editeur.setBounds(getWidth() - 120, 800, 90, 50);
+		editeur.setBounds(getWidth() - 200, 800, 90, 50);
 		aide.setBounds(getWidth() - 120, 620, 90, 50);
+		menu.setBounds(getWidth() - 120, 550, 80, 50);
 		pack_actuel.setBounds(getWidth() - 300, 250, 300, 200);
 		timer.setBounds(getWidth() - 300, 280, 300, 200);
 		aides.setBounds(getWidth() - 300, 310, 300, 200);
