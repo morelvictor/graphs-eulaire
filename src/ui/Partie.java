@@ -98,7 +98,7 @@ public class Partie extends JPanel {
 		};
 		if (vg != null) {
 			g = vg;
-			g.setModeGraphique(new GraphiqueDefaut(vg.getModeGraphique().image_bg));
+			g.setModeGraphique(new GraphiqueDefaut(g.getModeGraphique().image_bg));
 			for (var l : g.getMouseListeners()) {
 				g.removeMouseListener(l);
 			}
@@ -106,7 +106,7 @@ public class Partie extends JPanel {
 				g.removeMouseMotionListener(l);
 			}
 		} else {
-			g = new VueGraphe(new GraphiqueDefaut());
+			g = new VueGraphe(new GraphiqueDefaut(null));
 		}
 		g.select(-1);
 		add(g);
@@ -131,7 +131,7 @@ public class Partie extends JPanel {
 			g.setGraphe(current_g, current_c);
 			g.select(-1);
 			debut = true;
-			g.setModeGraphique(new GraphiqueDefaut());
+			g.setModeGraphique(new GraphiqueDefaut(g.getModeGraphique().image_bg));
 			update_current();
 		});
 
@@ -139,7 +139,7 @@ public class Partie extends JPanel {
 			next_point(solution.get(indice_solution++));
 			nb_aide++;
 			debut = true;
-			g.setModeGraphique(new GraphiqueDefaut());
+			g.setModeGraphique(new GraphiqueDefaut(g.getModeGraphique().image_bg));
 		});
 
 		add(regenerer);
@@ -276,7 +276,7 @@ public class Partie extends JPanel {
 		}
 
 		if (debut && g.estMemory()) {
-			g.setModeGraphique(new GraphiqueMemory());
+			g.setModeGraphique(new GraphiqueMemory(g.getModeGraphique().image_bg));
 			debut = false;
 		}
 
@@ -311,7 +311,7 @@ public class Partie extends JPanel {
 		g.importer(lvl.pack, lvl.n);
 		update_current();
 		debut = true;
-		g.setModeGraphique(new GraphiqueDefaut());
+		g.setModeGraphique(new GraphiqueDefaut(g.getModeGraphique().image_bg));
 		// packname = lvl.pack;
 		timer.setText("TEMPS : " +
 		              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));

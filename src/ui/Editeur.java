@@ -52,7 +52,7 @@ public class Editeur extends JPanel {
 				vuegraphe.removeMouseMotionListener(l);
 			}
 		} else {
-			vuegraphe = new VueGraphe(new GraphiqueEditeur());
+			vuegraphe = new VueGraphe(new GraphiqueEditeur(null));
 		}
 		vuegraphe.select(-1);
 		add(vuegraphe);
@@ -106,7 +106,7 @@ public class Editeur extends JPanel {
 			final int nb_sommets = 5 + r.nextInt(20);
 			final int nb_aretes = r.nextInt(nb_sommets);
 			vuegraphe.setGraphe(getNRandomSom(nb_sommets, nb_aretes), getNRandomCoord(nb_sommets));
-			vuegraphe.setModeGraphique(new GraphiqueEditeur());
+			vuegraphe.setModeGraphique(new GraphiqueEditeur(null));
 			graphe_actuel = get_graphe_nb();
 		});
 		add(generer_random);
