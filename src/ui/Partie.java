@@ -130,12 +130,16 @@ public class Partie extends JPanel {
 			indice_solution = 0;
 			g.setGraphe(current_g, current_c);
 			g.select(-1);
+			debut = true;
+			g.setModeGraphique(new GraphiqueDefaut());
 			update_current();
 		});
 
 		aide = Utils.generate_button("aide_jeu", e -> {
 			next_point(solution.get(indice_solution++));
 			nb_aide++;
+			debut = true;
+			g.setModeGraphique(new GraphiqueDefaut());
 		});
 
 		add(regenerer);
