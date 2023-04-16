@@ -26,6 +26,7 @@ public class VueGraphe extends JComponent {
 	private Graphe graphe;
 	private LinkedList<Point> coords;
 	private int selected = -1;
+	private boolean estMemory;
 
 	public VueGraphe(ModeGraphique mg) {
 		modeGraphique = mg;
@@ -37,6 +38,11 @@ public class VueGraphe extends JComponent {
 	public void setModeGraphique(ModeGraphique mg) {
 		modeGraphique = mg;
 	}
+
+	public boolean estMemory() {
+		return estMemory;
+	}
+
 	public ModeGraphique getModeGraphique() {
 		return modeGraphique;
 	}
@@ -181,6 +187,7 @@ public class VueGraphe extends JComponent {
 			} else {
 				writer = new BufferedWriter(new FileWriter("../packs/" + pack + "/" + n + ".mzr"));
 			}
+			writer.write("\n");
 			writer.write(serialise());
 			writer.close();
 		} catch (IOException e) {
@@ -192,13 +199,16 @@ public class VueGraphe extends JComponent {
 		String name = pack == null ? ("../packless/" + n) : ("../packs/" + pack + "/" + n);
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(name + ".mzr"));
-			final var line = reader.readLine();
-			if (line == null) {
+			final var header_line = reader.readLine();
+			final var coords_line = reader.readLine();
+			if (coords_line == null) {
 				effacer();
 				reader.close();
 				return;
 			}
-			coords = deserialiseCoords(line);
+
+			estMemory = header_line.equals("M");
+			coords = deserialiseCoords(coords_line);
 			graphe = deserialiseConnections(reader);
 			reader.close();
 			repaint();

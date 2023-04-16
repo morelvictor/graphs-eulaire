@@ -30,6 +30,7 @@ public class Partie extends JPanel {
 	private int nb_aide = 0;
 	boolean testing_editing;
 	long debutTimer;
+	boolean debut;
 
 	private static class Level {
 		public Level(String pack, int n) {
@@ -151,6 +152,7 @@ public class Partie extends JPanel {
 		update_current();
 		solution = g.getGraphe().hierholzer();
 		debutTimer = System.currentTimeMillis();
+		debut = true;
 		timer =
 			new JLabel("TEMPS : " +
 			           Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
@@ -239,6 +241,7 @@ public class Partie extends JPanel {
 				validate();
 				repaint();
 				debutTimer = System.currentTimeMillis();
+				debut = true;
 				timer.setText("TEMPS : " +
 				              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) /
 				                              1000.0));
@@ -267,6 +270,12 @@ public class Partie extends JPanel {
 		if (point == -1) {
 			return;
 		}
+
+		if (debut && g.estMemory()) {
+			g.setModeGraphique(new GraphiqueMemory());
+			debut = false;
+		}
+
 		if (g.get_selected() == -1) {
 			g.select(point);
 		} else if (g.getGraphe().getConnexion(g.get_selected(), point) != 0) {
@@ -297,6 +306,8 @@ public class Partie extends JPanel {
 		final var lvl = levels.get(current_level);
 		g.importer(lvl.pack, lvl.n);
 		update_current();
+		debut = true;
+		g.setModeGraphique(new GraphiqueDefaut());
 		// packname = lvl.pack;
 		timer.setText("TEMPS : " +
 		              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
@@ -307,6 +318,7 @@ public class Partie extends JPanel {
 		current_c = g.getCoords();
 		reset();
 	}
+
 	private void reset() {
 		g.setGraphe(current_g.clone(), current_c);
 		g.select(-1);
