@@ -15,7 +15,6 @@ public class Partie extends JPanel {
 	Image background;
 	JButton regenerer;
 	JButton editeur;
-	JButton menu;
 	JLabel timer;
 	JLabel aides;
 	JLabel pack_actuel;
@@ -70,6 +69,30 @@ public class Partie extends JPanel {
 	}
 
 	public Partie(App app, Image bg, String pack, VueGraphe vg, int level, Font font) {
+		setFocusable(true);
+		SwingUtilities.invokeLater(() -> {
+			requestFocus();
+		});
+		addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent ev) {
+				if (ev.getKeyCode() == app.settings.retryKey) {
+					regenerer.doClick();
+				} else if (ev.getKeyCode() == app.settings.menuKey) {
+					app.frame.setContentPane(new Menu(app));
+					app.frame.revalidate();
+					app.frame.repaint();
+				} else if (ev.getKeyCode() == app.settings.evidentMoveKey) {
+					if (g.get_selected() == -1) {
+						return;
+					}
+					var moves = g.getGraphe().getConnexions(g.get_selected());
+					if (moves.size() == 1) {
+						next_point(moves.get(0));
+					}
+				}
+			}
+		});
+
 		this.font = font;
 		packname = pack != null ? pack : "ALL";
 		omega = pack == null;
@@ -119,12 +142,6 @@ public class Partie extends JPanel {
 			app.frame.repaint();
 		});
 
-		menu = Utils.generate_button("retour-menu", e -> {
-			app.frame.setContentPane(new Menu(app));
-			app.frame.revalidate();
-			app.frame.repaint();
-		});
-
 		regenerer = Utils.generate_button("retry", e -> {
 			indice_solution = 0;
 			g.setGraphe(current_g, current_c);
@@ -139,7 +156,6 @@ public class Partie extends JPanel {
 
 		add(regenerer);
 		add(aide);
-		add(menu);
 		testing_editing = vg != null;
 		if (testing_editing) {
 			add(editeur);
@@ -170,7 +186,6 @@ public class Partie extends JPanel {
 		regenerer.setBounds(getWidth() - 120, 710, 90, 50);
 		editeur.setBounds(getWidth() - 200, 800, 90, 50);
 		aide.setBounds(getWidth() - 120, 620, 90, 50);
-		menu.setBounds(getWidth() - 120, 550, 80, 50);
 		pack_actuel.setBounds(getWidth() - 300, 250, 300, 200);
 		timer.setBounds(getWidth() - 300, 280, 300, 200);
 		aides.setBounds(getWidth() - 300, 310, 300, 200);
