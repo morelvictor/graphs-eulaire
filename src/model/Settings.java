@@ -24,7 +24,7 @@ public class Settings {
 	public Settings() {
 		retryKey = KeyEvent.VK_R;
 		menuKey = KeyEvent.VK_ESCAPE;
-		evidentMoveKey = KeyEvent.VK_M;
+		evidentMoveKey = KeyEvent.VK_SPACE;
 		oneClickMouseMove = false;
 		graphColor = Color.BLUE;
 		zoom = 1;

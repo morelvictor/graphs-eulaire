@@ -10,6 +10,7 @@ public abstract class Utils {
 		button.setContentAreaFilled(false);
 		button.setFocusPainted(false);
 		button.addActionListener(listener);
+		button.setFocusable(false);
 		return button;
 	}
 

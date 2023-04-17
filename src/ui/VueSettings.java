@@ -8,6 +8,20 @@ public class VueSettings extends JPanel {
 	Image background;
 
 	public VueSettings(App app) {
+		setFocusable(true);
+		SwingUtilities.invokeLater(() -> {
+			requestFocus();
+		});
+		addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent ev) {
+				if (ev.getKeyCode() == app.settings.menuKey) {
+					app.frame.setContentPane(new Menu(app));
+					app.frame.revalidate();
+					app.frame.repaint();
+				}
+			}
+		});
+
 		this.app = app;
 
 		try {
