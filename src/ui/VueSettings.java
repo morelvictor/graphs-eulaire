@@ -1,11 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class VueSettings extends JPanel {
 	App app;
 	Image background;
+	AtomicInteger selected = null;
+	JButton retryButton, menuButton, evidentButton;
 
 	public VueSettings(App app) {
 		setFocusable(true);
@@ -14,7 +17,13 @@ public class VueSettings extends JPanel {
 		});
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent ev) {
-				if (ev.getKeyCode() == app.settings.menuKey) {
+				if (selected != null) {
+					System.out.println(ev.getKeyCode());
+					selected.lazySet(ev.getKeyCode());
+					selected = null;
+					revalidate();
+					repaint();
+				} else if (ev.getKeyCode() == app.settings.menuKey.get()) {
 					app.frame.setContentPane(new Menu(app));
 					app.frame.revalidate();
 					app.frame.repaint();
@@ -33,25 +42,29 @@ public class VueSettings extends JPanel {
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		JLabel retryLabel = new JLabel("Retry: " + Utils.getKeyText(app.settings.retryKey));
-		retryLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		retryLabel.setFont(app.settings.font);
-		JLabel menuLabel = new JLabel("Menu: " + Utils.getKeyText(app.settings.menuKey));
-		System.out.println(Utils.getKeyText(app.settings.menuKey));
-		menuLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		menuLabel.setFont(app.settings.font);
+		retryButton = Utils.generate_button_text("Retry: " + Utils.getKeyText(
+								 app.settings.retryKey.get()), e -> {
+			selected = app.settings.retryKey;
+		}, app);
+		menuButton = Utils.generate_button_text("Menu: " + Utils.getKeyText(app.settings.menuKey.get()), e -> {
+			selected = app.settings.menuKey;
+		}, app);
 
-		JLabel evidentLabel =
-			new JLabel("Déplacement évident: " + Utils.getKeyText(app.settings.evidentMoveKey));
-		evidentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		evidentLabel.setFont(app.settings.font);
+		evidentButton =
+			Utils.generate_button_text("Déplacement évident: " +
+			                           Utils.getKeyText(app.settings.evidentMoveKey.get()), e -> {
+			selected = app.settings.evidentMoveKey;
+		}, app);
 
-		add(retryLabel);
-		add(menuLabel);
-		add(evidentLabel);
+		add(retryButton);
+		add(menuButton);
+		add(evidentButton);
 	}
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+		retryButton.setText("Retry: " + Utils.getKeyText(app.settings.retryKey.get()));
+		menuButton.setText("Menu: " + Utils.getKeyText(app.settings.menuKey.get()));
+		evidentButton.setText("Déplacement évident: " + Utils.getKeyText(app.settings.evidentMoveKey.get()));
 	}
 }

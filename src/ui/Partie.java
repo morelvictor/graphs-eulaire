@@ -75,13 +75,13 @@ public class Partie extends JPanel {
 		});
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent ev) {
-				if (ev.getKeyCode() == app.settings.retryKey) {
+				if (ev.getKeyCode() == app.settings.retryKey.get()) {
 					regenerer.doClick();
-				} else if (ev.getKeyCode() == app.settings.menuKey) {
+				} else if (ev.getKeyCode() == app.settings.menuKey.get()) {
 					app.frame.setContentPane(new Menu(app));
 					app.frame.revalidate();
 					app.frame.repaint();
-				} else if (ev.getKeyCode() == app.settings.evidentMoveKey) {
+				} else if (ev.getKeyCode() == app.settings.evidentMoveKey.get()) {
 					if (g.get_selected() == -1) {
 						return;
 					}
