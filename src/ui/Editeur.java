@@ -43,7 +43,7 @@ public class Editeur extends JPanel {
 		});
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent ev) {
-				if (ev.getKeyCode() == app.settings.menuKey) {
+				if (ev.getKeyCode() == app.settings.menuKey.get()) {
 					app.frame.setContentPane(new Menu(app));
 					app.frame.revalidate();
 					app.frame.repaint();

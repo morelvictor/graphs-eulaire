@@ -14,6 +14,18 @@ public abstract class Utils {
 		return button;
 	}
 
+	public static JButton generate_button_text(String text, ActionListener listener, App app) {
+		JButton button = new JButton(text);
+		button.setBorderPainted(false);
+		//button.setContentAreaFilled(false);
+		button.setFocusPainted(false);
+		button.addActionListener(listener);
+		button.setFocusable(false);
+		button.setFont(app.settings.font);
+		return button;
+
+	}
+
 	public static String getKeyText(int keyCode) {
 		if (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9 ||
 		    keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) {
