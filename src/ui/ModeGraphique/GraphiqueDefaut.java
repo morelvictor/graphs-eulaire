@@ -10,9 +10,6 @@ public class GraphiqueDefaut extends ModeGraphique {
 	GraphiqueDefaut(BufferedImage bg) {
 		super(bg);
 	}
-	GraphiqueDefaut() {
-		super(null);
-	}
 
 	public void render_sommets(Graphics2D g, LinkedList<Point> coords, int selected) {
 		for (int i = 0; i < coords.size(); i++) {

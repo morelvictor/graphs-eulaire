@@ -16,9 +16,6 @@ abstract class ModeGraphique {
 	ModeGraphique(BufferedImage bg) {
 		this.image_bg = bg;
 	}
-	ModeGraphique() {
-		this(null);
-	}
 
 	abstract void render_sommets(Graphics2D g, LinkedList<Point> coords, int selected);
 	abstract void render_aretes(Graphics2D g, Graphe graphe, LinkedList<Point> coords);
