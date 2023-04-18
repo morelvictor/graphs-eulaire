@@ -1,0 +1,78 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[french,activeacute]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+
+\title{Eulaire, le jeu avec les graphes}
+\author{Azizi Marwan \and Coutard Amelia \and Crague Ilian \and Morel Victor}
+
+\begin{document}
+
+\maketitle
+
+\section{Le jeu}
+
+\subsection{Présentation}
+\textit{Eulaire} est un jeu réalisé sous la direction d'Adrienne Lancelot. Il faut parcourir un graphe en passant exactement une et une seule fois par chaque arête. Le but est d'enchaîner les niveaux le plus vite possible pour se faire une place dans le classement des meilleurs joueurs du monde  !
+
+\subsection{Lancer le jeu}
+Le code source du projet se trouve sur notre dépôt \href{https://gaufre.informatique.univ-paris-diderot.fr/eulaire/2022-al1-ga-eulaire}{gaufre}. Une fois cloné, il suffit d'exécuter make à la racine, puis java App dans out/
+
+\section{Les graphes}
+Les graphes prennent une place centrale dans notre projet.
+\subsection{Qu'est-ce qu'un graphe ?}
+\subsection{Quelle implémentation ?}
+\subsection{Trouver un chemin eulérien}
+
+
+
+\section{L'éditeur de graphe}
+Une fois le graphe implémenté en machine, il faut l'afficher à l'écran. Mais comment faire ?\\
+Il est très difficile de déterminer arbitrairement une représentation adaptée au jeu où les sommets sont espacés, les arêtes ne se confondent pas, etc.\\
+Nous avons donc choisi d'incorporer au projet un éditeur de graphe, qui permettrait au créateur de niveau de définir le graphe mais aussi de choisir comment il sera affiché.
+
+\subsection{Créer un graphe}
+Le but de l'éditeur est de permettre de créer un graphe le plus simplement et le plus directement possible.
+
+\begin{description}
+    \item[Placer un sommet]:
+    cliquer là où on veut le placer
+
+    \item[Relier plusieurs sommets]:
+    cliquer successivement sur les différents sommets pour former un chemin. Le sommet sélectionné apparaît en vert.\\
+    On peut cliquer à nouveau sur ce dernier pour le déselectionner. On peut relier plusieurs fois deux sommets.
+
+    \item[Déplacer un sommet]:
+    cliquer sur le sommet, en maintenant le clic jusqu'à arriver à la position souhaitée.
+
+    \item[Supprimer un sommet]:
+    sélectionner le bouton "supprimer", puis cliquer sur le sommet à supprimer, pour sortir du mode de suppression, cliquer à nouveau sur le bouton "supprimer".
+
+    \item[Supprimer une arête]:
+    sélectionner le bouton "supprimer", puis cliquer et maintenir sur un sommet, déplacer le curseur jusqu'au sommet relié dont on veut supprimer la connexion.\\
+    On peut supprimer plusieurs arêtes à la suite en maintenant le clic.
+
+\end{description}
+
+
+\subsection{Fonctionnalités avancées}
+Des fonctionnalités supplémentaires ont été ajoutées à l'éditeur pour le compléter.\\
+Le but est de faciliter la conception de niveau mais aussi la prise en main de l'éditeur.
+\begin{description}
+    \item[Supprimer tout]: supprimer tous les sommets et toutes les arêtes.
+    
+    \item[Graphe random]: générer un graphe avec un nombre d'arêtes et de sommets aléatoire. Les sommets sont également reliés de manière aléatoire.\\
+    Le nombre d'arêtes et de sommet peut être ajusté avec leurs boutons respectifs.
+
+    \item[Importer / Exporter]: importer et exporter des graphes réalisés au préalable dans l'éditeur.\\
+    Les graphes sont ensuite sauvegardés au format \textit{mzr} .
+
+    \item[Tutoriel]: à déterminer
+
+\end{description}
+
+\section{Le jeu}
+
+\end{document}
