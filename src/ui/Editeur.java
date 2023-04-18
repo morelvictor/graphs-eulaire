@@ -37,6 +37,20 @@ public class Editeur extends JPanel {
 	private Font font;
 
 	public Editeur(App app, Image bg, String pack, VueGraphe vg, int level, Font font) {
+		setFocusable(true);
+		SwingUtilities.invokeLater(() -> {
+			requestFocus();
+		});
+		addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent ev) {
+				if (ev.getKeyCode() == app.settings.menuKey.get()) {
+					app.frame.setContentPane(new Menu(app));
+					app.frame.revalidate();
+					app.frame.repaint();
+				}
+			}
+		});
+
 		background = bg;
 		this.font = font;
 		this.app = app;

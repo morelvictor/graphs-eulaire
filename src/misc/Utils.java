@@ -10,7 +10,20 @@ public abstract class Utils {
 		button.setContentAreaFilled(false);
 		button.setFocusPainted(false);
 		button.addActionListener(listener);
+		button.setFocusable(false);
 		return button;
+	}
+
+	public static JButton generate_button_text(String text, ActionListener listener, App app) {
+		JButton button = new JButton(text);
+		button.setBorderPainted(false);
+		//button.setContentAreaFilled(false);
+		button.setFocusPainted(false);
+		button.addActionListener(listener);
+		button.setFocusable(false);
+		button.setFont(app.settings.font);
+		return button;
+
 	}
 
 	public static String getKeyText(int keyCode) {
