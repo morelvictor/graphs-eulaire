@@ -125,17 +125,21 @@ class Graphe implements Cloneable {
 			System.err.println("Graph isn't Eulerian.");
 			return null;
 		}
-		Graphe g = clone();
 
 		var odd_vertex = 0;
-		for (int i = 0; i < g.taille(); i++) {
-			if ((g.getConnexions(i).size() - g.getConnexion(i, i)) % 2 == 1) {
+		for (int i = 0; i < taille(); i++) {
+			if ((getConnexions(i).size() - getConnexion(i, i)) % 2 == 1) {
 				odd_vertex = i;
 			}
 		}
+		return hierholzer_from(odd_vertex);
+	}
+
+	public ArrayList<Integer> hierholzer_from(int vertex) {
+		Graphe g = clone();
 
 		var result = new ArrayList<Integer>();
-		result.add(Integer.valueOf(odd_vertex));
+		result.add(Integer.valueOf(vertex));
 
 		int insertion_point = 0;
 		while (insertion_point >= 0) {

@@ -24,8 +24,6 @@ public class Partie extends JPanel {
 	JTextArea nomjoueur;
 	JButton save_score;
 	JButton congrats;
-	private ArrayList<Integer> solution;
-	private int indice_solution = 0;
 	private int nb_aide = 0;
 	boolean testing_editing;
 	long debutTimer;
@@ -144,7 +142,6 @@ public class Partie extends JPanel {
 		});
 
 		regenerer = Utils.generate_button("retry", e -> {
-			indice_solution = 0;
 			g.setGraphe(current_g, current_c);
 			g.select(-1);
 			debut = true;
@@ -153,7 +150,14 @@ public class Partie extends JPanel {
 		});
 
 		aide = Utils.generate_button("aide_jeu", e -> {
-			next_point(solution.get(indice_solution++));
+			if (g.get_selected() == -1) {
+				next_point(g.getGraphe().hierholzer().get(0));
+			} else {
+				var solution = g.getGraphe().hierholzer_from(g.get_selected());
+				if (solution.size() >= 2) {
+					next_point(solution.get(1));
+				}
+			}
 			nb_aide++;
 			debut = true;
 			g.setModeGraphique(new GraphiqueDefaut(g.getModeGraphique().image_bg));
@@ -170,7 +174,6 @@ public class Partie extends JPanel {
 		}
 
 		update_current();
-		solution = g.getGraphe().hierholzer();
 		debutTimer = System.currentTimeMillis();
 		debut = true;
 		timer =
@@ -341,7 +344,5 @@ public class Partie extends JPanel {
 	private void reset() {
 		g.setGraphe(current_g.clone(), current_c);
 		g.select(-1);
-		solution = g.getGraphe().hierholzer();
-		indice_solution = 0;
 	}
 }
