@@ -50,7 +50,7 @@ class Graphe implements Cloneable {
 	}
 	public ArrayList<Integer> getConnexions(int i) {
 		var r = new ArrayList<Integer>();
-		for (int j = 0; j < contenu[0].length; j++) {
+		for (int j = 0; j < taille_; j++) {
 			for (int n = 0; n < getConnexion(i, j); n++) {
 				r.add(j);
 			}
