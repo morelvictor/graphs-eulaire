@@ -27,7 +27,7 @@ public class Partie extends JPanel {
 	private int nb_aide = 0;
 	boolean testing_editing;
 	long debutTimer;
-	boolean debut;
+	boolean en_memory;
 
 	private static class Level {
 		public Level(String pack, int n) {
@@ -144,23 +144,23 @@ public class Partie extends JPanel {
 		regenerer = Utils.generate_button("retry", e -> {
 			g.setGraphe(current_g, current_c);
 			g.select(-1);
-			debut = true;
-			g.setModeGraphique(new GraphiqueDefaut(g.getModeGraphique().image_bg));
+			setMemory(false);
 			update_current();
 		});
 
 		aide = Utils.generate_button("aide_jeu", e -> {
-			if (g.get_selected() == -1) {
-				next_point(g.getGraphe().hierholzer().get(0));
-			} else {
-				var solution = g.getGraphe().hierholzer_from(g.get_selected());
-				if (solution.size() >= 2) {
-					next_point(solution.get(1));
+			if (!en_memory) {
+				if (g.get_selected() == -1) {
+					next_point(g.getGraphe().hierholzer().get(0));
+				} else {
+					var solution = g.getGraphe().hierholzer_from(g.get_selected());
+					if (solution.size() >= 2) {
+						next_point(solution.get(1));
+					}
 				}
 			}
 			nb_aide++;
-			debut = true;
-			g.setModeGraphique(new GraphiqueDefaut(g.getModeGraphique().image_bg));
+			setMemory(false);
 		});
 
 		add(regenerer);
@@ -175,7 +175,7 @@ public class Partie extends JPanel {
 
 		update_current();
 		debutTimer = System.currentTimeMillis();
-		debut = true;
+		setMemory(false);
 		timer =
 			new JLabel("TEMPS : " +
 			           Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
@@ -263,7 +263,7 @@ public class Partie extends JPanel {
 				validate();
 				repaint();
 				debutTimer = System.currentTimeMillis();
-				debut = true;
+				setMemory(false);
 				timer.setText("TEMPS : " +
 				              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) /
 				                              1000.0));
@@ -293,9 +293,8 @@ public class Partie extends JPanel {
 			return;
 		}
 
-		if (debut && g.estMemory()) {
-			g.setModeGraphique(new GraphiqueMemory(g.getModeGraphique().image_bg));
-			debut = false;
+		if (!en_memory && g.estMemory()) {
+			setMemory(true);
 		}
 
 		if (g.get_selected() == -1) {
@@ -328,8 +327,7 @@ public class Partie extends JPanel {
 		final var lvl = levels.get(current_level);
 		g.importer(lvl.pack, lvl.n);
 		update_current();
-		debut = true;
-		g.setModeGraphique(new GraphiqueDefaut(g.getModeGraphique().image_bg));
+		setMemory(false);
 		// packname = lvl.pack;
 		timer.setText("TEMPS : " +
 		              Double.toString(((double)(System.currentTimeMillis() - debutTimer)) / 1000.0));
@@ -344,5 +342,16 @@ public class Partie extends JPanel {
 	private void reset() {
 		g.setGraphe(current_g.clone(), current_c);
 		g.select(-1);
+	}
+
+	private void setMemory(boolean b) {
+		if (b) {
+			en_memory = true;
+			g.setModeGraphique(new GraphiqueMemory(g.getModeGraphique().image_bg));
+		} else {
+			en_memory = false;
+			g.setModeGraphique(new GraphiqueDefaut(g.getModeGraphique().image_bg));
+		}
+		g.repaint();
 	}
 }
