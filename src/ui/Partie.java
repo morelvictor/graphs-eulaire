@@ -81,7 +81,7 @@ public class Partie extends JPanel {
 					app.frame.revalidate();
 					app.frame.repaint();
 				} else if (ev.getKeyCode() == app.settings.evidentMoveKey.get()) {
-					if (g.get_selected() == -1) {
+					if (g.estMemory() || g.get_selected() == -1) {
 						return;
 					}
 					var moves = g.getGraphe().getConnexions(g.get_selected());
