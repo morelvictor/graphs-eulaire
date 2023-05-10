@@ -1,5 +1,11 @@
-pour compiler depuis 2022-al1-ga-eulaire/ :
+pour compiler et exécuter, depuis 2022-al1-ga-eulaire/ :
 make run
 
-rapport :
-https://www.overleaf.com/5374433312ggcdvjmhgvbh
+rapport : rapport.tex ou, compilé avec pdflatex, rapport.pdf
+
+Nous sommes le groupe AL1a:
+	Azizi Marwan
+	Coutard Amelia
+	Crague Ilian
+	Morel Victor
+	Bernard Malaurie
